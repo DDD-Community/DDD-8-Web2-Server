@@ -2,9 +2,9 @@ package ddd.caffeine.ratrip.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @RestControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
 
 	/**
 	 * BaseException 으로 throw 한 예외들 처리 하는 메서드.
@@ -52,6 +52,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 			.build();
 
 		return new ResponseEntity(response, response.getHttpStatus());
+	}
+
+	@ExceptionHandler(BindException.class)
+	protected ResponseEntity<ExceptionResponse> handleBindException(final BindException e) {
+		log.error("cause : {}, message : {}", e.getCause(), e.getMessage());
+		ExceptionResponse response = ExceptionResponse.builder()
+			.httpStatus(HttpStatus.BAD_REQUEST)
+			.errorCode("BAD_REQUEST")
+			.message(e.getMessage())
+			.build();
+
+		return new ResponseEntity<>(response, response.getHttpStatus());
 	}
 }
 

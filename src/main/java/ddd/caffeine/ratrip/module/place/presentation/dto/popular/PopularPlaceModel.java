@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.place.presentation.dto;
+package ddd.caffeine.ratrip.module.place.presentation.dto.popular;
 
 import ddd.caffeine.ratrip.module.place.model.Location;
 import ddd.caffeine.ratrip.module.place.model.Place;

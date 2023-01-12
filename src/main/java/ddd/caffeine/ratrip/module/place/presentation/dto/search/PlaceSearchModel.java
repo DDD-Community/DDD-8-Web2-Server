@@ -1,10 +1,10 @@
-package ddd.caffeine.ratrip.module.place.presentation.dto;
+package ddd.caffeine.ratrip.module.place.presentation.dto.search;
 
 import lombok.Builder;
 import lombok.Getter;
 
-@Builder
 @Getter
+@Builder
 public class PlaceSearchModel {
 	private String placeKakaoId;
 	private String placeName;

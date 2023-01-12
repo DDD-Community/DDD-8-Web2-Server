@@ -15,9 +15,10 @@ import ddd.caffeine.ratrip.module.place.feign.kakao.model.PlaceKakaoModel;
 import ddd.caffeine.ratrip.module.place.feign.naver.model.ImageNaverModel;
 import ddd.caffeine.ratrip.module.place.model.Place;
 import ddd.caffeine.ratrip.module.place.model.Region;
-import ddd.caffeine.ratrip.module.place.presentation.dto.PlaceDetailsResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.PlaceSearchResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.PopularPlaceResponseDto;
+import ddd.caffeine.ratrip.module.place.model.ThirdPartySearchOption;
+import ddd.caffeine.ratrip.module.place.presentation.dto.detail.PlaceDetailsResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.popular.PopularPlaceResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.search.PlaceSearchResponseDto;
 import ddd.caffeine.ratrip.module.place.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 public class PlaceService {
 
 	private final PlaceFeignService placeFeignService;
-	private final PlaceValidator placeValidator;
 	private final PlaceRepository placeRepository;
 
 	@Transactional(readOnly = true)
@@ -38,17 +38,15 @@ public class PlaceService {
 	}
 
 	@Transactional(readOnly = true)
-	public PlaceSearchResponseDto searchPlaces(String keyword, String latitude, String longitude, int page) {
-		validateSearchRequestParameters(latitude, longitude, page);
+	public PlaceSearchResponseDto searchPlaces(ThirdPartySearchOption searchOption) {
 		PlaceKakaoModel placeKakaoModel = placeFeignService.readPlacesByKeywordAndCoordinate(
-			keyword, latitude, longitude, page);
+			searchOption);
 
 		return placeKakaoModel.mapByPlaceSearchResponseDto();
 	}
 
 	@Transactional(readOnly = true)
 	public PlaceDetailsResponseDto readPlaceDetailsByUUID(String uuid) {
-		validateReadPlaceDetailsByUUIDParameters(uuid);
 		Optional<Place> place = placeRepository.findById(UUID.fromString(uuid));
 		place.orElseThrow(() -> new PlaceException(NOT_FOUND_PLACE_EXCEPTION));
 
@@ -59,7 +57,6 @@ public class PlaceService {
 	public PlaceDetailsResponseDto readPlaceDetailsByThirdPartyId(String thirdPartyId, String address,
 		String placeName) {
 
-		validatePlaceDetailsByThirdPartyIdParameters(thirdPartyId, address);
 		Optional<Place> optionalPlace = placeRepository.findByKakaoId(thirdPartyId);
 
 		// @TODO 이부분 조금 더 깔끔하게 할 수 있을거같긴한데.. 잘 떠오르질 않음 -> 추후 좋은 방법 있을 경우 리팩토링.
@@ -98,20 +95,5 @@ public class PlaceService {
 		place.injectImageLink(imageModel.readImageLinkByIndex(DATA_INDEX));
 
 		return place;
-	}
-
-	private void validateSearchRequestParameters(String latitude, String longitude, int page) {
-		placeValidator.validateRangeLatitude(latitude);
-		placeValidator.validateRangeLongitude(longitude);
-		placeValidator.validatePageSize(page);
-	}
-
-	private void validatePlaceDetailsByThirdPartyIdParameters(String thirdPartyId, String address) {
-		placeValidator.validateIsNumber(thirdPartyId);
-		//@Todo : 지번주소인지 도로명주소인지 정하기.
-	}
-
-	private void validateReadPlaceDetailsByUUIDParameters(String uuid) {
-		placeValidator.validateUUIDForm(uuid);
 	}
 }

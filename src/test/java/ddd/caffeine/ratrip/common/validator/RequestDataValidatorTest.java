@@ -1,11 +1,11 @@
-package ddd.caffeine.ratrip.module.place.service;
+package ddd.caffeine.ratrip.common.validator;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -14,13 +14,16 @@ import com.fasterxml.uuid.Generators;
 import ddd.caffeine.ratrip.common.exception.domain.FeignException;
 import ddd.caffeine.ratrip.common.exception.domain.PlaceException;
 
-class PlaceValidatorTest {
+class RequestDataValidatorTest {
+	RequestDataValidator requestValidator;
 
-	PlaceValidator recommendPlaceValidator;
-
-	@BeforeEach
-	void init() {
-		recommendPlaceValidator = new PlaceValidator();
+	@Test
+	@DisplayName("UUID 형식 정상 검증 테스트")
+	void validateUUIDFormTest() {
+		//given
+		String uuid = generateUUID();
+		//then
+		requestValidator.validateUUIDForm(uuid);
 	}
 
 	@ParameterizedTest
@@ -29,7 +32,7 @@ class PlaceValidatorTest {
 	void validateLotNumberAddressThrowException(String address) {
 		//then
 		assertThatThrownBy(() ->
-			recommendPlaceValidator.validateLotNumberAddress(address))
+			requestValidator.validateLotNumberAddress(address))
 			.isInstanceOf(PlaceException.class)
 			.hasMessage("올바르지 않은 주소 형식입니다.");
 	}
@@ -39,7 +42,7 @@ class PlaceValidatorTest {
 	@ValueSource(strings = {"충남 천안시 서북구 쌍용동 541-4", "경기 화성시 장지동 479", "충북 단양군 가곡면 사평리 246-33"})
 	void validateLotNumberAddress(String address) {
 		//then
-		recommendPlaceValidator.validateLotNumberAddress(address);
+		requestValidator.validateLotNumberAddress(address);
 	}
 
 	@ParameterizedTest
@@ -47,7 +50,7 @@ class PlaceValidatorTest {
 	@ValueSource(strings = {"경기 양평군 양서면 북한강로89번길 16", "인천 중구 마시란로 163", "경기 광주시 남한산성면 검복길 82"})
 	void validateRoadNameAddressTest(String address) {
 		//then
-		recommendPlaceValidator.validateRoadNameAddress(address);
+		requestValidator.validateRoadNameAddress(address);
 	}
 
 	@ParameterizedTest
@@ -56,7 +59,7 @@ class PlaceValidatorTest {
 	void validateRoadNameAddressThrowException(String address) {
 		//then
 		assertThatThrownBy(() ->
-			recommendPlaceValidator.validateRoadNameAddress(address))
+			requestValidator.validateRoadNameAddress(address))
 			.isInstanceOf(PlaceException.class)
 			.hasMessage("올바르지 않은 주소 형식입니다.");
 	}
@@ -67,7 +70,7 @@ class PlaceValidatorTest {
 	void validatePageSizeTest(int pageSize) {
 		//then
 		assertThatThrownBy(() ->
-			recommendPlaceValidator.validatePageSize(pageSize))
+			requestValidator.validatePageSize(pageSize))
 			.isInstanceOf(FeignException.class)
 			.hasMessage("Page 는 1 이상 45 이하 여야 합니다.");
 	}
@@ -78,7 +81,7 @@ class PlaceValidatorTest {
 	void validateLatitudeSize(String latitude) {
 		//then
 		assertThatThrownBy(() ->
-			recommendPlaceValidator.validateRangeLatitude(latitude))
+			requestValidator.validateRangeLatitude(latitude))
 			.isInstanceOf(PlaceException.class)
 			.hasMessage("위도는 -90 ~ 90 까지 범위안에 존재해야합니다.");
 	}
@@ -89,7 +92,7 @@ class PlaceValidatorTest {
 	void validateLongitudeSize(String longitude) {
 		//then
 		assertThatThrownBy(() ->
-			recommendPlaceValidator.validateRangeLongitude(longitude))
+			requestValidator.validateRangeLongitude(longitude))
 			.isInstanceOf(PlaceException.class)
 			.hasMessage("경도는 -180 ~ 180 까지 범위안에 존재해야합니다.");
 	}
@@ -100,7 +103,7 @@ class PlaceValidatorTest {
 	void validateCoordinate(String coordinate) {
 		//then
 		assertThatThrownBy(() ->
-			recommendPlaceValidator.validateRangeLatitude(coordinate))
+			requestValidator.validateRangeLatitude(coordinate))
 			.isInstanceOf(PlaceException.class)
 			.hasMessage("좌표는 숫자여야합니다.");
 	}
@@ -116,5 +119,4 @@ class PlaceValidatorTest {
 		sb.insert(23, "-");
 		return sb.toString();
 	}
-
 }

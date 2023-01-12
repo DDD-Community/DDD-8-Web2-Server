@@ -7,8 +7,8 @@ import java.util.List;
 
 import ddd.caffeine.ratrip.common.exception.domain.PlaceException;
 import ddd.caffeine.ratrip.module.place.model.Place;
-import ddd.caffeine.ratrip.module.place.presentation.dto.PlaceSearchModel;
-import ddd.caffeine.ratrip.module.place.presentation.dto.PlaceSearchResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.search.PlaceSearchModel;
+import ddd.caffeine.ratrip.module.place.presentation.dto.search.PlaceSearchResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -1,9 +1,8 @@
-package ddd.caffeine.ratrip.module.place.presentation.dto;
+package ddd.caffeine.ratrip.module.place.presentation.dto.search;
 
 import java.util.List;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 public class PlaceSearchResponseDto {
