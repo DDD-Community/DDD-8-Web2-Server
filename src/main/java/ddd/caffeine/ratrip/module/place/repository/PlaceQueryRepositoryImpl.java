@@ -7,8 +7,8 @@ import java.util.List;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import ddd.caffeine.ratrip.module.Region;
 import ddd.caffeine.ratrip.module.place.model.Place;
-import ddd.caffeine.ratrip.module.place.model.Region;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

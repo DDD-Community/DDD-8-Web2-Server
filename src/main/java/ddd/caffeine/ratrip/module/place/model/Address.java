@@ -6,6 +6,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
+import ddd.caffeine.ratrip.module.Region;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

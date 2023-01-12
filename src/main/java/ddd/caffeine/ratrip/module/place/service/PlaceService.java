@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ddd.caffeine.ratrip.common.exception.domain.PlaceException;
+import ddd.caffeine.ratrip.module.Region;
 import ddd.caffeine.ratrip.module.place.feign.PlaceFeignService;
 import ddd.caffeine.ratrip.module.place.feign.kakao.model.PlaceKakaoModel;
 import ddd.caffeine.ratrip.module.place.feign.naver.model.ImageNaverModel;
 import ddd.caffeine.ratrip.module.place.model.Place;
-import ddd.caffeine.ratrip.module.place.model.Region;
 import ddd.caffeine.ratrip.module.place.presentation.dto.PlaceDetailsResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.PlaceSearchResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.PopularPlaceResponseDto;
