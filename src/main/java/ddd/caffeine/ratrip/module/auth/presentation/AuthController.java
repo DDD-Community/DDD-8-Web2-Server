@@ -3,8 +3,6 @@ package ddd.caffeine.ratrip.module.auth.presentation;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,9 +17,7 @@ import ddd.caffeine.ratrip.module.auth.presentation.dto.request.TokenReissueRequ
 import ddd.caffeine.ratrip.module.auth.presentation.dto.response.SignInResponseDto;
 import ddd.caffeine.ratrip.module.auth.presentation.dto.response.SignOutResponseDto;
 import ddd.caffeine.ratrip.module.auth.presentation.dto.response.TokenResponseDto;
-import ddd.caffeine.ratrip.module.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -53,15 +49,8 @@ public class AuthController {
 	}
 
 	@Operation(summary = "로그아웃")
-	@PostMapping("/auth/signout")
+	@PostMapping("/signout")
 	public ResponseEntity<SignOutResponseDto> signOut(@Valid @RequestBody SignOutRequestDto request) {
 		return ResponseEntity.ok(authService.signOut(request.toServiceDto()));
-	}
-
-	@Operation(summary = "회원탈퇴")
-	@DeleteMapping("/auth/withdrawal")
-	public ResponseEntity<String> withdrawal(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
-		authService.withdrawal(user);
-		return ResponseEntity.ok("Delete Success");
 	}
 }

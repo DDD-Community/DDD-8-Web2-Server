@@ -14,7 +14,6 @@ import ddd.caffeine.ratrip.module.auth.presentation.dto.response.SignOutResponse
 import ddd.caffeine.ratrip.module.auth.presentation.dto.response.TokenResponseDto;
 import ddd.caffeine.ratrip.module.user.application.UserService;
 import ddd.caffeine.ratrip.module.user.application.dto.SignUpUserDto;
-import ddd.caffeine.ratrip.module.user.domain.User;
 import ddd.caffeine.ratrip.module.user.domain.UserSocialType;
 import lombok.RequiredArgsConstructor;
 
@@ -51,9 +50,5 @@ public class AuthService {
 
 	public TokenResponseDto reissueToken(TokenReissueDto request) {
 		return tokenService.reissueToken(request);
-	}
-
-	public void withdrawal(User user) {
-		userService.withdrawal(user);
 	}
 }
