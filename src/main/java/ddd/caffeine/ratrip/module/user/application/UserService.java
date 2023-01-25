@@ -40,6 +40,10 @@ public class UserService implements UserDetailsService {
 		return new UserNameUpdateResponseDto(userRepository.save(user).getName());
 	}
 
+	public void withdrawal(User user) {
+		userRepository.delete(user);
+	}
+
 	private User findUserBySocialInfo(SocialInfo socialInfo) {
 		return userRepository.findUserBySocialInfo(socialInfo);
 	}
