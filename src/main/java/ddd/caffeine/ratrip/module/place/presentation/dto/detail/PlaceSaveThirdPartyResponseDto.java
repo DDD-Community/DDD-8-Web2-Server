@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import ddd.caffeine.ratrip.module.place.domain.Location;
 import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
 import lombok.Getter;
 
 /**
@@ -18,9 +19,9 @@ public class PlaceSaveThirdPartyResponseDto {
 	private Location location;
 	private String telephone;
 	private boolean isUpdated;
-	private boolean isBookMarked;
+	private BookmarkResponseDto bookmark;
 
-	public PlaceSaveThirdPartyResponseDto(Place place, boolean isBookMarked) {
+	public PlaceSaveThirdPartyResponseDto(Place place, BookmarkResponseDto bookmark) {
 		this.id = place.getId();
 		this.name = place.getName();
 		this.category = place.getCategory().name();
@@ -28,6 +29,6 @@ public class PlaceSaveThirdPartyResponseDto {
 		this.location = place.getLocation();
 		this.isUpdated = place.isUpdated();
 		this.telephone = place.getTelephone();
-		this.isBookMarked = isBookMarked;
+		this.bookmark = bookmark;
 	}
 }

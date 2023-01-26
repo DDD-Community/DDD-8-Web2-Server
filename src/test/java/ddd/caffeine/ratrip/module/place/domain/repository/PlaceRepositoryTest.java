@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,8 +29,8 @@ class PlaceRepositoryTest {
 	PlaceRepository placeRepository;
 
 	@Test
-	@DisplayName("findByKakaoId 정상 동작 테스트")
-	void findByKakaoIdTest() {
+	@DisplayName("findByThirdPartyID 정상 동작 테스트")
+	void findByThirdPartyIDTest() {
 		//given
 		Place testPlace = createPlace("testId", "testName", "testAddress", "testCategoryCode", 120.365, 34.678,
 			"testLink", "testLink", "testPhoneNumber");
@@ -39,12 +38,12 @@ class PlaceRepositoryTest {
 		placeRepository.save(testPlace);
 
 		//when
-		Optional<Place> place = placeRepository.findByKakaoId("testId");
+		Place place = placeRepository.findByThirdPartyID("testId");
 
 		//then
-		assertThat(place).isPresent();
-		assertThat(place.get().getId()).isNotNull();
-		assertThat(place.get().getName()).isEqualTo("testName");
+		assertThat(place).isNotNull();
+		assertThat(place.getId()).isNotNull();
+		assertThat(place.getName()).isEqualTo("testName");
 	}
 
 	@Test

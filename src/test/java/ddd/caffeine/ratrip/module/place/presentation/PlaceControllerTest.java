@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
-import ddd.caffeine.ratrip.module.place.presentation.dto.detail.PlaceDetailsByThirdPartyRequestDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.detail.PlaceSaveByThirdPartyRequestDto;
 
 @MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(controllers = PlaceController.class,
@@ -45,7 +45,7 @@ class PlaceControllerTest {
 		String placeName = "지원이네 집";
 		String address = "서울특별시 서초구 양재동 16-10";
 
-		PlaceDetailsByThirdPartyRequestDto request = new PlaceDetailsByThirdPartyRequestDto(
+		PlaceSaveByThirdPartyRequestDto request = new PlaceSaveByThirdPartyRequestDto(
 			thirdPartyId, placeName, address
 		);
 
@@ -70,7 +70,7 @@ class PlaceControllerTest {
 		String placeName = "지원이네 집";
 		String address = "서울특별시 서초구 양재동 16-10";
 
-		PlaceDetailsByThirdPartyRequestDto request = new PlaceDetailsByThirdPartyRequestDto(
+		PlaceSaveByThirdPartyRequestDto request = new PlaceSaveByThirdPartyRequestDto(
 			thirdPartyId, placeName, address
 		);
 

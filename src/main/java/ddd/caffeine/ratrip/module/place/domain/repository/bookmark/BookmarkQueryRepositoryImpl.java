@@ -47,6 +47,7 @@ public class BookmarkQueryRepositoryImpl implements BookmarkQueryRepository {
 			.join(bookmark.place, place)
 			.where(
 				bookmark.user.eq(user),
+				bookmark.isActivated.isTrue(),
 				categoriesIn(categories)
 			)
 			.orderBy(readOrderSpecifiers(pageable).toArray(OrderSpecifier[]::new))
@@ -62,6 +63,14 @@ public class BookmarkQueryRepositoryImpl implements BookmarkQueryRepository {
 		return jpaQueryFactory.selectFrom(bookmark)
 			.where(bookmark.user.id.eq(userId), bookmark.place.id.eq(placeId))
 			.fetchFirst() != null;
+	}
+
+	@Override
+	public Long deleteBookMark(Bookmark entity) {
+		return jpaQueryFactory
+			.delete(bookmark)
+			.where(bookmark.eq(entity))
+			.execute();
 	}
 
 	private BooleanExpression categoriesIn(List<Category> categories) {

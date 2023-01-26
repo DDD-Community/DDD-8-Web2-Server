@@ -7,14 +7,14 @@ import ddd.caffeine.ratrip.module.place.domain.repository.dao.BookMarkPlaceDao;
 import lombok.Getter;
 
 @Getter
-public class BookMarkResponseModel {
+public class BookmarkPlaceModel {
 	private UUID id;
 	private String name;
 	private String detailAddress;
 	private String imageUrl;
 	private Category category;
 
-	public BookMarkResponseModel(BookMarkPlaceDao dao) {
+	public BookmarkPlaceModel(BookMarkPlaceDao dao) {
 		this.id = dao.getId();
 		this.name = dao.getName();
 		this.detailAddress = dao.getDetailAddress();

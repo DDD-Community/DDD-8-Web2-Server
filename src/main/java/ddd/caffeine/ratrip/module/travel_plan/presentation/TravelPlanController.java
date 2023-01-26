@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -86,21 +87,22 @@ public class TravelPlanController {
 	 * @return : 하루 일정 UUID
 	 */
 	@Operation(summary = "일정 장소 추가 API")
-	@PostMapping("/{travel_plan_id}/day-schedules/{day_schedule_id}/places")
+	@PostMapping("/{travel_plan_id}/day-schedules/{day_schedule_id}/places/{place_id}")
 	public ResponseEntity<DayScheduleAddPlaceResponseDto> addPlaceInDayScheduleApi(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user,
 		@PathVariable("travel_plan_id") @UUIDFormat String travelPlanUUID,
 		@PathVariable("day_schedule_id") @UUIDFormat String dayScheduleUUID,
+		@PathVariable("place_id") @UUIDFormat String placeUUID,
 		@RequestBody DayScheduleAddPlaceRequestDto request) {
 		DayScheduleAddPlaceResponseDto response = travelPlanService.addPlaceInDaySchedule(
 			new DayScheduleAccessOption(user, travelPlanUUID, dayScheduleUUID),
-			request.getPlaceUUID(), request.getMemo());
+			placeUUID, request.getMemo());
 
 		return ResponseEntity.ok(response);
 	}
 
 	@Operation(summary = "일정 내의 장소 순서 변경 API")
-	@PostMapping("/{travel_plan_id}/day-schedules/{day_schedule_id}/places/sequence")
+	@PatchMapping("/{travel_plan_id}/day-schedules/{day_schedule_id}/places/sequence")
 	public ResponseEntity<String> exchangePlaceSequenceInDayScheduleApi(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user,
 		@PathVariable("travel_plan_id") @UUIDFormat String travelPlanUUID,

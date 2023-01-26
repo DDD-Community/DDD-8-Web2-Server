@@ -10,19 +10,19 @@ import lombok.Getter;
 @Getter
 public class DayScheduleExchangePlaceOrderDto {
 	@UUIDFormat
-	private String firstPlaceUUID;
+	private String id;
 	@UUIDFormat
-	private String secondPlaceUUID;
+	private String exchangeId;
 
-	public DayScheduleExchangePlaceOrderDto(String firstPlaceId, String secondPlaceId) {
-		this.firstPlaceUUID = firstPlaceId;
-		this.secondPlaceUUID = secondPlaceId;
+	public DayScheduleExchangePlaceOrderDto(String id, String exchangeId) {
+		this.id = id;
+		this.exchangeId = exchangeId;
 	}
 
 	public List<UUID> readPlaceUUIDs() {
 		List<UUID> uuids = new ArrayList<>();
-		uuids.add(UUID.fromString(firstPlaceUUID));
-		uuids.add(UUID.fromString(secondPlaceUUID));
+		uuids.add(UUID.fromString(id));
+		uuids.add(UUID.fromString(exchangeId));
 
 		return uuids;
 	}

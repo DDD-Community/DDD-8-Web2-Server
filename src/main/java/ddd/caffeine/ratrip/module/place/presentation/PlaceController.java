@@ -11,9 +11,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ddd.caffeine.ratrip.common.validator.annotation.UUIDFormat;
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
 import ddd.caffeine.ratrip.module.place.presentation.dto.PlaceInRegionResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkAddResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarksResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.detail.PlaceDetailsByThirdPartyRequestDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlaceResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.detail.PlaceDetailsResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.detail.PlaceSaveByThirdPartyRequestDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.detail.PlaceSaveThirdPartyResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.search.PlaceSearchRequestDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.search.PlaceSearchResponseDto;
@@ -60,7 +60,7 @@ public class PlaceController {
 	@PostMapping
 	public ResponseEntity<PlaceSaveThirdPartyResponseDto> callSavePlaceByThirdPartyData(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user,
-		@Valid @RequestBody PlaceDetailsByThirdPartyRequestDto request) {
+		@Valid @RequestBody PlaceSaveByThirdPartyRequestDto request) {
 
 		PlaceSaveThirdPartyResponseDto response = placeService.savePlaceByThirdPartyData(
 			request.mapByThirdPartyDetailSearchOption(), user);
@@ -93,34 +93,26 @@ public class PlaceController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "[인증] 북마크 추가")
-	@ApiResponse(description = "북마크 추가 성공 시, 북마크 ID 반환")
-	@PostMapping("/{id}/bookmarks")
-	public ResponseEntity<BookmarkAddResponseDto> callAddBookmarkApi(
-		@Parameter(hidden = true) @AuthenticationPrincipal User user,
-		@PathVariable @UUIDFormat String id) {
-		BookmarkAddResponseDto response = placeService.addBookMark(UUID.fromString(id), user);
+	@Operation(summary = "[인증] 북마크 상태 변경")
+	@ApiResponse(description = "북마크 등록 성공 시, 북마크 ID & 북마크 상태 반환")
+	@PatchMapping("/{place_id}/bookmarks/{bookmark_id}")
+	public ResponseEntity<BookmarkResponseDto> callChangeBookmarkStateApi(
+		@PathVariable(name = "place_id") @UUIDFormat String placeUUID,
+		@PathVariable("bookmark_id") @UUIDFormat String bookmarkUUID) {
+		BookmarkResponseDto response = placeService.changeBookmarkState(
+			UUID.fromString(placeUUID), UUID.fromString(bookmarkUUID));
 
 		return ResponseEntity.ok(response);
-	}
-
-	@Operation(summary = "[인증] 북마크 삭제")
-	@DeleteMapping("/{id}/bookmarks")
-	public ResponseEntity<String> callDeleteBookmarkApi(
-		@PathVariable @UUIDFormat String id,
-		@Parameter(hidden = true) @AuthenticationPrincipal User user) {
-		placeService.deleteBookMark(UUID.fromString(id), user);
-		return ResponseEntity.ok("SUCCESS TO DELETE");
 	}
 
 	//TODO - 인자를 Enum 타입으로 받는 법 알아보기
 	@Operation(summary = "[인증] 북마크 리스트 조회")
 	@GetMapping("/bookmarks")
-	public ResponseEntity<BookmarksResponseDto> getBookmarks(
+	public ResponseEntity<BookmarkPlaceResponseDto> getBookmarks(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user,
 		@RequestParam(name = "category", defaultValue = "모든 카테고리", required = false) List<String> categories,
 		@PageableDefault(size = 7, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-		BookmarksResponseDto response = placeService.readBookmarks(user, categories, pageable);
+		BookmarkPlaceResponseDto response = placeService.readBookmarks(user, categories, pageable);
 		return ResponseEntity.ok(response);
 	}
 }

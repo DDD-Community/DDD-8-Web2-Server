@@ -7,30 +7,30 @@ import ddd.caffeine.ratrip.module.place.domain.ThirdPartyDetailSearchOption;
 import lombok.Getter;
 
 @Getter
-public class PlaceDetailsByThirdPartyRequestDto {
+public class PlaceSaveByThirdPartyRequestDto {
 
 	@Number
-	@NotBlank(message = "ThirdPartyId must not be blank")
-	private String thirdPartyId;
+	@NotBlank(message = "id must not be blank")
+	private String id;
 
 	@NotBlank(message = "PlaceName must not be blank")
-	private String placeName;
+	private String name;
 
 	@NotBlank(message = "Address must not be blank")
 	private String address;
 
-	public PlaceDetailsByThirdPartyRequestDto(String thirdPartyId, String placeName,
+	public PlaceSaveByThirdPartyRequestDto(String thirdPartyId, String placeName,
 		String address) {
 		validateParameters(address);
-		this.thirdPartyId = thirdPartyId;
-		this.placeName = placeName;
+		this.id = thirdPartyId;
+		this.name = placeName;
 		this.address = address;
 	}
 
 	public ThirdPartyDetailSearchOption mapByThirdPartyDetailSearchOption() {
 		return ThirdPartyDetailSearchOption.builder()
-			.id(this.thirdPartyId)
-			.placeName(this.placeName)
+			.id(this.id)
+			.placeName(this.name)
 			.address(this.address)
 			.build();
 	}

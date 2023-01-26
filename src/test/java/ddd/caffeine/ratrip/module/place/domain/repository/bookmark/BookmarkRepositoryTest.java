@@ -47,6 +47,25 @@ class BookmarkRepositoryTest {
 		assertThat(bookmark).isNull();
 	}
 
+	@Test
+	@DisplayName("북마크 삭제 정상 동작 테스트")
+	void deleteBookMarkTest() {
+		//given
+		User user = User.of("name", "email", UserStatus.ACTIVE, "socialId", UserSocialType.KAKAO);
+		Place place = createPlace("testId", "양재 스타벅스", "서울 양재동 스타벅스 까페", "CF7", 1, 1,
+			"testLink", "testLink", "testPhoneNumber");
+		userRepository.save(user);
+		placeRepository.save(place);
+		Bookmark bookmark = Bookmark.of(user, place);
+		bookmarkRepository.save(bookmark);
+
+		//when
+		Long execute = bookmarkRepository.deleteBookMark(bookmark);
+
+		//then
+		assertThat(execute).isEqualTo(1);
+	}
+
 	/**
 	 * place 엔티티 생성 메서드.
 	 */

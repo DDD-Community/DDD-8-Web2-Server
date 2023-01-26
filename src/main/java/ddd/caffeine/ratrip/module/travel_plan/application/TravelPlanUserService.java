@@ -14,7 +14,6 @@ import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanAccessOption;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanUser;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.TravelPlanUserRepository;
-import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.TravelPlanOngoingResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.TravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.TravelPlanResponseModel;
 import ddd.caffeine.ratrip.module.user.domain.User;
@@ -43,17 +42,8 @@ public class TravelPlanUserService {
 			.build();
 	}
 
-	public TravelPlanOngoingResponseDto readByUserUnfinishedTravel(User user) {
-		TravelPlanUser travelPlanUser = travelPlanUserRepository.findByUserUnfinishedTravel(user);
-		//작성중인 여행 없을 경우,
-		if (travelPlanUser == null) {
-			return new TravelPlanOngoingResponseDto(Boolean.FALSE);
-		}
-		//작성중인 여행이 있을 경우,
-		return TravelPlanOngoingResponseDto.builder()
-			.content(new TravelPlanResponseModel(travelPlanUser.readTravelPlan()))
-			.hasPlan(Boolean.TRUE)
-			.build();
+	public TravelPlanUser readByUserUnfinishedTravel(User user) {
+		return travelPlanUserRepository.findByUserUnfinishedTravel(user);
 	}
 
 	public void validateAccessTravelPlan(TravelPlanAccessOption accessOption) {
@@ -62,5 +52,12 @@ public class TravelPlanUserService {
 			return;
 		}
 		throw new TravelPlanException(UNAUTHORIZED_ACCESS_TRAVEL_PLAN);
+	}
+
+	public void validateMakeTravelPlan(User user) {
+		TravelPlanUser travelPlanUser = readByUserUnfinishedTravel(user);
+		if (travelPlanUser == null) {
+			throw new TravelPlanException(ALREADY_EXIST_TRAVEL_PLAN_EXCEPTION);
+		}
 	}
 }

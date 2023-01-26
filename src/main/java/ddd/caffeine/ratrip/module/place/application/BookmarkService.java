@@ -1,6 +1,7 @@
 package ddd.caffeine.ratrip.module.place.application;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,8 @@ import ddd.caffeine.ratrip.module.place.domain.Category;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.repository.bookmark.BookmarkRepository;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.BookMarkPlaceDao;
-import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarksResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlaceResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
@@ -24,34 +26,37 @@ public class BookmarkService {
 	private final BookmarkRepository bookmarkRepository;
 	private final BookmarkValidator bookmarkValidator;
 
-	public boolean isBookmarked(User user, Place place) {
-		return bookmarkRepository.existsByUserIdAndPlaceId(place.getId(), user.getId());
-	}
-
-	public UUID addBookmark(User user, Place place) {
-		Bookmark bookmark = Bookmark.of(user, place);
-		return bookmarkRepository.save(bookmark).getId();
-	}
-
-	public void deleteBookmark(User user, Place place) {
+	public BookmarkResponseDto readBookmarkModel(User user, Place place) {
 		Bookmark bookmark = readBookmark(user, place);
-		bookmarkValidator.validateExistBookmark(bookmark);
-		bookmarkRepository.delete(bookmark);
+		if (bookmark == null) {
+			Bookmark entity = Bookmark.of(user, place);
+			bookmarkRepository.save(entity);
+			return new BookmarkResponseDto(entity);
+		}
+		return new BookmarkResponseDto(bookmark);
 	}
 
-	public BookmarksResponseDto getBookmarks(User user, List<String> categories,
+	public BookmarkResponseDto changeBookmarkState(UUID bookmarkUUID) {
+		Optional<Bookmark> bookmark = bookmarkRepository.findById(bookmarkUUID);
+		bookmarkValidator.validateExistOptionalBookmark(bookmark);
+		bookmark.get().changeBookmarkState();
+
+		return new BookmarkResponseDto(bookmark.get());
+	}
+
+	public BookmarkPlaceResponseDto getBookmarks(User user, List<String> categories,
 		Pageable page) {
 		Slice<BookMarkPlaceDao> bookmarkPlaceDtos = bookmarkRepository.findBookmarkPlacesInCategories(
 			Category.createCategories(categories),
 			user, page);
 
-		return new BookmarksResponseDto(bookmarkPlaceDtos.getContent(), bookmarkPlaceDtos.hasNext());
+		return new BookmarkPlaceResponseDto(bookmarkPlaceDtos.getContent(), bookmarkPlaceDtos.hasNext());
 	}
 
+	/**
+	 * 북마크 엔티티를 조회 하는 메서드.
+	 */
 	private Bookmark readBookmark(User user, Place place) {
-		Bookmark bookmark = bookmarkRepository.findByUserAndPlace(user, place);
-		bookmarkValidator.validateExistBookmark(bookmark);
-
-		return bookmark;
+		return bookmarkRepository.findByUserAndPlace(user, place);
 	}
 }

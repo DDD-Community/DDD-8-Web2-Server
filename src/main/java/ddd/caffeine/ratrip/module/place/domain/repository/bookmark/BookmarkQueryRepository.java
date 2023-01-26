@@ -18,4 +18,6 @@ public interface BookmarkQueryRepository {
 	boolean existsByUserIdAndPlaceId(UUID userId, UUID placeId);
 
 	Slice<BookMarkPlaceDao> findBookmarkPlacesInCategories(List<Category> categories, User user, Pageable pageable);
+
+	Long deleteBookMark(Bookmark entity);
 }

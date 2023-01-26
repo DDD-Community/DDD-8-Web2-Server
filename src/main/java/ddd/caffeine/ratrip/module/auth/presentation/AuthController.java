@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ddd.caffeine.ratrip.module.auth.application.AuthService;
-import ddd.caffeine.ratrip.module.auth.presentation.dto.request.SignInWithAppleRequestDto;
+import ddd.caffeine.ratrip.module.auth.application.dto.SignInWithAppleDto;
+import ddd.caffeine.ratrip.module.auth.presentation.dto.request.AppleUserData;
 import ddd.caffeine.ratrip.module.auth.presentation.dto.request.SignOutRequestDto;
 import ddd.caffeine.ratrip.module.auth.presentation.dto.request.TokenReissueRequestDto;
 import ddd.caffeine.ratrip.module.auth.presentation.dto.response.SignInResponseDto;
@@ -34,12 +35,10 @@ public class AuthController {
 	}
 
 	@Operation(summary = "애플 로그인")
-	@PostMapping("/signin/apple")
-	public ResponseEntity<SignInResponseDto> signInWithApple(@Valid @RequestBody SignInWithAppleRequestDto request) {
-		System.out.println("code = " + request.getAuthorizationCode());
-		System.out.println("idToken = " + request.getIdToken());
-		System.out.println("name = " + request.getUser().getName());
-		return ResponseEntity.ok(authService.signInWithApple(request.toServiceDto()));
+	@PostMapping(value = "/signin/apple")
+	public ResponseEntity<SignInResponseDto> signInWithApple(@RequestParam("code") String code,
+		@RequestParam("id_token") String idToken, @RequestParam("user") AppleUserData userData) {
+		return ResponseEntity.ok(authService.signInWithApple(SignInWithAppleDto.of(idToken, code, userData)));
 	}
 
 	@Operation(summary = "엑세스 토큰 재발급")

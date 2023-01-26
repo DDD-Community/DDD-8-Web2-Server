@@ -7,11 +7,11 @@ import ddd.caffeine.ratrip.module.place.domain.repository.dao.BookMarkPlaceDao;
 import lombok.Getter;
 
 @Getter
-public class BookmarksResponseDto {
-	private List<BookMarkResponseModel> places;
+public class BookmarkPlaceResponseDto {
+	private List<BookmarkPlaceModel> places;
 	private boolean hasNext;
 
-	public BookmarksResponseDto(List<BookMarkPlaceDao> places, boolean hasNext) {
+	public BookmarkPlaceResponseDto(List<BookMarkPlaceDao> places, boolean hasNext) {
 		mapBookMarkResponseModels(places);
 		this.hasNext = hasNext;
 	}
@@ -19,7 +19,7 @@ public class BookmarksResponseDto {
 	private void mapBookMarkResponseModels(List<BookMarkPlaceDao> places) {
 		this.places = new ArrayList<>();
 		for (BookMarkPlaceDao place : places) {
-			this.places.add(new BookMarkResponseModel(place));
+			this.places.add(new BookmarkPlaceModel(place));
 		}
 	}
 }

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.common.jpa.AuditingTimeEntity;
 import ddd.caffeine.ratrip.common.util.SequentialUUIDGenerator;
@@ -34,6 +35,10 @@ public class Bookmark extends AuditingTimeEntity {
 	@JoinColumn(name = "place_id", columnDefinition = "BINARY(16)", nullable = false)
 	private Place place;
 
+	@NotNull
+	@Column(name = "is_activated", columnDefinition = "TINYINT(1)")
+	private boolean isActivated = Boolean.TRUE;
+
 	@PrePersist
 	public void createBookmarkPrimaryKey() {
 		//sequential uuid 생성
@@ -51,5 +56,13 @@ public class Bookmark extends AuditingTimeEntity {
 			.user(user)
 			.place(place)
 			.build();
+	}
+
+	public void changeBookmarkState() {
+		if (this.isActivated) {
+			this.isActivated = Boolean.FALSE;
+			return;
+		}
+		this.isActivated = Boolean.TRUE;
 	}
 }

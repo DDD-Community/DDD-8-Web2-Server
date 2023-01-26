@@ -26,6 +26,13 @@ public class PlaceQueryRepositoryImpl implements PlaceQueryRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
+	public Place findByThirdPartyID(String thirdPartyID) {
+		return jpaQueryFactory.selectFrom(place)
+			.where(place.kakaoId.eq(thirdPartyID))
+			.fetchOne();
+	}
+
+	@Override
 	public Slice<Place> findPlacesInRegions(List<Region> regions, Pageable pageable) {
 		List<Place> contents = jpaQueryFactory
 			.selectFrom(place)

@@ -9,6 +9,4 @@ import ddd.caffeine.ratrip.module.place.domain.Bookmark;
 
 @Repository
 public interface BookmarkRepository extends JpaRepository<Bookmark, UUID>, BookmarkQueryRepository {
-	@Override
-	void delete(Bookmark entity);
 }

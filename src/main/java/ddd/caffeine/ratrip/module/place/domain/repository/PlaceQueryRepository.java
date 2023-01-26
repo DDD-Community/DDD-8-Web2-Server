@@ -10,4 +10,6 @@ import ddd.caffeine.ratrip.module.place.domain.Place;
 
 public interface PlaceQueryRepository {
 	Slice<Place> findPlacesInRegions(List<Region> regions, Pageable pageable);
+
+	Place findByThirdPartyID(String thirdPartyID);
 }

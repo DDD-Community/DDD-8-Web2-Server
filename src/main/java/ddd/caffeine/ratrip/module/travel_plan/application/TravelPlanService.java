@@ -14,6 +14,7 @@ import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.travel_plan.domain.DayScheduleAccessOption;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanAccessOption;
+import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanUser;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.TravelPlanRepository;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.LocalDateDao;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.TravelPlanOngoingResponseDto;
@@ -34,7 +35,16 @@ public class TravelPlanService {
 
 	@Transactional(readOnly = true)
 	public TravelPlanOngoingResponseDto readTravelPlanByUser(User user) {
-		return travelPlanUserService.readByUserUnfinishedTravel(user);
+		TravelPlanUser travelPlanUser = travelPlanUserService.readByUserUnfinishedTravel(user);
+		//작성중인 여행 없을 경우,
+		if (travelPlanUser == null) {
+			return new TravelPlanOngoingResponseDto(Boolean.FALSE);
+		}
+		//작성중인 여행이 있을 경우,
+		return TravelPlanOngoingResponseDto.builder()
+			.content(new TravelPlanResponseModel(travelPlanUser.readTravelPlan()))
+			.hasPlan(Boolean.TRUE)
+			.build();
 	}
 
 	@Transactional(readOnly = true)
@@ -44,6 +54,8 @@ public class TravelPlanService {
 
 	@Transactional
 	public TravelPlanResponseModel makeTravelPlan(TravelPlan travelPlan, User user) {
+		//진행중인 일정 있을 경우 예외
+		travelPlanUserService.validateMakeTravelPlan(user);
 		//TravelPlan 생성 및 저장
 		travelPlanRepository.save(travelPlan);
 		//TravelPlan 및 User 저장.
