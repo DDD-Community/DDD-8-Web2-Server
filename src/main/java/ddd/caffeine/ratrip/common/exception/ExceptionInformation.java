@@ -22,6 +22,7 @@ public enum ExceptionInformation {
 	INVALID_LOCAL_DATE_FORM_EXCEPTION(BAD_REQUEST, "올바른 DATE 형식이 아닙니다."),
 	INVALID_THIRD_PARTY_ID_EXCEPTION(BAD_REQUEST, "ID 값은 숫자로 이루어져있어야합니다."),
 	INVALID_ADDRESS_EXCEPTION(BAD_REQUEST, "올바르지 않은 주소 형식입니다."),
+	APPLE_USER_DATA_CASTING_EXCEPTION(BAD_REQUEST, "String Type의 user를 AppleUserData Type으로 변환하는데 실패하였습니다."),
 
 	// 401 Unauthorized
 	INVALID_BEARER_FORMAT_EXCEPTION(UNAUTHORIZED, "Bearer 토큰의 형식이 올바르지 않습니다."),
