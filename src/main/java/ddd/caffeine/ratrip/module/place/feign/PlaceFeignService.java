@@ -3,11 +3,12 @@ package ddd.caffeine.ratrip.module.place.feign;
 import org.springframework.stereotype.Service;
 
 import ddd.caffeine.ratrip.common.secret.SecretKeyManager;
-import ddd.caffeine.ratrip.module.place.feign.kakao.KakaoFeignClient;
-import ddd.caffeine.ratrip.module.place.feign.kakao.model.PlaceKakaoModel;
-import ddd.caffeine.ratrip.module.place.feign.naver.NaverFeignClient;
-import ddd.caffeine.ratrip.module.place.feign.naver.model.ImageNaverModel;
 import ddd.caffeine.ratrip.module.place.domain.ThirdPartySearchOption;
+import ddd.caffeine.ratrip.module.place.feign.kakao.KakaoFeignClient;
+import ddd.caffeine.ratrip.module.place.feign.kakao.model.FeignPlaceModel;
+import ddd.caffeine.ratrip.module.place.feign.naver.NaverFeignClient;
+import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignBlogModel;
+import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignImageModel;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -20,7 +21,7 @@ public class PlaceFeignService {
 	/**
 	 * 주소와 장소이름을 토대로 하나의 장소를 읽어옵니다.
 	 */
-	public PlaceKakaoModel readPlacesByAddressAndPlaceName(String address, String placeName) {
+	public FeignPlaceModel readPlacesByAddressAndPlaceName(String address, String placeName) {
 		final String KAKAO_API_KEY = secretKeyManager.getKakaoRestApiKey();
 
 		final String KAKAO_REQUEST_HEADER = "KakaoAK " + KAKAO_API_KEY;
@@ -36,7 +37,7 @@ public class PlaceFeignService {
 	 *
 	 * @Todo : 반경 몇 km 까지 할 것인지 프론트 개발자님들과 상의.
 	 */
-	public PlaceKakaoModel readPlacesByKeywordAndCoordinate(
+	public FeignPlaceModel readPlacesByKeywordAndCoordinate(
 		ThirdPartySearchOption option) {
 		final String KAKAO_API_KEY = secretKeyManager.getKakaoRestApiKey();
 
@@ -51,17 +52,33 @@ public class PlaceFeignService {
 	/**
 	 * keyword 의 사진 데이터를 읽어 옵니다.
 	 */
-	public ImageNaverModel readImageModel(String keyword) {
+	public FeignImageModel readImageModel(String keyword) {
 		final int DATA_COUNT = 1;
 		final String SORT_TYPE = "sim";
+		final String SIZE_FILTER = "medium";
 		final String NAVER_CLIENT_KEY = secretKeyManager.getNaverClientKey();
 		final String NAVER_SECRET_KEY = secretKeyManager.getNaverSecretKey();
 
-		ImageNaverModel imageModel = naverFeignClient.readImageModelByPlaceName(
-			NAVER_CLIENT_KEY, NAVER_SECRET_KEY, keyword, DATA_COUNT, SORT_TYPE
+		FeignImageModel imageModel = naverFeignClient.readImageModelByPlaceName(
+			NAVER_CLIENT_KEY, NAVER_SECRET_KEY, keyword, DATA_COUNT, SORT_TYPE, SIZE_FILTER
 		);
 
 		return imageModel;
 	}
 
+	/**
+	 * todo: 정확성 있는 키워드 고민.
+	 */
+	public FeignBlogModel readBlogModel(String keyword) {
+		final int DATA_COUNT = 3;
+		final String SORT_TYPE = "sim";
+		final String NAVER_CLIENT_KEY = secretKeyManager.getNaverClientKey();
+		final String NAVER_SECRET_KEY = secretKeyManager.getNaverSecretKey();
+
+		FeignBlogModel feignBlogModel = naverFeignClient.readBlogModelsByKeyword(
+			NAVER_CLIENT_KEY, NAVER_SECRET_KEY, keyword, DATA_COUNT, SORT_TYPE
+		);
+
+		return feignBlogModel;
+	}
 }

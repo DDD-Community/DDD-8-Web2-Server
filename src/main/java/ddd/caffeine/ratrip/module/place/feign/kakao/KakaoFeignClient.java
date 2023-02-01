@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ddd.caffeine.ratrip.common.configuration.FeignConfiguration;
-import ddd.caffeine.ratrip.module.place.feign.kakao.model.PlaceKakaoModel;
+import ddd.caffeine.ratrip.module.place.feign.kakao.model.FeignPlaceModel;
 
 @FeignClient(name = "KakaoFeignClient", url = "https://dapi.kakao.com", configuration = FeignConfiguration.class)
 public interface KakaoFeignClient {
 	@GetMapping(value = "v2/local/search/keyword.json")
-	PlaceKakaoModel readPlacesByKeywordInRadius(
+	FeignPlaceModel readPlacesByKeywordInRadius(
 		@RequestHeader("Authorization") String header,
 		@RequestParam("query") String query,
 		@RequestParam("y") String latitude,
@@ -21,7 +21,7 @@ public interface KakaoFeignClient {
 	);
 
 	@GetMapping(value = "v2/local/search/keyword.json")
-	PlaceKakaoModel readPlaceByKeyword(
+	FeignPlaceModel readPlaceByKeyword(
 		@RequestHeader("Authorization") String header,
 		@RequestParam("query") String query,
 		@RequestParam("size") int size

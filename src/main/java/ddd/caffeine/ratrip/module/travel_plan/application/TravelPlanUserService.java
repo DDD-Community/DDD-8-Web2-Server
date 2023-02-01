@@ -2,9 +2,6 @@ package ddd.caffeine.ratrip.module.travel_plan.application;
 
 import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -14,8 +11,7 @@ import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanAccessOption;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanUser;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.TravelPlanUserRepository;
-import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.TravelPlanResponseDto;
-import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.TravelPlanResponseModel;
+import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.MyTravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
@@ -30,14 +26,10 @@ public class TravelPlanUserService {
 		travelPlanUserRepository.save(travelPlanUser);
 	}
 
-	public TravelPlanResponseDto readByUser(User user, Pageable pageable) {
-		List<TravelPlanResponseModel> contents = new ArrayList<>();
+	public MyTravelPlanResponseDto readByUser(User user, Pageable pageable) {
 		Slice<TravelPlanUser> travelPlanUser = travelPlanUserRepository.findByUser(user, pageable);
-		for (TravelPlanUser entity : travelPlanUser.getContent()) {
-			contents.add(new TravelPlanResponseModel(entity.getTravelPlan()));
-		}
-		return TravelPlanResponseDto.builder()
-			.contents(contents)
+		return MyTravelPlanResponseDto.builder()
+			.contents(travelPlanUser.getContent())
 			.hasNext(travelPlanUser.hasNext())
 			.build();
 	}
@@ -56,7 +48,7 @@ public class TravelPlanUserService {
 
 	public void validateMakeTravelPlan(User user) {
 		TravelPlanUser travelPlanUser = readByUserUnfinishedTravel(user);
-		if (travelPlanUser == null) {
+		if (travelPlanUser != null) {
 			throw new TravelPlanException(ALREADY_EXIST_TRAVEL_PLAN_EXCEPTION);
 		}
 	}

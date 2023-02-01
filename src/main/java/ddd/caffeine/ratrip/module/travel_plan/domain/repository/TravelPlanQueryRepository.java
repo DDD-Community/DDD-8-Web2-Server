@@ -1,9 +1,9 @@
 package ddd.caffeine.ratrip.module.travel_plan.domain.repository;
 
-import java.util.UUID;
+import java.util.List;
 
-import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.LocalDateDao;
+import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 
 public interface TravelPlanQueryRepository {
-	LocalDateDao findLocalDateById(UUID id);
+	List<TravelPlan> findAllOngoingTravelPlan();
 }

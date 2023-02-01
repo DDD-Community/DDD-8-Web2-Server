@@ -137,8 +137,8 @@ class PlaceRepositoryTest {
 			.telephone(telephone)
 			.build();
 
-		place.injectImageLink(imageLink);
-		place.setPlaceCategory(categoryCode);
+		place.setImageLink(imageLink);
+		place.setCategoryByCode(categoryCode);
 		place.setAddress(address);
 		place.setLocation(y, x);
 

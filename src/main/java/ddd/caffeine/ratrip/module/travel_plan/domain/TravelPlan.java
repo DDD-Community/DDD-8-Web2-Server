@@ -50,8 +50,8 @@ public class TravelPlan extends AuditingTimeEntity implements Serializable {
 	@Column(name = "is_end", columnDefinition = "TINYINT(1)")
 	private boolean isEnd = Boolean.FALSE;
 
-	public void endTheTrip(boolean end) {
-		isEnd = end;
+	public void endTheTrip() {
+		isEnd = Boolean.TRUE;
 	}
 
 	@PrePersist

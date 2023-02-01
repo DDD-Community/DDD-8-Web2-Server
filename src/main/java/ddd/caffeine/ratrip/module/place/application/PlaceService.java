@@ -16,14 +16,15 @@ import ddd.caffeine.ratrip.module.place.domain.ThirdPartyDetailSearchOption;
 import ddd.caffeine.ratrip.module.place.domain.ThirdPartySearchOption;
 import ddd.caffeine.ratrip.module.place.domain.repository.PlaceRepository;
 import ddd.caffeine.ratrip.module.place.feign.PlaceFeignService;
-import ddd.caffeine.ratrip.module.place.feign.kakao.model.PlaceKakaoModel;
-import ddd.caffeine.ratrip.module.place.feign.naver.model.ImageNaverModel;
-import ddd.caffeine.ratrip.module.place.presentation.dto.PlaceInRegionResponseDto;
+import ddd.caffeine.ratrip.module.place.feign.kakao.model.FeignPlaceModel;
+import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignBlogModel;
+import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignImageModel;
 import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlaceResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.detail.PlaceDetailsResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.detail.PlaceSaveThirdPartyResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.search.PlaceSearchResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceDetailResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceInRegionResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSaveThirdPartyResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSearchResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
@@ -39,53 +40,62 @@ public class PlaceService {
 
 	@Transactional(readOnly = true)
 	public PlaceInRegionResponseDto readPlacesInRegions(List<String> regions, Pageable page) {
+
 		Slice<Place> places = placeRepository.findPlacesInRegions(Region.createRegions(regions), page);
 		return new PlaceInRegionResponseDto(places.getContent(), places.hasNext());
 	}
 
 	@Transactional(readOnly = true)
 	public PlaceSearchResponseDto searchPlaces(ThirdPartySearchOption searchOption) {
-		PlaceKakaoModel placeKakaoModel = placeFeignService.readPlacesByKeywordAndCoordinate(
-			searchOption);
 
-		return placeKakaoModel.mapByPlaceSearchResponseDto();
+		FeignPlaceModel feignPlaceModel = placeFeignService.readPlacesByKeywordAndCoordinate(
+			searchOption);
+		return feignPlaceModel.mapByPlaceSearchResponseDto();
 	}
 
 	@Transactional(readOnly = true)
-	public PlaceDetailsResponseDto readPlaceDetailsByUUID(String uuid, User user) {
+	public PlaceDetailResponseDto readPlaceDetailsByUUID(String uuid) {
+
 		Place place = readPlaceByUUID(UUID.fromString(uuid));
-		BookmarkResponseDto bookMarkModel = bookmarkService.readBookmarkModel(user, place);
-		return new PlaceDetailsResponseDto(place, bookMarkModel);
+		return new PlaceDetailResponseDto(place);
 	}
 
 	@Transactional
-	public PlaceSaveThirdPartyResponseDto savePlaceByThirdPartyData(ThirdPartyDetailSearchOption searchOption,
-		User user) {
-		BookmarkResponseDto bookmarkModel;
+	public PlaceSaveThirdPartyResponseDto savePlaceByThirdPartyData(ThirdPartyDetailSearchOption searchOption) {
 		Place place = placeRepository.findByThirdPartyID(searchOption.readThirdPartyId());
 
 		if (place == null) {
 			Place entity = readPlaceEntity(searchOption.readPlaceNameAndAddress());
 			placeRepository.save(entity);
-			bookmarkModel = bookmarkService.readBookmarkModel(user, entity);
-			return new PlaceSaveThirdPartyResponseDto(entity, bookmarkModel);
+			return new PlaceSaveThirdPartyResponseDto(entity);
 		}
-
 		handlePlaceUpdate(place, searchOption.readPlaceNameAndAddress());
-		bookmarkModel = bookmarkService.readBookmarkModel(user, place);
-		return new PlaceSaveThirdPartyResponseDto(place, bookmarkModel);
+		return new PlaceSaveThirdPartyResponseDto(place);
 	}
 
 	@Transactional
-	public BookmarkResponseDto changeBookmarkState(UUID placeUUID, UUID bookmarkUUID) {
-		Optional<Place> place = placeRepository.findById(placeUUID);
+	public BookmarkResponseDto changeBookmarkState(User user, String placeUUID) {
+		Optional<Place> place = placeRepository.findById(UUID.fromString(placeUUID));
 		placeValidator.validateExistPlace(place);
-		return bookmarkService.changeBookmarkState(bookmarkUUID);
+		return bookmarkService.changeBookmarkState(user, place.get());
 	}
 
 	@Transactional(readOnly = true)
 	public BookmarkPlaceResponseDto readBookmarks(User user, List<String> categories, Pageable pageable) {
 		return bookmarkService.getBookmarks(user, categories, pageable);
+	}
+
+	@Transactional(readOnly = true)
+	public BookmarkResponseDto readBookmark(User user, String placeUUID) {
+		Optional<Place> place = placeRepository.findById(UUID.fromString(placeUUID));
+		placeValidator.validateExistPlace(place);
+		return bookmarkService.readBookmark(user, place.get());
+	}
+
+	@Transactional
+	public BookmarkResponseDto createBookmark(User user, String placeUUID) {
+		Place place = readPlaceByUUID(UUID.fromString(placeUUID));
+		return bookmarkService.createBookmark(user, place);
 	}
 
 	public Place readPlaceByUUID(UUID placeUUID) {
@@ -98,9 +108,11 @@ public class PlaceService {
 	 */
 	private void handlePlaceUpdate(Place place, Map<String, String> placeNameAndAddressMap) {
 		if (place.checkNeedsUpdate(placeNameAndAddressMap.get("address"), placeNameAndAddressMap.get("name"))) {
-			PlaceKakaoModel placeKakaoModel = placeFeignService.readPlacesByAddressAndPlaceName(
+			FeignPlaceModel feignPlaceModel = placeFeignService.readPlacesByAddressAndPlaceName(
 				placeNameAndAddressMap.get("address"), placeNameAndAddressMap.get("name"));
-			place.update(placeKakaoModel.readOne());
+			place.update(feignPlaceModel.readOne());
+			setImageLinkInPlace(place, place.getName());
+			setBlogsInPlace(place, place.getName());
 		}
 	}
 
@@ -108,15 +120,26 @@ public class PlaceService {
 	 * 장소이름과 주소를 가지고 그에 맞는 Place Entity 생성해주는 메서드.
 	 */
 	private Place readPlaceEntity(Map<String, String> placeNameAndAddressMap) {
-		final int DATA_INDEX = 0;
-
-		PlaceKakaoModel placeKakaoModel = placeFeignService.readPlacesByAddressAndPlaceName(
+		FeignPlaceModel feignPlaceModel = placeFeignService.readPlacesByAddressAndPlaceName(
 			placeNameAndAddressMap.get("address"), placeNameAndAddressMap.get("name"));
-		Place place = placeKakaoModel.mapByPlaceEntity();
+		Place place = feignPlaceModel.mapByPlaceEntity();
 
-		ImageNaverModel imageModel = placeFeignService.readImageModel(placeNameAndAddressMap.get("name"));
-		place.injectImageLink(imageModel.readImageLinkByIndex(DATA_INDEX));
+		setImageLinkInPlace(place, place.getName());
+		setBlogsInPlace(place, place.getName());
 
 		return place;
 	}
+
+	private void setImageLinkInPlace(Place place, String keyword) {
+		final int DATA_INDEX = 0;
+
+		FeignImageModel imageModel = placeFeignService.readImageModel(keyword);
+		place.setImageLink(imageModel.readImageLinkByIndex(DATA_INDEX));
+	}
+
+	private void setBlogsInPlace(Place place, String keyword) {
+		FeignBlogModel blogModel = placeFeignService.readBlogModel(keyword);
+		place.setBlogs(blogModel.readBlogs());
+	}
+
 }

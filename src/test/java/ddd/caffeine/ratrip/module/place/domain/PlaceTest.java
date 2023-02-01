@@ -1,45 +1,13 @@
 package ddd.caffeine.ratrip.module.place.domain;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import ddd.caffeine.ratrip.common.model.Region;
+import ddd.caffeine.ratrip.module.place.domain.sub_domain.Address;
 
 class PlaceTest {
-
-	@BeforeEach
-	void init() {
-	}
-
-	@Test
-	@DisplayName("setPlaceCategory 메서드 정상 동작 테스트")
-	void NormalSetPlaceCategoryTest() {
-		//given
-		String cafeCategoryCode = "CE7";
-		Place placeCafe = new Place();
-
-		//when
-		placeCafe.setPlaceCategory(cafeCategoryCode);
-
-		//then
-		Assertions.assertThat(placeCafe.getCategory()).isEqualTo(Category.CAFE);
-	}
-
-	@Test
-	@DisplayName("setPlaceCategory 관리하지 않는 카테고리일 경우 동작 테스트")
-	void 기타SetPlaceCategoryTest() {
-		//given
-		String 기타CategoryCode = "관리 하지 않는 카테고리 코드";
-		Place placeNoCategory = new Place();
-
-		//when
-		placeNoCategory.setPlaceCategory(기타CategoryCode);
-
-		//then
-		Assertions.assertThat(placeNoCategory.getCategory()).isEqualTo(Category.ETC);
-	}
 
 	@Test
 	@DisplayName("setAddress 메서드 정상 동작 테스트")

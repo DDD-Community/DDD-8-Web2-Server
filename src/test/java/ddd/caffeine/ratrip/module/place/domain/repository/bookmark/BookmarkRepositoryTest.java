@@ -10,8 +10,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import ddd.caffeine.ratrip.TestConfig;
-import ddd.caffeine.ratrip.module.place.domain.Bookmark;
 import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.place.domain.bookmark.Bookmark;
+import ddd.caffeine.ratrip.module.place.domain.bookmark.BookmarkId;
+import ddd.caffeine.ratrip.module.place.domain.bookmark.repository.BookmarkRepository;
 import ddd.caffeine.ratrip.module.place.domain.repository.PlaceRepository;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import ddd.caffeine.ratrip.module.user.domain.UserSocialType;
@@ -39,31 +41,35 @@ class BookmarkRepositoryTest {
 			"testLink", "testLink", "testPhoneNumber");
 		userRepository.save(user);
 		placeRepository.save(place);
+		BookmarkId bookmarkId = new BookmarkId(user.getId(), place.getId());
+		Bookmark bookmark = Bookmark.of(user, place);
+		bookmarkRepository.save(bookmark);
 
 		//when
-		Bookmark bookmark = bookmarkRepository.findByUserAndPlace(user, place);
+		BookmarkId id = new BookmarkId(user.getId(), place.getId());
+		Bookmark entity = bookmarkRepository.findByBookmarkId(id);
 
 		//then
-		assertThat(bookmark).isNull();
 	}
 
 	@Test
-	@DisplayName("북마크 삭제 정상 동작 테스트")
-	void deleteBookMarkTest() {
+	@DisplayName("validate method test")
+	void existsBookmarkTest() {
 		//given
 		User user = User.of("name", "email", UserStatus.ACTIVE, "socialId", UserSocialType.KAKAO);
 		Place place = createPlace("testId", "양재 스타벅스", "서울 양재동 스타벅스 까페", "CF7", 1, 1,
 			"testLink", "testLink", "testPhoneNumber");
 		userRepository.save(user);
 		placeRepository.save(place);
+		BookmarkId bookmarkId = new BookmarkId(user.getId(), place.getId());
 		Bookmark bookmark = Bookmark.of(user, place);
 		bookmarkRepository.save(bookmark);
 
 		//when
-		Long execute = bookmarkRepository.deleteBookMark(bookmark);
+		boolean exist = bookmarkRepository.existsByBookmarkId(bookmarkId);
 
 		//then
-		assertThat(execute).isEqualTo(1);
+		assertThat(exist).isTrue();
 	}
 
 	/**
@@ -78,8 +84,8 @@ class BookmarkRepositoryTest {
 			.telephone(telephone)
 			.build();
 
-		place.injectImageLink(imageLink);
-		place.setPlaceCategory(categoryCode);
+		place.setImageLink(imageLink);
+		place.setCategoryByCode(categoryCode);
 		place.setAddress(address);
 		place.setLocation(y, x);
 

@@ -1,10 +1,11 @@
 package ddd.caffeine.ratrip.module.place.domain;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,7 +16,11 @@ import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.common.jpa.AuditingTimeEntity;
 import ddd.caffeine.ratrip.common.util.SequentialUUIDGenerator;
-import ddd.caffeine.ratrip.module.place.feign.kakao.model.PlaceKakaoData;
+import ddd.caffeine.ratrip.module.place.domain.sub_domain.Address;
+import ddd.caffeine.ratrip.module.place.domain.sub_domain.Blog;
+import ddd.caffeine.ratrip.module.place.domain.sub_domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.sub_domain.Location;
+import ddd.caffeine.ratrip.module.place.feign.kakao.model.FeignPlaceData;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,6 +51,9 @@ public class Place extends AuditingTimeEntity {
 	@NotNull
 	@Embedded
 	private Address address;
+
+	@ElementCollection
+	private List<Blog> blogs = new ArrayList<>();
 
 	@NotNull
 	@Embedded
@@ -81,7 +89,11 @@ public class Place extends AuditingTimeEntity {
 		this.id = SequentialUUIDGenerator.generate();
 	}
 
-	public void injectImageLink(String imageLink) {
+	public void setBlogs(List<Blog> blogs) {
+		this.blogs = blogs;
+	}
+
+	public void setImageLink(String imageLink) {
 		this.imageLink = imageLink;
 	}
 
@@ -93,12 +105,8 @@ public class Place extends AuditingTimeEntity {
 		this.address = new Address(address);
 	}
 
-	public void setPlaceCategory(String categoryCode) {
-		Optional<Category> optionalCategory = Arrays.stream(Category.values())
-			.filter((category) -> category.getCode().equals(categoryCode))
-			.findFirst();
-
-		this.category = optionalCategory.orElse(Category.ETC);
+	public void setCategoryByCode(String categoryCode) {
+		this.category = Category.createByCode(categoryCode);
 	}
 
 	/**
@@ -112,17 +120,21 @@ public class Place extends AuditingTimeEntity {
 		return Boolean.TRUE;
 	}
 
-	public void update(PlaceKakaoData data) {
+	public void update(FeignPlaceData feign) {
 		this.isUpdated = Boolean.TRUE;
 
-		this.kakaoId = data.getId();
-		this.name = data.getPlaceName();
-		this.additionalInfoLink = data.getPlaceUrl();
-		this.telephone = data.getPhone();
+		this.kakaoId = feign.getId();
+		this.name = feign.getPlaceName();
+		this.additionalInfoLink = feign.getPlaceUrl();
+		this.telephone = feign.getPhone();
 
-		setPlaceCategory(data.getCategoryGroupCode());
-		setAddress(data.getAddressName());
-		setLocation(Double.parseDouble(data.getY()), Double.parseDouble(data.getX()));
+		setCategoryByCode(feign.getCategoryGroupCode());
+		setAddress(feign.getAddressName());
+		setLocation(Double.parseDouble(feign.getY()), Double.parseDouble(feign.getX()));
+	}
+
+	public List<Blog> readBlogs() {
+		return blogs;
 	}
 
 	@Builder

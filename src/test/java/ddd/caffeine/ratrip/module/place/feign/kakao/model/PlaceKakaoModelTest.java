@@ -15,11 +15,11 @@ class PlaceKakaoModelTest {
 	@DisplayName("데이터가 없을 경우 메서드 예외 정상 동작 테스트")
 	void readOneTest() {
 		//given
-		PlaceKakaoModel placeKakaoModel = new PlaceKakaoModel();
-		placeKakaoModel.documents = new ArrayList<>();
+		FeignPlaceModel feignPlaceModel = new FeignPlaceModel();
+		feignPlaceModel.documents = new ArrayList<>();
 
 		//then
-		assertThatThrownBy(() -> placeKakaoModel.readOne())
+		assertThatThrownBy(() -> feignPlaceModel.readOne())
 			.isInstanceOf(PlaceException.class)
 			.hasMessage("존재하지 않는 장소입니다.");
 	}

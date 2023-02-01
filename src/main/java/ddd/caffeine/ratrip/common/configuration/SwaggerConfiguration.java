@@ -10,6 +10,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
 public class SwaggerConfiguration {
@@ -18,6 +19,7 @@ public class SwaggerConfiguration {
 		SecurityRequirement securityRequirement = new SecurityRequirement().addList("Access Token");
 
 		return new OpenAPI()
+			.addServersItem(new Server().url("/"))
 			.info(new Info()
 				.title("Ratrip API")
 				.description("[인증]이 붙은 API는 요청 헤더에 Key: Authorization, Value: Bearer {token}을 포함해야 합니다."))
@@ -30,4 +32,5 @@ public class SwaggerConfiguration {
 						.name("Authorization")))
 			.security(List.of(securityRequirement));
 	}
+	
 }
