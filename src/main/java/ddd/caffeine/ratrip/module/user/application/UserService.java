@@ -41,6 +41,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	public void withdrawal(User user) {
+		//TODO - travel plan, travel plan user, bookmark 데이터 삭제해야 됨
 		userRepository.delete(user);
 	}
 
