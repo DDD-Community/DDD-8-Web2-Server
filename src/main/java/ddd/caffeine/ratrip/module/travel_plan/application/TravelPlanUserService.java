@@ -7,6 +7,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import ddd.caffeine.ratrip.common.exception.domain.TravelPlanException;
+import ddd.caffeine.ratrip.common.model.Region;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanAccessOption;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanUser;
@@ -51,5 +52,9 @@ public class TravelPlanUserService {
 		if (travelPlanUser != null) {
 			throw new TravelPlanException(ALREADY_EXIST_TRAVEL_PLAN_EXCEPTION);
 		}
+	}
+
+	public Region findOngoingTravelPlanUserRegionByUser(User user) {
+		return travelPlanUserRepository.findOngoingTravelPlanUserRegionByUser(user);
 	}
 }

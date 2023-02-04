@@ -20,12 +20,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ddd.caffeine.ratrip.common.model.Region;
 import ddd.caffeine.ratrip.common.validator.annotation.UUIDFormat;
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
+import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlaceByCoordinateRequestDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlaceResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlacesByCoordinateResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlacesByRegionResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.request.CategoryPlaceByCoordinateRequestDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.request.CategoryPlaceByRegionRequestDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.request.PlaceSaveByThirdPartyRequestDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.request.PlaceSearchRequestDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.CategoryPlacesByCoordinateResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.CategoryPlacesByRegionResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceDetailResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceInRegionResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSaveThirdPartyResponseDto;
@@ -89,7 +97,7 @@ public class PlaceController {
 	}
 
 	//TODO - 인자를 Enum 타입으로 받는 법 알아보기
-	@Operation(summary = "[인증] 북마크 리스트 조회")
+	@Operation(summary = "[인증] 카테고리별 북마크 리스트 페이지네이션 조회")
 	@GetMapping("/bookmarks")
 	public ResponseEntity<BookmarkPlaceResponseDto> callReadBookmarksApi(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user,
@@ -127,5 +135,44 @@ public class PlaceController {
 		BookmarkResponseDto response = placeService.changeBookmarkState(user, placeUUID);
 
 		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "[인증] 유저가 선택한 지역 기반 북마크 추천 페이지네이션 조회")
+	@GetMapping("/bookmarks/region")
+	public ResponseEntity<BookmarkPlacesByRegionResponseDto> getBookmarkPlacesByRegion(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user, @RequestParam Region region,
+		@PageableDefault(size = 20) Pageable pageable) {
+
+		return ResponseEntity.ok(placeService.getBookmarkPlacesByRegion(user, region, pageable));
+	}
+
+	@Operation(summary = "[인증] 유저가 현재 위치 기반 북마크 추천 페이지네이션 조회")
+	@GetMapping("/bookmarks/coordinate")
+	public ResponseEntity<BookmarkPlacesByCoordinateResponseDto> getBookmarkPlacesByCoordinate(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user,
+		@Valid @ModelAttribute BookmarkPlaceByCoordinateRequestDto request,
+		@PageableDefault(size = 20) Pageable pageable) {
+
+		return ResponseEntity.ok(placeService.getBookmarkPlacesByCoordinate(user, request.toServiceDto(), pageable));
+	}
+
+	@Operation(summary = "[인증] 유저가 선택한 지역 기반 카테고리 추천 페이지네이션 조회")
+	@GetMapping("/categories/region")
+	public ResponseEntity<CategoryPlacesByRegionResponseDto> getCategoryPlacesByRegion(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user,
+		@Valid @ModelAttribute CategoryPlaceByRegionRequestDto request,
+		@PageableDefault(size = 20) Pageable pageable) {
+
+		return ResponseEntity.ok(placeService.getCategoryPlacesByRegion(user, request.toServiceDto(), pageable));
+	}
+
+	@Operation(summary = "[인증] 유저가 현재 위치 기반 카테고리 추천 페이지네이션 조회")
+	@GetMapping("/categories/coordinate")
+	public ResponseEntity<CategoryPlacesByCoordinateResponseDto> getCategoryPlacesByCoordinate(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user,
+		@Valid @ModelAttribute CategoryPlaceByCoordinateRequestDto request,
+		@PageableDefault(size = 20) Pageable pageable) {
+
+		return ResponseEntity.ok(placeService.getCategoryPlacesByCoordinate(user, request.toServiceDto(), pageable));
 	}
 }

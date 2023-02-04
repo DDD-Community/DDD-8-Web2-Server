@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import ddd.caffeine.ratrip.common.configuration.FeignConfiguration;
 import ddd.caffeine.ratrip.module.place.feign.kakao.model.FeignPlaceModel;
+import ddd.caffeine.ratrip.module.place.feign.kakao.model.KakaoRegionResponse;
 
 @FeignClient(name = "KakaoFeignClient", url = "https://dapi.kakao.com", configuration = FeignConfiguration.class)
 public interface KakaoFeignClient {
@@ -26,4 +27,8 @@ public interface KakaoFeignClient {
 		@RequestParam("query") String query,
 		@RequestParam("size") int size
 	);
+
+	@GetMapping("/v2/local/geo/coord2regioncode.json")
+	KakaoRegionResponse getRegion(@RequestHeader("Authorization") String requestHeader,
+		@RequestParam("x") double longitude, @RequestParam("y") double latitude);
 }

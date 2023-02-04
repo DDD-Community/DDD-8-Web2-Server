@@ -16,11 +16,14 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import ddd.caffeine.ratrip.common.model.Region;
 import ddd.caffeine.ratrip.common.util.QuerydslUtils;
 import ddd.caffeine.ratrip.module.place.domain.bookmark.Bookmark;
 import ddd.caffeine.ratrip.module.place.domain.bookmark.BookmarkId;
 import ddd.caffeine.ratrip.module.place.domain.bookmark.repository.dao.BookMarkPlaceDao;
+import ddd.caffeine.ratrip.module.place.domain.bookmark.repository.dao.BookmarkPlaceByRegionDao;
 import ddd.caffeine.ratrip.module.place.domain.bookmark.repository.dao.QBookMarkPlaceDao;
+import ddd.caffeine.ratrip.module.place.domain.bookmark.repository.dao.QBookmarkPlaceByRegionDao;
 import ddd.caffeine.ratrip.module.place.domain.sub_domain.Category;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -76,6 +79,25 @@ public class BookmarkQueryRepositoryImpl implements BookmarkQueryRepository {
 			.delete(bookmark)
 			.where(bookmark.eq(entity))
 			.execute();
+	}
+
+	@Override
+	public Slice<BookmarkPlaceByRegionDao> findBookmarkPlacesByRegion(User user, Region region, Pageable pageable) {
+		List<BookmarkPlaceByRegionDao> contents = jpaQueryFactory
+			.select(new QBookmarkPlaceByRegionDao(place.id, place.name, place.imageLink))
+			.from(bookmark)
+			.join(bookmark.place, place)
+			.where(
+				bookmark.user.eq(user),
+				bookmark.isActivated.isTrue(),
+				place.address.region.eq(region)
+			)
+			.orderBy(place.numberOfTrips.desc())
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize() + 1)
+			.fetch();
+
+		return QuerydslUtils.toSlice(contents, pageable);
 	}
 
 	private BooleanExpression categoriesIn(List<Category> categories) {

@@ -8,9 +8,17 @@ import lombok.Getter;
 public class ThirdPartySearchOption {
 	private String keyword;
 
-	private String latitude;
+	private double latitude;
 
-	private String longitude;
+	private double longitude;
 
 	private int page;
+
+	public String readLatitude() {
+		return String.valueOf(latitude);
+	}
+
+	public String readLongitude() {
+		return String.valueOf(longitude);
+	}
 }

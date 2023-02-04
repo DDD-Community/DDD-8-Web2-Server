@@ -6,17 +6,17 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class TravelPlanOngoingResponseDto {
+public class LatestTravelPlanResponseDto {
 
 	private TravelPlanResponseDto content;
 	private boolean hasPlan;
 
-	public TravelPlanOngoingResponseDto(boolean hasPlan) {
+	public LatestTravelPlanResponseDto(boolean hasPlan) {
 		this.hasPlan = hasPlan;
 	}
 
 	@Builder
-	public TravelPlanOngoingResponseDto(TravelPlanResponseDto content, boolean hasPlan) {
+	public LatestTravelPlanResponseDto(TravelPlanResponseDto content, boolean hasPlan) {
 		this.content = content;
 		this.hasPlan = hasPlan;
 	}

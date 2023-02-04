@@ -18,6 +18,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import ddd.caffeine.ratrip.common.model.Region;
 import ddd.caffeine.ratrip.common.util.QuerydslUtils;
 import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.place.domain.repository.dao.CategoryPlaceByRegionDao;
+import ddd.caffeine.ratrip.module.place.domain.repository.dao.QCategoryPlaceByRegionDao;
+import ddd.caffeine.ratrip.module.place.domain.sub_domain.Category;
+import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -38,6 +42,21 @@ public class PlaceQueryRepositoryImpl implements PlaceQueryRepository {
 			.selectFrom(place)
 			.where(regionsIn(regions))
 			.orderBy(readOrderSpecifiers(pageable).toArray(OrderSpecifier[]::new))
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize() + 1)
+			.fetch();
+
+		return QuerydslUtils.toSlice(contents, pageable);
+	}
+
+	@Override
+	public Slice<CategoryPlaceByRegionDao> getCategoryPlacesByRegion(User user, Region region, Category category,
+		Pageable pageable) {
+		List<CategoryPlaceByRegionDao> contents = jpaQueryFactory
+			.select(new QCategoryPlaceByRegionDao(place.id, place.name))
+			.from(place)
+			.where(place.address.region.eq(region), place.category.eq(category))
+			.orderBy(place.numberOfTrips.desc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();

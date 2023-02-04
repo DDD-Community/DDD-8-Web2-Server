@@ -87,8 +87,8 @@ class RequestDataValidatorTest {
 
 	@ParameterizedTest
 	@DisplayName("위도 범위 유효성 검사 테스트")
-	@ValueSource(strings = {"100", "-90.01", "90.93"})
-	void validateLatitudeSize(String latitude) {
+	@ValueSource(doubles = {100, -90.01, 90.93})
+	void validateLatitudeSize(double latitude) {
 		//then
 		assertThatThrownBy(() ->
 			requestValidator.validateRangeLatitude(latitude))
@@ -98,24 +98,13 @@ class RequestDataValidatorTest {
 
 	@ParameterizedTest
 	@DisplayName("경도 범위 유효성 검사 테스트")
-	@ValueSource(strings = {"190", "-180.01", "180.93"})
-	void validateLongitudeSize(String longitude) {
+	@ValueSource(doubles = {190, -180.01, 180.93})
+	void validateLongitudeSize(double longitude) {
 		//then
 		assertThatThrownBy(() ->
 			requestValidator.validateRangeLongitude(longitude))
 			.isInstanceOf(CommonException.class)
 			.hasMessage("경도는 -180 ~ 180 까지 범위안에 존재해야합니다.");
-	}
-
-	@ParameterizedTest
-	@DisplayName("좌표 유효성 검사 테스트")
-	@ValueSource(strings = {"test", "3..321341.", "한국"})
-	void validateCoordinate(String coordinate) {
-		//then
-		assertThatThrownBy(() ->
-			requestValidator.validateRangeLatitude(coordinate))
-			.isInstanceOf(CommonException.class)
-			.hasMessage("좌표는 숫자여야합니다.");
 	}
 
 	private String generateUUID() {

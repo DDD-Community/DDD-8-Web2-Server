@@ -22,9 +22,9 @@ import ddd.caffeine.ratrip.module.travel_plan.domain.repository.TravelPlanReposi
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.response.DayScheduleInTravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.response.DaySchedulePlaceResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.response.DayScheduleResponseDto;
+import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.LatestTravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.MyTravelPlanResponse;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.MyTravelPlanResponseDto;
-import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.TravelPlanOngoingResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.TravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -39,14 +39,14 @@ public class TravelPlanService {
 	private final TravelPlanRepository travelPlanRepository;
 
 	@Transactional(readOnly = true)
-	public TravelPlanOngoingResponseDto readTravelPlanByUser(User user) {
+	public LatestTravelPlanResponseDto readTravelPlanByUser(User user) {
 		TravelPlanUser travelPlanUser = travelPlanUserService.readByUserUnfinishedTravel(user);
-		//작성중인 여행 없을 경우,
+		//작성중인 여행 없을 경우,천
 		if (travelPlanUser == null) {
-			return new TravelPlanOngoingResponseDto(Boolean.FALSE);
+			return new LatestTravelPlanResponseDto(Boolean.FALSE);
 		}
 		//작성중인 여행이 있을 경우,
-		return TravelPlanOngoingResponseDto.builder()
+		return LatestTravelPlanResponseDto.builder()
 			.content(new TravelPlanResponseDto(travelPlanUser.readTravelPlan()))
 			.hasPlan(Boolean.TRUE)
 			.build();

@@ -15,6 +15,7 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import ddd.caffeine.ratrip.common.model.Region;
 import ddd.caffeine.ratrip.common.util.QuerydslUtils;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanUser;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.TravelPlanUserQueryRepository;
@@ -42,10 +43,10 @@ public class TravelPlanUserQueryRepositoryImpl implements TravelPlanUserQueryRep
 		TravelPlanUser response = jpaQueryFactory
 			.selectFrom(travelPlanUser)
 			.where(
-				travelPlanUser.user.eq(user),
-				travelPlanUser.travelPlan.isEnd.isFalse()
+				travelPlanUser.user.eq(user)
 			)
-			.fetchOne();
+			.orderBy(travelPlanUser.createdAt.desc())
+			.fetchFirst();
 		return response;
 	}
 
@@ -60,6 +61,18 @@ public class TravelPlanUserQueryRepositoryImpl implements TravelPlanUserQueryRep
 			.fetch();
 
 		return QuerydslUtils.toSlice(contents, pageable);
+	}
+
+	@Override
+	public Region findOngoingTravelPlanUserRegionByUser(User user) {
+		return jpaQueryFactory
+			.select(travelPlanUser.travelPlan.region)
+			.from(travelPlanUser)
+			.where(
+				travelPlanUser.user.eq(user),
+				travelPlanUser.travelPlan.isEnd.isFalse()
+			)
+			.fetchFirst();
 	}
 
 	private List<OrderSpecifier> readOrderSpecifiers(Pageable pageable) {

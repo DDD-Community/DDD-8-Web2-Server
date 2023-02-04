@@ -14,15 +14,15 @@ public class PlaceSearchRequestDto {
 	private String keyword;
 
 	@NotEmpty(message = "Latitude must not be blank")
-	private String latitude;
+	private double latitude;
 
 	@NotEmpty(message = "Longitude must not be blank")
-	private String longitude;
+	private double longitude;
 
 	@Min(1)
 	private Integer page;
 
-	private PlaceSearchRequestDto(String keyword, String latitude, String longitude, Integer page) {
+	private PlaceSearchRequestDto(String keyword, double latitude, double longitude, Integer page) {
 		initPage(page);
 		validateParameters(latitude, longitude, this.page);
 		this.keyword = keyword;
@@ -39,7 +39,7 @@ public class PlaceSearchRequestDto {
 			.build();
 	}
 
-	private void validateParameters(String latitude, String longitude, int page) {
+	private void validateParameters(double latitude, double longitude, int page) {
 		RequestDataValidator.validateRangeLatitude(latitude);
 		RequestDataValidator.validateRangeLongitude(longitude);
 		RequestDataValidator.validatePageSize(page);

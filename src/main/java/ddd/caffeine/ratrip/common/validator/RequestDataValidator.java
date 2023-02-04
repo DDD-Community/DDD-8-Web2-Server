@@ -31,14 +31,6 @@ public class RequestDataValidator {
 		}
 	}
 
-	public static void validateIsNumber(String number) {
-		try {
-			Long.parseLong(number);
-		} catch (NumberFormatException e) {
-			throw new CommonException(INVALID_THIRD_PARTY_ID_EXCEPTION);
-		}
-	}
-
 	public static void validateUUIDForm(String uuid) {
 		final Pattern UUID_PATTERN = Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
 		if (!(UUID_PATTERN.matcher(uuid).matches())) {
@@ -54,25 +46,15 @@ public class RequestDataValidator {
 		}
 	}
 
-	public static void validateRangeLatitude(String lat) {
-		double latitude = validateTypeCastDouble(lat);
+	public static void validateRangeLatitude(double latitude) {
 		if (!(-90 <= latitude && latitude <= 90)) {
 			throw new CommonException(INVALID_LATITUDE_RANGE_EXCEPTION);
 		}
 	}
 
-	public static void validateRangeLongitude(String lng) {
-		double longitude = validateTypeCastDouble(lng);
+	public static void validateRangeLongitude(double longitude) {
 		if (!(-180 <= longitude && longitude <= 180)) {
 			throw new CommonException(INVALID_LONGITUDE_RANGE_EXCEPTION);
-		}
-	}
-
-	private static double validateTypeCastDouble(String param) {
-		try {
-			return Double.parseDouble(param);
-		} catch (NumberFormatException e) {
-			throw new CommonException(INVALID_COORDINATE_EXCEPTION);
 		}
 	}
 }

@@ -30,8 +30,8 @@ import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.resp
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.response.DaySchedulePlaceResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.response.DayScheduleResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.request.TravelPlanInitRequestDto;
+import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.LatestTravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.MyTravelPlanResponseDto;
-import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.TravelPlanOngoingResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.TravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,11 +77,11 @@ public class TravelPlanController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "[인증] 현재 진행중인 여행 계획 정보 불러오기 API")
-	@GetMapping("ongoing")
-	public ResponseEntity<TravelPlanOngoingResponseDto> readTravelPlanOngoingApi(
+	@Operation(summary = "[인증]최근여행 계획 정보 불러오기 API")
+	@GetMapping("latest")
+	public ResponseEntity<LatestTravelPlanResponseDto> readTravelPlanLatestApi(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user) {
-		TravelPlanOngoingResponseDto response = travelPlanService.readTravelPlanByUser(user);
+		LatestTravelPlanResponseDto response = travelPlanService.readTravelPlanByUser(user);
 		return ResponseEntity.ok(response);
 	}
 
