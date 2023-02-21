@@ -48,7 +48,7 @@ public class User extends AuditingTimeEntity implements UserDetails {
 		this.id = SequentialUUIDGenerator.generate();
 	}
 
-	@Builder(access = AccessLevel.PACKAGE)
+	@Builder
 	private User(String name, String email, UserStatus status, String socialId, UserSocialType socialType) {
 		this.name = name;
 		this.email = email;

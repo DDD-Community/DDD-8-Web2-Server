@@ -1,10 +1,12 @@
 package ddd.caffeine.ratrip.module.place.domain.repository;
 
 import static ddd.caffeine.ratrip.module.place.domain.QPlace.*;
+import static ddd.caffeine.ratrip.module.place.domain.bookmark.QBookmark.*;
 import static org.springframework.util.ObjectUtils.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -17,9 +19,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import ddd.caffeine.ratrip.common.model.Region;
 import ddd.caffeine.ratrip.common.util.QuerydslUtils;
-import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.CategoryPlaceByRegionDao;
+import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceBookmarkDao;
+import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceDetailBookmarkDao;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.QCategoryPlaceByRegionDao;
+import ddd.caffeine.ratrip.module.place.domain.repository.dao.QPlaceBookmarkDao;
+import ddd.caffeine.ratrip.module.place.domain.repository.dao.QPlaceDetailBookmarkDao;
 import ddd.caffeine.ratrip.module.place.domain.sub_domain.Category;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -30,16 +35,33 @@ public class PlaceQueryRepositoryImpl implements PlaceQueryRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public Place findByThirdPartyID(String thirdPartyID) {
-		return jpaQueryFactory.selectFrom(place)
+	public PlaceBookmarkDao findByThirdPartyID(String thirdPartyID) {
+		return jpaQueryFactory
+			.select(new QPlaceBookmarkDao(place.id, place.name, place.category, place.address, place.location,
+				place.imageLink, place.telephone, place.isUpdated, bookmark.isActivated))
+			.from(place)
+			.leftJoin(place.bookmarks, bookmark)
 			.where(place.kakaoId.eq(thirdPartyID))
 			.fetchOne();
 	}
 
 	@Override
-	public Slice<Place> findPlacesInRegions(List<Region> regions, Pageable pageable) {
-		List<Place> contents = jpaQueryFactory
-			.selectFrom(place)
+	public PlaceDetailBookmarkDao findByUUID(UUID id) {
+		return jpaQueryFactory
+			.select(new QPlaceDetailBookmarkDao(place, bookmark.isActivated))
+			.from(place)
+			.leftJoin(place.bookmarks, bookmark)
+			.where(place.id.eq(id))
+			.fetchOne();
+	}
+
+	@Override
+	public Slice<PlaceBookmarkDao> findPlacesInRegions(List<Region> regions, Pageable pageable) {
+		List<PlaceBookmarkDao> contents = jpaQueryFactory
+			.select(new QPlaceBookmarkDao(place.id, place.name, place.category, place.address, place.location,
+				place.imageLink, place.telephone, place.isUpdated, bookmark.isActivated))
+			.from(place)
+			.leftJoin(place.bookmarks, bookmark)
 			.where(regionsIn(regions))
 			.orderBy(readOrderSpecifiers(pageable).toArray(OrderSpecifier[]::new))
 			.offset(pageable.getOffset())
@@ -50,7 +72,23 @@ public class PlaceQueryRepositoryImpl implements PlaceQueryRepository {
 	}
 
 	@Override
-	public Slice<CategoryPlaceByRegionDao> getCategoryPlacesByRegion(User user, Region region, Category category,
+	public Slice<PlaceBookmarkDao> findPlacesInRegion(Region region, Pageable pageable) {
+		List<PlaceBookmarkDao> contents = jpaQueryFactory
+			.select(new QPlaceBookmarkDao(place.id, place.name, place.category, place.address, place.location,
+				place.imageLink, place.telephone, place.isUpdated, bookmark.isActivated))
+			.from(place)
+			.leftJoin(place.bookmarks, bookmark)
+			.where(regionsEq(region))
+			.orderBy(readOrderSpecifiers(pageable).toArray(OrderSpecifier[]::new))
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize() + 1)
+			.fetch();
+
+		return QuerydslUtils.toSlice(contents, pageable);
+	}
+
+	@Override
+	public Slice<CategoryPlaceByRegionDao> getCategoryPlacesByRegion(Region region, Category category,
 		Pageable pageable) {
 		List<CategoryPlaceByRegionDao> contents = jpaQueryFactory
 			.select(new QCategoryPlaceByRegionDao(place.id, place.name))
@@ -66,6 +104,10 @@ public class PlaceQueryRepositoryImpl implements PlaceQueryRepository {
 
 	private BooleanExpression regionsIn(List<Region> region) {
 		return region.isEmpty() ? null : place.address.region.in(region);
+	}
+
+	private BooleanExpression regionsEq(Region region) {
+		return region == null ? null : place.address.region.eq(region);
 	}
 
 	private List<OrderSpecifier> readOrderSpecifiers(Pageable pageable) {

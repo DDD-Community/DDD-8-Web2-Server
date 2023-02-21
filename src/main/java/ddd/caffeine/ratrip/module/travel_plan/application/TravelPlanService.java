@@ -3,6 +3,7 @@ package ddd.caffeine.ratrip.module.travel_plan.application;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
@@ -38,10 +39,22 @@ public class TravelPlanService {
 	private final PlaceService placeService;
 	private final TravelPlanRepository travelPlanRepository;
 
+	/**
+	 * 개발용 - 추후 삭제.
+	 */
+	@Transactional
+	public void deleteTravelPlan(String travelPlanUUID, User user) {
+		Optional<TravelPlan> travelPlan = travelPlanRepository.findById(UUID.fromString(travelPlanUUID));
+		travelPlanValidator.validateExistTravelPlan(travelPlan);
+		travelPlanUserService.deleteTravelPlanUser(user);
+		dayScheduleService.deleteDaySchedule(UUID.fromString(travelPlanUUID));
+		travelPlanRepository.delete(travelPlan.get());
+	}
+
 	@Transactional(readOnly = true)
-	public LatestTravelPlanResponseDto readTravelPlanByUser(User user) {
-		TravelPlanUser travelPlanUser = travelPlanUserService.readByUserUnfinishedTravel(user);
-		//작성중인 여행 없을 경우,천
+	public LatestTravelPlanResponseDto readRecentTravelPlanByUser(User user) {
+		TravelPlanUser travelPlanUser = travelPlanUserService.readByUserLatestTravel(user);
+		//최근 작성한 여행 없을 경우,
 		if (travelPlanUser == null) {
 			return new LatestTravelPlanResponseDto(Boolean.FALSE);
 		}
@@ -145,16 +158,16 @@ public class TravelPlanService {
 		//접근 가능한 유저인지 확인
 		travelPlanUserService.validateAccessTravelPlan(accessOption.readTravelPlanAccessOption());
 		//삭제
-		dayScheduleService.deleteDaySchedulePlace(daySchedulePlaceUUID);
+		dayScheduleService.deleteDaySchedulePlace(accessOption.readDayScheduleUUID(), daySchedulePlaceUUID);
 	}
 
 	@Transactional
-	public void exchangePlaceSequenceInDaySchedule(DayScheduleAccessOption accessOption,
+	public void updatePlacesSequenceInDaySchedule(DayScheduleAccessOption accessOption,
 		List<UUID> daySchedulePlaceUUIDs) {
 		//접근 가능한 유저인지 확인
 		travelPlanUserService.validateAccessTravelPlan(accessOption.readTravelPlanAccessOption());
-		//하루 일정 장소 순서 exchange
-		dayScheduleService.exchangePlaceSequence(daySchedulePlaceUUIDs);
+		//하루 일정 장소 순서 update
+		dayScheduleService.updatePlacesSequence(accessOption.readDayScheduleUUID(), daySchedulePlaceUUIDs);
 	}
 
 	private List<LocalDate> createDateList(LocalDate startTravelDate, int travelDays) {

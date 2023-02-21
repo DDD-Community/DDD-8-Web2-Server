@@ -2,9 +2,10 @@ package ddd.caffeine.ratrip.module.place.presentation.dto.response;
 
 import java.util.UUID;
 
-import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.sub_domain.Address;
 import ddd.caffeine.ratrip.module.place.domain.sub_domain.Location;
+import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,14 +22,18 @@ public class PlaceInRegionResponse {
 	private Location location;
 	private String imageLink;
 	private String telephone;
+	private BookmarkResponseDto bookmark;
 
-	public PlaceInRegionResponse(Place place) {
-		this.id = place.getId();
-		this.name = place.getName();
-		this.category = place.getCategory().name();
-		this.address = place.getAddress();
-		this.imageLink = place.getImageLink();
-		this.location = place.getLocation();
-		this.telephone = place.getTelephone();
+	@Builder
+	public PlaceInRegionResponse(UUID id, String name, String category, Address address, Location location,
+		String imageLink, String telephone, BookmarkResponseDto bookmark) {
+		this.id = id;
+		this.name = name;
+		this.category = category;
+		this.address = address;
+		this.location = location;
+		this.imageLink = imageLink;
+		this.telephone = telephone;
+		this.bookmark = bookmark;
 	}
 }

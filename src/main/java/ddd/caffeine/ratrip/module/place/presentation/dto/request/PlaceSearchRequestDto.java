@@ -2,9 +2,9 @@ package ddd.caffeine.ratrip.module.place.presentation.dto.request;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-import ddd.caffeine.ratrip.common.validator.RequestDataValidator;
+import ddd.caffeine.ratrip.common.RequestDataValidator;
 import ddd.caffeine.ratrip.module.place.domain.ThirdPartySearchOption;
 import lombok.Getter;
 
@@ -13,10 +13,10 @@ public class PlaceSearchRequestDto {
 	@NotBlank(message = "Keyword must not be blank")
 	private String keyword;
 
-	@NotEmpty(message = "Latitude must not be blank")
+	@NotNull(message = "Latitude must not be null")
 	private double latitude;
 
-	@NotEmpty(message = "Longitude must not be blank")
+	@NotNull(message = "Latitude must not be null")
 	private double longitude;
 
 	@Min(1)

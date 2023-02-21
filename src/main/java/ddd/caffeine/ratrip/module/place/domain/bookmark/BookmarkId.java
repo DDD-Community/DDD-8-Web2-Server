@@ -4,13 +4,10 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-import javax.persistence.Embeddable;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Embeddable
 @NoArgsConstructor
 public class BookmarkId implements Serializable {
 	private UUID user;

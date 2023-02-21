@@ -39,7 +39,7 @@ public class TravelPlanUserQueryRepositoryImpl implements TravelPlanUserQueryRep
 			.fetchFirst() != null;
 	}
 
-	public TravelPlanUser findByUserUnfinishedTravel(User user) {
+	public TravelPlanUser findByUserLatestTravel(User user) {
 		TravelPlanUser response = jpaQueryFactory
 			.selectFrom(travelPlanUser)
 			.where(
@@ -47,11 +47,25 @@ public class TravelPlanUserQueryRepositoryImpl implements TravelPlanUserQueryRep
 			)
 			.orderBy(travelPlanUser.createdAt.desc())
 			.fetchFirst();
+
+		return response;
+	}
+
+	public TravelPlanUser findByUserUnFinishedTravel(User user) {
+		TravelPlanUser response = jpaQueryFactory
+			.selectFrom(travelPlanUser)
+			.where(
+				travelPlanUser.user.eq(user),
+				travelPlanUser.travelPlan.isEnd.isFalse()
+			)
+			.orderBy(travelPlanUser.createdAt.desc())
+			.fetchFirst();
+
 		return response;
 	}
 
 	@Override
-	public Slice<TravelPlanUser> findByUser(User user, Pageable pageable) {
+	public Slice<TravelPlanUser> findByUserPagination(User user, Pageable pageable) {
 		List<TravelPlanUser> contents = jpaQueryFactory
 			.selectFrom(travelPlanUser)
 			.where(travelPlanUser.user.eq(user))
@@ -61,6 +75,15 @@ public class TravelPlanUserQueryRepositoryImpl implements TravelPlanUserQueryRep
 			.fetch();
 
 		return QuerydslUtils.toSlice(contents, pageable);
+	}
+
+	//todo : 개발용 - 추후 삭제
+	@Override
+	public List<TravelPlanUser> findByUser(User user) {
+		return jpaQueryFactory
+			.selectFrom(travelPlanUser)
+			.where(travelPlanUser.user.eq(user))
+			.fetch();
 	}
 
 	@Override

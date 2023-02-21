@@ -4,16 +4,16 @@ import lombok.Getter;
 
 @Getter
 public class BookmarkResponseDto {
-	private boolean isBookmarked;
-	private boolean hasBookmark;
+	private boolean isActivated;
+	private boolean isPresent;
 
-	public BookmarkResponseDto(boolean isBookmarked) {
-		this.isBookmarked = isBookmarked;
-		this.hasBookmark = Boolean.TRUE;
+	public BookmarkResponseDto(boolean isActivated) {
+		this.isActivated = isActivated;
+		this.isPresent = Boolean.TRUE;
 	}
 
 	public BookmarkResponseDto() {
-		this.hasBookmark = Boolean.FALSE;
+		this.isPresent = Boolean.FALSE;
 	}
 
 	public static BookmarkResponseDto hasBookmarkFalse() {

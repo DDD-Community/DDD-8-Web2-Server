@@ -2,7 +2,7 @@ package ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.req
 
 import javax.validation.constraints.Size;
 
-import ddd.caffeine.ratrip.common.validator.annotation.UUIDFormat;
+import ddd.caffeine.ratrip.common.annotation.UUIDFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

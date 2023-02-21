@@ -11,11 +11,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.common.jpa.AuditingTimeEntity;
 import ddd.caffeine.ratrip.common.util.SequentialUUIDGenerator;
+import ddd.caffeine.ratrip.module.place.domain.bookmark.Bookmark;
 import ddd.caffeine.ratrip.module.place.domain.sub_domain.Address;
 import ddd.caffeine.ratrip.module.place.domain.sub_domain.Blog;
 import ddd.caffeine.ratrip.module.place.domain.sub_domain.Category;
@@ -79,6 +81,9 @@ public class Place extends AuditingTimeEntity {
 	@Column
 	private int numberOfTrips;
 
+	@OneToMany(mappedBy = "place")
+	private List<Bookmark> bookmarks = new ArrayList<>();
+
 	public void travelCome() {
 		this.numberOfTrips++;
 	}
@@ -109,17 +114,6 @@ public class Place extends AuditingTimeEntity {
 		this.category = Category.createByCode(categoryCode);
 	}
 
-	/**
-	 * 장소에 대한 데이터를 업데이트 해야하는지 확인 하는 메서드.
-	 */
-	public boolean checkNeedsUpdate(String address, String placeName) {
-		Address checkSample = new Address(address);
-		if (this.name.equals(placeName) || this.address.equals(checkSample)) {
-			return Boolean.FALSE;
-		}
-		return Boolean.TRUE;
-	}
-
 	public void update(FeignPlaceData feign) {
 		this.isUpdated = Boolean.TRUE;
 
@@ -146,5 +140,18 @@ public class Place extends AuditingTimeEntity {
 		this.isDeleted = false;
 		this.isUpdated = false;
 		this.numberOfTrips = 0;
+	}
+
+	public void updateBookmark(Bookmark bookmark) {
+		removeIfExistBookmark(bookmark);
+		this.getBookmarks().add(bookmark);
+	}
+
+	private void removeIfExistBookmark(Bookmark bookmark) {
+		boolean isPresent = this.getBookmarks().stream().filter(
+			b -> b.compareToBookmark(bookmark)).findFirst().isPresent();
+		if (isPresent) {
+			this.getBookmarks().remove(bookmark);
+		}
 	}
 }

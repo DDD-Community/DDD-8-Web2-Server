@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.place.presentation;
+package ddd.caffeine.ratrip.common.validator.annotation.place;
 
 import static java.util.UUID.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -20,12 +20,16 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
+import ddd.caffeine.ratrip.module.place.presentation.PlaceController;
 import ddd.caffeine.ratrip.module.place.presentation.dto.request.PlaceSaveByThirdPartyRequestDto;
 
+/**
+ * Place Controller 계층에서 Validate Custom Annotation 에 관한 테스트 입니다.
+ */
 @MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(controllers = PlaceController.class,
 	excludeAutoConfiguration = {SecurityAutoConfiguration.class})
-class PlaceControllerTest {
+class ValidateAnnotationPlaceTest {
 
 	@Autowired
 	private MockMvc mockMvc;

@@ -45,25 +45,39 @@ public class DaySchedulePlaceService {
 		return daySchedulePlace.getId();
 	}
 
-	public void deletePlace(String daySchedulePlaceUUID) {
-		boolean exist = daySchedulePlaceRepository.existByUUID(UUID.fromString(daySchedulePlaceUUID));
-		daySchedulePlaceValidator.validateExist(exist);
-		daySchedulePlaceRepository.delete(UUID.fromString(daySchedulePlaceUUID));
+	public void deletePlace(UUID dayScheduleUUID, String daySchedulePlaceUUID) {
+		DaySchedulePlace daySchedulePlace = daySchedulePlaceValidator.validateExistDaySchedulePlace(
+			daySchedulePlaceRepository.findById(UUID.fromString(daySchedulePlaceUUID)));
+		daySchedulePlaceRepository.delete(daySchedulePlace.getId());
+		//sequence 동기화
+		List<DaySchedulePlace> daySchedulePlaces = daySchedulePlaceRepository.findByDaySchedulePlaceGreaterThanSequence(
+			dayScheduleUUID, daySchedulePlace.getSequence());
+		for (DaySchedulePlace schedulePlace : daySchedulePlaces) {
+			schedulePlace.minusSequence();
+		}
 	}
 
-	public void exchangePlaceSequence(List<UUID> daySchedulePlaceUUIDs) {
-		List<DaySchedulePlace> daySchedulePlaces = daySchedulePlaceRepository.findDaySchedulePlacesById(
-			daySchedulePlaceUUIDs.get(0), daySchedulePlaceUUIDs.get(1));
-		daySchedulePlaceValidator.validateExchangeSequence(daySchedulePlaces);
-
-		DaySchedulePlace baseDaySchedulePlace = daySchedulePlaces.get(0);
-		baseDaySchedulePlace.exchangeOrder(daySchedulePlaces.get(1));
+	public void updatePlacesSequence(UUID dayScheduleUUID, List<UUID> daySchedulePlaceUUIDs) {
+		List<DaySchedulePlace> daySchedulePlaces = daySchedulePlaceRepository.findDaySchedulePlacesByDayScheduleUUID(
+			dayScheduleUUID);
+		for (int index = 0; index < daySchedulePlaceUUIDs.size(); index++) {
+			UUID daySchedulePlaceUUID = daySchedulePlaceUUIDs.get(index);
+			updateSequence(daySchedulePlaces, daySchedulePlaceUUID, index);
+		}
 	}
 
 	public String readRepresentativePhoto(UUID dayScheduleUUID) {
 		return daySchedulePlaceRepository.findRepresentativeImageLink(dayScheduleUUID);
 	}
-	
+
+	private void updateSequence(List<DaySchedulePlace> daySchedulePlaces, UUID daySchedulePlaceUUID, int index) {
+		Optional<DaySchedulePlace> optionalDaySchedulePlace = daySchedulePlaces.stream().filter(
+			o -> o.getId().equals(daySchedulePlaceUUID)).findFirst();
+		DaySchedulePlace daySchedulePlace = daySchedulePlaceValidator.validateExistDaySchedulePlace(
+			optionalDaySchedulePlace);
+		daySchedulePlace.changeSequence(index + 1);
+	}
+
 	private int readNextSequence(UUID dayScheduleUUID) {
 		int total = daySchedulePlaceRepository.countPlacesByDayScheduleUUID(dayScheduleUUID);
 		return total + 1;
@@ -74,4 +88,13 @@ public class DaySchedulePlaceService {
 		daySchedulePlaceValidator.validateNotExist(exist);
 	}
 
+	/**
+	 * Todo : 개발용 추후 삭제
+	 */
+	public void delete(UUID dayScheduleUUID) {
+		List<DaySchedulePlace> daySchedulePlaces = daySchedulePlaceRepository.findByDayScheduleUUID(dayScheduleUUID);
+		for (DaySchedulePlace daySchedulePlace : daySchedulePlaces) {
+			daySchedulePlaceRepository.delete(daySchedulePlace);
+		}
+	}
 }

@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.UUID;
 
 import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceDetailBookmarkDao;
 import ddd.caffeine.ratrip.module.place.domain.sub_domain.Blog;
 import ddd.caffeine.ratrip.module.place.domain.sub_domain.Location;
+import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
 import lombok.Getter;
 
 /**
@@ -25,8 +27,21 @@ public class PlaceDetailResponseDto {
 	private String telephone;
 	private boolean isUpdated;
 	private List<Blog> blogs;
+	BookmarkResponseDto bookmark;
 
-	public PlaceDetailResponseDto(Place place) {
+	public PlaceDetailResponseDto(PlaceDetailBookmarkDao content) {
+		initPlaceContents(content.getPlace());
+		this.bookmark = createBookmarkContent(content.getIsActivated());
+	}
+
+	private BookmarkResponseDto createBookmarkContent(Boolean isActivated) {
+		if (isActivated == null) {
+			return new BookmarkResponseDto();
+		}
+		return new BookmarkResponseDto(isActivated);
+	}
+
+	private void initPlaceContents(Place place) {
 		this.id = place.getId();
 		this.kakaoId = place.getKakaoId();
 		this.name = place.getName();

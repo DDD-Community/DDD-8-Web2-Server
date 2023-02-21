@@ -50,7 +50,7 @@ public class BookmarkQueryRepositoryImpl implements BookmarkQueryRepository {
 				place.category)
 			)
 			.from(bookmark)
-			.join(bookmark.place, place)
+			.innerJoin(bookmark.place, place)
 			.where(
 				bookmark.user.eq(user),
 				bookmark.isActivated.isTrue(),
@@ -86,7 +86,7 @@ public class BookmarkQueryRepositoryImpl implements BookmarkQueryRepository {
 		List<BookmarkPlaceByRegionDao> contents = jpaQueryFactory
 			.select(new QBookmarkPlaceByRegionDao(place.id, place.name, place.imageLink))
 			.from(bookmark)
-			.join(bookmark.place, place)
+			.innerJoin(bookmark.place, place)
 			.where(
 				bookmark.user.eq(user),
 				bookmark.isActivated.isTrue(),

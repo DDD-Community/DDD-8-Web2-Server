@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.travel_plan.repository;
+package ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.repository;
 
 import static org.assertj.core.api.Assertions.*;
 

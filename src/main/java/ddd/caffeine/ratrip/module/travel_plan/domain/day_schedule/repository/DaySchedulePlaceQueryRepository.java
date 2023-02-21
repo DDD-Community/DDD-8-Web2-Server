@@ -12,15 +12,17 @@ public interface DaySchedulePlaceQueryRepository {
 	List<DaySchedulePlaceDao> findDaySchedulePlaceDaoByDayScheduleUUIDAndPlaceUUID(UUID dayScheduleUUID,
 		String placeUUID);
 
-	List<DaySchedulePlace> findDaySchedulePlacesById(UUID firstUUID, UUID secondUUID);
+	List<DaySchedulePlace> findDaySchedulePlacesByDayScheduleUUID(UUID dayScheduleUUID);
 
 	Integer countPlacesByDayScheduleUUID(UUID dayScheduleUUID);
 
 	boolean existByDayScheduleAndPlace(DaySchedule daySchedule, Place place);
 
-	boolean existByUUID(UUID daySchedulePlaceUUID);
+	List<DaySchedulePlace> findByDaySchedulePlaceGreaterThanSequence(UUID daySchedulePlaceUUID, int sequence);
 
 	String findRepresentativeImageLink(UUID dayScheduleUUID);
 
 	Long delete(UUID daySchedulePlaceUUID);
+
+	List<DaySchedulePlace> findByDayScheduleUUID(UUID dayScheduleUUID);
 }

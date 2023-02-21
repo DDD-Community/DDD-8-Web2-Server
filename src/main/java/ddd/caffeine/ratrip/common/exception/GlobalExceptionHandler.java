@@ -61,7 +61,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		ExceptionResponse response = ExceptionResponse.builder()
 			.httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 			.errorCode("UNEXPECTED_EXCEPTION")
-			.message(e.getMessage())
+			.message("Internal Server Error")
 			.build();
 
 		return new ResponseEntity<>(response, response.getHttpStatus());

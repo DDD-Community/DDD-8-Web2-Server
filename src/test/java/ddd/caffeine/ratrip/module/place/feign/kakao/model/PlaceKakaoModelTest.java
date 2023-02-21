@@ -8,12 +8,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import ddd.caffeine.ratrip.common.exception.domain.PlaceException;
+import ddd.caffeine.ratrip.module.place.feign.kakao.model.FeignPlaceModel;
 
 class PlaceKakaoModelTest {
-
 	@Test
 	@DisplayName("데이터가 없을 경우 메서드 예외 정상 동작 테스트")
-	void readOneTest() {
+	void readOneExceptionTest() {
 		//given
 		FeignPlaceModel feignPlaceModel = new FeignPlaceModel();
 		feignPlaceModel.documents = new ArrayList<>();

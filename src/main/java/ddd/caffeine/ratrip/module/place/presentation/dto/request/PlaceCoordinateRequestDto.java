@@ -1,31 +1,31 @@
-package ddd.caffeine.ratrip.module.place.presentation.dto.bookmark;
+package ddd.caffeine.ratrip.module.place.presentation.dto.request;
 
 import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.common.RequestDataValidator;
-import ddd.caffeine.ratrip.module.place.application.dto.BookmarkPlaceByRegionDto;
+import ddd.caffeine.ratrip.module.place.application.dto.PlaceByCoordinateDto;
 import lombok.Getter;
 
 @Getter
-public class BookmarkPlaceByCoordinateRequestDto {
+public class PlaceCoordinateRequestDto {
 	@NotNull(message = "Latitude must not be null")
-	private final double latitude;
+	private Double latitude;
 
 	@NotNull(message = "Longitude must not be null")
-	private final double longitude;
+	private Double longitude;
 
-	public BookmarkPlaceByCoordinateRequestDto(double latitude, double longitude) {
+	public PlaceCoordinateRequestDto(Double latitude, Double longitude) {
 		validateParameters(latitude, longitude);
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
 
-	public BookmarkPlaceByRegionDto toServiceDto() {
-		return BookmarkPlaceByRegionDto.of(latitude, longitude);
-	}
-
 	private void validateParameters(double latitude, double longitude) {
 		RequestDataValidator.validateRangeLatitude(latitude);
 		RequestDataValidator.validateRangeLongitude(longitude);
+	}
+
+	public PlaceByCoordinateDto toServiceDto() {
+		return PlaceByCoordinateDto.of(latitude, longitude);
 	}
 }

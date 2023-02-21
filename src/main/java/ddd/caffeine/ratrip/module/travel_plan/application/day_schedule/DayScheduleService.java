@@ -25,6 +25,15 @@ public class DayScheduleService {
 	private final DayScheduleValidator dayScheduleValidator;
 	private final DayScheduleRepository dayScheduleRepository;
 
+	//todo : 개발용 
+	public void deleteDaySchedule(UUID travelPlanUUID) {
+		List<DaySchedule> daySchedule = dayScheduleRepository.findByTravelPlanId(travelPlanUUID);
+		for (DaySchedule schedule : daySchedule) {
+			daySchedulePlaceService.delete(schedule.getId());
+			dayScheduleRepository.delete(schedule);
+		}
+	}
+
 	public void initTravelPlan(TravelPlan travelPlan, List<LocalDate> dates) {
 		List<DaySchedule> daySchedules = new ArrayList<>();
 		for (LocalDate date : dates) {
@@ -47,8 +56,8 @@ public class DayScheduleService {
 		return daySchedulePlaceService.update(daySchedulePlaceUUID, memo);
 	}
 
-	public void deleteDaySchedulePlace(String daySchedulePlaceUUID) {
-		daySchedulePlaceService.deletePlace(daySchedulePlaceUUID);
+	public void deleteDaySchedulePlace(UUID dayScheduleUUID, String daySchedulePlaceUUID) {
+		daySchedulePlaceService.deletePlace(dayScheduleUUID, daySchedulePlaceUUID);
 	}
 
 	public DayScheduleResponseDto readDaySchedule(UUID dayScheduleUUID, String placeUUID) {
@@ -69,8 +78,8 @@ public class DayScheduleService {
 		return dayScheduleRepository.findByTravelPlanId(travelPlanUUID);
 	}
 
-	public void exchangePlaceSequence(List<UUID> daySchedulePlaceUUIDs) {
-		daySchedulePlaceService.exchangePlaceSequence(daySchedulePlaceUUIDs);
+	public void updatePlacesSequence(UUID dayScheduleUUID, List<UUID> daySchedulePlaceUUIDs) {
+		daySchedulePlaceService.updatePlacesSequence(dayScheduleUUID, daySchedulePlaceUUIDs);
 	}
 
 	public String readRepresentativePhoto(UUID travelPlanUUID, LocalDate date) {

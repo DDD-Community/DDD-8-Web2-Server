@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.common.validator.annotation;
+package ddd.caffeine.ratrip.common.annotation;
 
 import java.util.regex.Pattern;
 

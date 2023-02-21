@@ -1,10 +1,9 @@
 package ddd.caffeine.ratrip.module.place.domain;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Builder
 public class ThirdPartyDetailSearchOption {
 	private String id;
@@ -12,14 +11,6 @@ public class ThirdPartyDetailSearchOption {
 	private String placeName;
 
 	private String address;
-
-	public Map<String, String> readPlaceNameAndAddress() {
-		HashMap<String, String> placeNameAndAddressMap = new HashMap<>();
-		placeNameAndAddressMap.put("name", this.placeName);
-		placeNameAndAddressMap.put("address", this.address);
-
-		return placeNameAndAddressMap;
-	}
 
 	public String readThirdPartyId() {
 		return this.id;

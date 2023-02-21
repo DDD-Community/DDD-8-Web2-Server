@@ -1,5 +1,7 @@
 package ddd.caffeine.ratrip.module.place.domain.sub_domain;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
@@ -40,5 +42,21 @@ public class Address {
 
 	private Region createRegion(String keyword) {
 		return Region.createRegionIfNotExistReturnEtc(keyword);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Address address = (Address)o;
+		return Objects.equals(this.region, address.getRegion()) &&
+			Objects.equals(this.detailed, address.getDetailed());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.region, this.detailed);
 	}
 }

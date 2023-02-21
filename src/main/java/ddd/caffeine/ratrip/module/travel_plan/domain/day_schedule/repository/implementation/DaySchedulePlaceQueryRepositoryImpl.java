@@ -22,6 +22,17 @@ public class DaySchedulePlaceQueryRepositoryImpl implements DaySchedulePlaceQuer
 
 	private final JPAQueryFactory jpaQueryFactory;
 
+	/**
+	 * todo : 추후 삭제
+	 */
+	@Override
+	public List<DaySchedulePlace> findByDayScheduleUUID(UUID dayScheduleUUID) {
+		return jpaQueryFactory
+			.selectFrom(daySchedulePlace)
+			.where(daySchedulePlace.daySchedule.id.eq(dayScheduleUUID))
+			.fetch();
+	}
+
 	@Override
 	public List<DaySchedulePlaceDao> findDaySchedulePlaceDaoByDayScheduleUUIDAndPlaceUUID(UUID dayScheduleUUID,
 		String placeUUID) {
@@ -41,11 +52,11 @@ public class DaySchedulePlaceQueryRepositoryImpl implements DaySchedulePlaceQuer
 	}
 
 	@Override
-	public List<DaySchedulePlace> findDaySchedulePlacesById(UUID firstUUID, UUID secondUUID) {
+	public List<DaySchedulePlace> findDaySchedulePlacesByDayScheduleUUID(UUID dayScheduleUUID) {
 		return jpaQueryFactory
 			.selectFrom(daySchedulePlace)
 			.where(
-				daySchedulePlace.id.eq(firstUUID).or(daySchedulePlace.id.eq(secondUUID))
+				daySchedulePlace.daySchedule.id.eq(dayScheduleUUID)
 			)
 			.fetch();
 	}
@@ -70,13 +81,14 @@ public class DaySchedulePlaceQueryRepositoryImpl implements DaySchedulePlaceQuer
 	}
 
 	@Override
-	public boolean existByUUID(UUID daySchedulePlaceUUID) {
+	public List<DaySchedulePlace> findByDaySchedulePlaceGreaterThanSequence(UUID dayScheduleUUID, int sequence) {
 		return jpaQueryFactory
 			.selectFrom(daySchedulePlace)
 			.where(
-				daySchedulePlace.id.eq(daySchedulePlaceUUID)
+				daySchedulePlace.daySchedule.id.eq(dayScheduleUUID),
+				daySchedulePlace.sequence.gt(sequence)
 			)
-			.fetchFirst() != null;
+			.fetch();
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.common.validator;
+package ddd.caffeine.ratrip.common;
 
 import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
 

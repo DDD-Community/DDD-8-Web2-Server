@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.common.validator.annotation;
+package ddd.caffeine.ratrip.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,9 +9,9 @@ import javax.validation.Constraint;
 
 @Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = NumberValidator.class)
-public @interface Number {
-	String message() default "ID 값은 숫자로 이루어져있어야합니다.";
+@Constraint(validatedBy = NullableUUIDValidator.class)
+public @interface NullableUUIDFormat {
+	String message() default "올바른 UUID 형식이 아닙니다.";
 
 	Class[] groups() default {};
 

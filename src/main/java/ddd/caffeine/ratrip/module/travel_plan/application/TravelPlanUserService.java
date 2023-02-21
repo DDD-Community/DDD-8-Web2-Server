@@ -2,6 +2,8 @@ package ddd.caffeine.ratrip.module.travel_plan.application;
 
 import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
 
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -22,21 +24,33 @@ public class TravelPlanUserService {
 
 	private final TravelPlanUserRepository travelPlanUserRepository;
 
+	//Todo : 개발용 - 추후 삭제할 것
+	public void deleteTravelPlanUser(User user) {
+		List<TravelPlanUser> travelPlanUser = travelPlanUserRepository.findByUser(user);
+		for (TravelPlanUser planUser : travelPlanUser) {
+			travelPlanUserRepository.delete(planUser);
+		}
+	}
+
 	public void saveTravelPlanWithUser(TravelPlan travelPlan, User user) {
 		TravelPlanUser travelPlanUser = new TravelPlanUser(travelPlan, user);
 		travelPlanUserRepository.save(travelPlanUser);
 	}
 
 	public MyTravelPlanResponseDto readByUser(User user, Pageable pageable) {
-		Slice<TravelPlanUser> travelPlanUser = travelPlanUserRepository.findByUser(user, pageable);
+		Slice<TravelPlanUser> travelPlanUser = travelPlanUserRepository.findByUserPagination(user, pageable);
 		return MyTravelPlanResponseDto.builder()
 			.contents(travelPlanUser.getContent())
 			.hasNext(travelPlanUser.hasNext())
 			.build();
 	}
 
+	public TravelPlanUser readByUserLatestTravel(User user) {
+		return travelPlanUserRepository.findByUserLatestTravel(user);
+	}
+
 	public TravelPlanUser readByUserUnfinishedTravel(User user) {
-		return travelPlanUserRepository.findByUserUnfinishedTravel(user);
+		return travelPlanUserRepository.findByUserUnFinishedTravel(user);
 	}
 
 	public void validateAccessTravelPlan(TravelPlanAccessOption accessOption) {
