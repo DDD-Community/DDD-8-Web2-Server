@@ -32,6 +32,10 @@ public class DaySchedule extends AuditingTimeEntity {
 	@Column(columnDefinition = "DATE")
 	private LocalDate date;
 
+	@NotNull
+	@Column(name = "is_deleted", columnDefinition = "TINYINT(1)")
+	private boolean isDeleted = Boolean.FALSE;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "travel_plan_id", columnDefinition = "BINARY(16)")
 	private TravelPlan travelPlan;

@@ -41,6 +41,10 @@ public class DaySchedulePlace extends AuditingTimeEntity {
 	@Column(columnDefinition = "VARCHAR(255)")
 	private String memo;
 
+	@NotNull
+	@Column(name = "is_deleted", columnDefinition = "TINYINT(1)")
+	private boolean isDeleted = Boolean.FALSE;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "day_schedule_id", columnDefinition = "BINARY(16)")
 	private DaySchedule daySchedule;
