@@ -55,4 +55,8 @@ public class DaySchedule extends AuditingTimeEntity {
 	public UUID readPrimaryKey() {
 		return this.id;
 	}
+
+	public void delete() {
+		this.isDeleted = Boolean.TRUE;
+	}
 }

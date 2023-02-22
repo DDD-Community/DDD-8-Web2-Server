@@ -34,6 +34,16 @@ public class DayScheduleService {
 		}
 	}
 
+	public void deleteAllDaySchedule(UUID travelPlanUUID) { //TODO - 쿼리 확인해보기
+		List<DaySchedule> daySchedules = dayScheduleRepository.findByTravelPlanId(travelPlanUUID);
+
+		for (DaySchedule daySchedule : daySchedules) {
+			daySchedulePlaceService.deleteAllDaySchedulePlaceByDaySchedule(daySchedule.getId());
+			daySchedule.delete();
+		}
+
+	}
+
 	public void initTravelPlan(TravelPlan travelPlan, List<LocalDate> dates) {
 		List<DaySchedule> daySchedules = new ArrayList<>();
 		for (LocalDate date : dates) {
