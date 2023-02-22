@@ -101,7 +101,7 @@ public class TravelPlanService {
 		List<TravelPlan> travelPlans = travelPlanRepository.findAllOngoingTravelPlan();
 		for (TravelPlan travelPlan : travelPlans) {
 			if (filterOutOfDate(travelPlan, currentDate)) {
-				travelPlan.isEnd();
+				travelPlan.endTheTrip();
 			}
 		}
 	}
