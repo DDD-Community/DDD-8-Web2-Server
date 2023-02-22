@@ -21,14 +21,15 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class TravelPlanUserService {
-
 	private final TravelPlanUserRepository travelPlanUserRepository;
 
-	//Todo : 개발용 - 추후 삭제할 것
-	public void deleteTravelPlanUser(User user) {
-		List<TravelPlanUser> travelPlanUser = travelPlanUserRepository.findByUser(user);
-		for (TravelPlanUser planUser : travelPlanUser) {
-			travelPlanUserRepository.delete(planUser);
+	public void deleteTravelPlanUser(User user) { //TODO - 쿼리 확인하기
+		List<TravelPlanUser> travelPlanUsers = travelPlanUserRepository.findByUser(user);
+
+		if (!travelPlanUsers.isEmpty()) {
+			for (TravelPlanUser travelPlanUser : travelPlanUsers) {
+				travelPlanUser.delete();
+			}
 		}
 	}
 

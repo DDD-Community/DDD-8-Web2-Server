@@ -77,7 +77,6 @@ public class TravelPlanUserQueryRepositoryImpl implements TravelPlanUserQueryRep
 		return QuerydslUtils.toSlice(contents, pageable);
 	}
 
-	//todo : 개발용 - 추후 삭제
 	@Override
 	public List<TravelPlanUser> findByUser(User user) {
 		return jpaQueryFactory
