@@ -1,5 +1,7 @@
 package ddd.caffeine.ratrip.module.travel_plan.application;
 
+import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ddd.caffeine.ratrip.common.exception.domain.TravelPlanException;
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.travel_plan.application.day_schedule.DayScheduleService;
@@ -43,12 +46,39 @@ public class TravelPlanService {
 	 * 개발용 - 추후 삭제.
 	 */
 	@Transactional
-	public void deleteTravelPlan(String travelPlanUUID, User user) {
+	public void TEMP_deleteTravelPlan(String travelPlanUUID, User user) {
 		Optional<TravelPlan> travelPlan = travelPlanRepository.findById(UUID.fromString(travelPlanUUID));
 		travelPlanValidator.validateExistTravelPlan(travelPlan);
-		travelPlanUserService.deleteTravelPlanUser(user);
-		dayScheduleService.deleteDaySchedule(UUID.fromString(travelPlanUUID));
+		travelPlanUserService.TEMP_deleteTravelPlanUser(user);
+		dayScheduleService.TEMP_deleteDaySchedule(UUID.fromString(travelPlanUUID));
 		travelPlanRepository.delete(travelPlan.get());
+	}
+
+	@Transactional
+	public void deleteAllTravelPlan(User user) {
+		List<TravelPlanUser> travelPlanUsers = travelPlanUserService.findByUser(user);
+
+		for (TravelPlanUser travelPlanUser : travelPlanUsers) {
+			deleteDaySchedule(travelPlanUser);
+			deleteTravelPlanUser(travelPlanUser);
+			deleteTravelPlan(travelPlanUser.getTravelPlan().readUUID());
+		}
+	}
+
+	private void deleteTravelPlanUser(TravelPlanUser travelPlanUser) {
+		travelPlanUserService.deleteTravelPlanUser(travelPlanUser);
+	}
+
+	private void deleteDaySchedule(TravelPlanUser travelPlanUser) {
+		dayScheduleService.deleteDaySchedule(travelPlanUser.getTravelPlan().readUUID());
+	}
+
+	@Transactional
+	public void deleteTravelPlan(UUID TravelPlanUUID) {
+		TravelPlan travelPlan = travelPlanRepository.findById(TravelPlanUUID)
+			.orElseThrow(() -> new TravelPlanException(NOT_FOUND_TRAVEL_PLAN_EXCEPTION));
+
+		travelPlan.delete();
 	}
 
 	@Transactional(readOnly = true)
@@ -77,8 +107,8 @@ public class TravelPlanService {
 	}
 
 	@Transactional(readOnly = true)
-	public MyTravelPlanResponseDto readAllTravelPlanByUser(User user, Pageable pageable) {
-		MyTravelPlanResponseDto response = travelPlanUserService.readByUser(user, pageable);
+	public MyTravelPlanResponseDto readAllTravelPlanByUserPagination(User user, Pageable pageable) {
+		MyTravelPlanResponseDto response = travelPlanUserService.readByUserPagination(user, pageable);
 		for (MyTravelPlanResponse content : response.readContents()) {
 			String imageLink = dayScheduleService.readRepresentativePhoto(content.readTravelPlanId(),
 				content.readStartDate());

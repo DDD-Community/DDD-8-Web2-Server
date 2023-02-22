@@ -25,19 +25,13 @@ public class TravelPlanUserService {
 	private final TravelPlanUserRepository travelPlanUserRepository;
 
 	//Todo : 개발용 - 추후 삭제할 것
-	public void deleteTravelPlanUser(User user) {
+	public void TEMP_deleteTravelPlanUser(User user) {
 		List<TravelPlanUser> travelPlanUser = travelPlanUserRepository.findByUser(user);
-		travelPlanUserRepository.deleteAll(travelPlanUser);
+		travelPlanUserRepository.deleteAllInBatch(travelPlanUser);
 	}
 
-	public void deleteAllTravelPlanUser(User user) { //TODO - 쿼리 확인하기
-		List<TravelPlanUser> travelPlanUsers = travelPlanUserRepository.findByUser(user);
-
-		if (!travelPlanUsers.isEmpty()) {
-			for (TravelPlanUser travelPlanUser : travelPlanUsers) {
-				travelPlanUser.delete();
-			}
-		}
+	public void deleteTravelPlanUser(TravelPlanUser travelPlanUser) { //TODO - 쿼리 확인하기
+		travelPlanUser.delete();
 	}
 
 	public void saveTravelPlanWithUser(TravelPlan travelPlan, User user) {
@@ -45,12 +39,16 @@ public class TravelPlanUserService {
 		travelPlanUserRepository.save(travelPlanUser);
 	}
 
-	public MyTravelPlanResponseDto readByUser(User user, Pageable pageable) {
+	public MyTravelPlanResponseDto readByUserPagination(User user, Pageable pageable) {
 		Slice<TravelPlanUser> travelPlanUser = travelPlanUserRepository.findByUserPagination(user, pageable);
 		return MyTravelPlanResponseDto.builder()
 			.contents(travelPlanUser.getContent())
 			.hasNext(travelPlanUser.hasNext())
 			.build();
+	}
+
+	public List<TravelPlanUser> findByUser(User user) {
+		return travelPlanUserRepository.findByUser(user);
 	}
 
 	public TravelPlanUser readByUserLatestTravel(User user) {

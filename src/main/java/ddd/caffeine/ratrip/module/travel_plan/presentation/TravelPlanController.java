@@ -53,7 +53,7 @@ public class TravelPlanController {
 	public ResponseEntity<MyTravelPlanResponseDto> readAllTravelPlanApi(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user,
 		@PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-		MyTravelPlanResponseDto response = travelPlanService.readAllTravelPlanByUser(user, pageable);
+		MyTravelPlanResponseDto response = travelPlanService.readAllTravelPlanByUserPagination(user, pageable);
 		return ResponseEntity.ok(response);
 	}
 
@@ -83,7 +83,7 @@ public class TravelPlanController {
 	public ResponseEntity<String> deleteTravelPlanApi(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user,
 		@PathVariable("travel_plan_id") @UUIDFormat String travelPlanUUID) {
-		travelPlanService.deleteTravelPlan(travelPlanUUID, user);
+		travelPlanService.TEMP_deleteTravelPlan(travelPlanUUID, user);
 		return ResponseEntity.ok("DELETE TO SUCCESS");
 	}
 

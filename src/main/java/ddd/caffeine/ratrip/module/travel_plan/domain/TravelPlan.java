@@ -75,4 +75,8 @@ public class TravelPlan extends AuditingTimeEntity implements Serializable {
 		this.travelDays = travelDays;
 		this.startDate = startDate;
 	}
+
+	public void delete() {
+		this.isDeleted = Boolean.TRUE;
+	}
 }

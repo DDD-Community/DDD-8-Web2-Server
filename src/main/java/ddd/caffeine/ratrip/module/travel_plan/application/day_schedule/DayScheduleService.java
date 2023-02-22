@@ -26,7 +26,7 @@ public class DayScheduleService {
 	private final DayScheduleRepository dayScheduleRepository;
 
 	//todo : 개발용 
-	public void deleteDaySchedule(UUID travelPlanUUID) {
+	public void TEMP_deleteDaySchedule(UUID travelPlanUUID) {
 		List<DaySchedule> daySchedule = dayScheduleRepository.findByTravelPlanId(travelPlanUUID);
 		for (DaySchedule schedule : daySchedule) {
 			daySchedulePlaceService.delete(schedule.getId());
@@ -34,11 +34,11 @@ public class DayScheduleService {
 		}
 	}
 
-	public void deleteAllDaySchedule(UUID travelPlanUUID) { //TODO - 쿼리 확인해보기
+	public void deleteDaySchedule(UUID travelPlanUUID) { //TODO - 쿼리 확인해보기
 		List<DaySchedule> daySchedules = dayScheduleRepository.findByTravelPlanId(travelPlanUUID);
 
 		for (DaySchedule daySchedule : daySchedules) {
-			daySchedulePlaceService.deleteAllDaySchedulePlaceByDaySchedule(daySchedule.getId());
+			daySchedulePlaceService.deleteAllDaySchedulePlaceByDayScheduleUUID(daySchedule.getId());
 			daySchedule.delete();
 		}
 
