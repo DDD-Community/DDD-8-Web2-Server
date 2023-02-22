@@ -93,8 +93,6 @@ public class DaySchedulePlaceService {
 	 */
 	public void delete(UUID dayScheduleUUID) {
 		List<DaySchedulePlace> daySchedulePlaces = daySchedulePlaceRepository.findByDayScheduleUUID(dayScheduleUUID);
-		for (DaySchedulePlace daySchedulePlace : daySchedulePlaces) {
-			daySchedulePlaceRepository.delete(daySchedulePlace);
-		}
+		daySchedulePlaceRepository.deleteAll(daySchedulePlaces);
 	}
 }
