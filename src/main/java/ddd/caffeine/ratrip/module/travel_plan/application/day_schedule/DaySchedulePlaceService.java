@@ -93,6 +93,16 @@ public class DaySchedulePlaceService {
 	 */
 	public void delete(UUID dayScheduleUUID) {
 		List<DaySchedulePlace> daySchedulePlaces = daySchedulePlaceRepository.findByDayScheduleUUID(dayScheduleUUID);
-		daySchedulePlaceRepository.deleteAll(daySchedulePlaces);
+		daySchedulePlaceRepository.deleteAllInBatch(daySchedulePlaces);
+	}
+
+	public void deleteAllDaySchedulePlaceByDaySchedule(UUID dayScheduleUUID) { //TODO - 쿼리 확인해보기
+		List<DaySchedulePlace> daySchedulePlaces = daySchedulePlaceRepository.findByDayScheduleUUID(dayScheduleUUID);
+
+		if (!daySchedulePlaces.isEmpty()) {
+			for (DaySchedulePlace daySchedulePlace : daySchedulePlaces) {
+				daySchedulePlace.delete();
+			}
+		}
 	}
 }

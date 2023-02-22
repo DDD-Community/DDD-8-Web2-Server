@@ -78,4 +78,8 @@ public class DaySchedulePlace extends AuditingTimeEntity {
 	public void update(String memo) {
 		this.memo = memo;
 	}
+
+	public void delete() {
+		this.isDeleted = Boolean.TRUE;
+	}
 }
