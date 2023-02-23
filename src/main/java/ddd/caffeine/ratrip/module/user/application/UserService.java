@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ddd.caffeine.ratrip.common.exception.domain.UserException;
 import ddd.caffeine.ratrip.module.notification.application.dto.UpdateUserNameDto;
+import ddd.caffeine.ratrip.module.place.application.PlaceService;
 import ddd.caffeine.ratrip.module.travel_plan.application.TravelPlanService;
 import ddd.caffeine.ratrip.module.user.application.dto.SignUpUserDto;
 import ddd.caffeine.ratrip.module.user.domain.SocialInfo;
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService implements UserDetailsService {
 	private final UserRepository userRepository;
 	private final TravelPlanService travelPlanService;
+	private final PlaceService placeService;
 	private final UserValidator userValidator;
 
 	public UUID findUserIdBySocialIdAndSocialType(SignUpUserDto request) {
@@ -43,9 +45,9 @@ public class UserService implements UserDetailsService {
 	}
 
 	public void withdrawal(User user) {
-		travelPlanService.deleteAllTravelPlan(user);
-		userRepository.delete(user);
-
+		travelPlanService.deleteAllTravelPlan(user); //TODO -  조회시 isDeleted 속성 확인하는 부분 추가
+		placeService.deleteAllBookmark(user);
+		userRepository.delete(user); // 안먹힘
 	}
 
 	private User findUserBySocialInfo(SocialInfo socialInfo) {

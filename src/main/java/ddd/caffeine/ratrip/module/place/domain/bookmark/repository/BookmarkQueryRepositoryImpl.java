@@ -6,6 +6,7 @@ import static org.springframework.util.ObjectUtils.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -98,6 +99,16 @@ public class BookmarkQueryRepositoryImpl implements BookmarkQueryRepository {
 			.fetch();
 
 		return QuerydslUtils.toSlice(contents, pageable);
+	}
+
+	@Override
+	public List<Bookmark> findByUserId(UUID id) {
+		return jpaQueryFactory
+			.selectFrom(bookmark)
+			.where(
+				bookmark.user.id.eq(id)
+			)
+			.fetch();
 	}
 
 	private BooleanExpression categoriesIn(List<Category> categories) {

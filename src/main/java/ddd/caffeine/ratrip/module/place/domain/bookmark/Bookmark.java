@@ -36,6 +36,10 @@ public class Bookmark extends AuditingTimeEntity {
 	@Column(name = "is_activated", columnDefinition = "TINYINT(1)")
 	private boolean isActivated;
 
+	@NotNull
+	@Column(name = "is_deleted", columnDefinition = "TINYINT(1)")
+	private boolean isDeleted = Boolean.FALSE;
+
 	@Builder
 	private Bookmark(User user, Place place) {
 		changePlace(place);
@@ -69,5 +73,9 @@ public class Bookmark extends AuditingTimeEntity {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
+	}
+
+	public void delete() {
+		this.isDeleted = Boolean.TRUE;
 	}
 }
