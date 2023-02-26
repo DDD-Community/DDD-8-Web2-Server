@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ddd.caffeine.ratrip.module.user.application.UserService;
 import ddd.caffeine.ratrip.module.user.domain.User;
+import ddd.caffeine.ratrip.module.user.domain.UserStatus;
 import ddd.caffeine.ratrip.module.user.presentation.dto.request.UpdateUserNameRequestDto;
 import ddd.caffeine.ratrip.module.user.presentation.dto.response.UserNameResponseDto;
 import ddd.caffeine.ratrip.module.user.presentation.dto.response.UserNameUpdateResponseDto;
@@ -43,8 +44,7 @@ public class UserController {
 
 	@Operation(summary = "회원 탈퇴")
 	@DeleteMapping("/withdrawal")
-	public ResponseEntity<String> withdrawal(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
-		userService.withdrawal(user);
-		return ResponseEntity.ok("Delete Success");
+	public ResponseEntity<UserStatus> withdrawal(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
+		return ResponseEntity.ok(userService.withdrawal(user));
 	}
 }

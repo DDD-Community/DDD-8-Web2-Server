@@ -44,10 +44,12 @@ public class UserService implements UserDetailsService {
 		return new UserNameUpdateResponseDto(userRepository.save(user).getName());
 	}
 
-	public void withdrawal(User user) {
+	@Transactional
+	public UserStatus withdrawal(User user) {
 		travelPlanService.deleteAllTravelPlan(user); //TODO -  조회시 isDeleted 속성 확인하는 부분 추가
 		placeService.deleteAllBookmark(user);
-		userRepository.delete(user); // 안먹힘
+		user.delete();
+		return userRepository.save(user).getStatus();
 	}
 
 	private User findUserBySocialInfo(SocialInfo socialInfo) {
