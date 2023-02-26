@@ -70,6 +70,10 @@ public class User extends AuditingTimeEntity implements UserDetails {
 		this.name = name;
 	}
 
+	public void delete(User user) {
+		this.status = UserStatus.DELETED;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return null;
