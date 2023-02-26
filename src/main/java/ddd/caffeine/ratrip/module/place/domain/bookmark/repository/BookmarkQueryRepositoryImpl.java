@@ -38,7 +38,8 @@ public class BookmarkQueryRepositoryImpl implements BookmarkQueryRepository {
 		return jpaQueryFactory
 			.selectFrom(bookmark)
 			.where(
-				bookmarkIdEq(id)
+				bookmarkIdEq(id),
+				bookmark.isDeleted.isFalse()
 			)
 			.fetchOne();
 	}
@@ -55,6 +56,7 @@ public class BookmarkQueryRepositoryImpl implements BookmarkQueryRepository {
 			.where(
 				bookmark.user.eq(user),
 				bookmark.isActivated.isTrue(),
+				bookmark.isDeleted.isFalse(),
 				categoriesIn(categories)
 			)
 			.orderBy(readOrderSpecifiers(pageable).toArray(OrderSpecifier[]::new))
@@ -91,6 +93,7 @@ public class BookmarkQueryRepositoryImpl implements BookmarkQueryRepository {
 			.where(
 				bookmark.user.eq(user),
 				bookmark.isActivated.isTrue(),
+				bookmark.isDeleted.isFalse(),
 				place.address.region.eq(region)
 			)
 			.orderBy(place.numberOfTrips.desc())

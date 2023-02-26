@@ -43,7 +43,7 @@ public class TravelPlanUserQueryRepositoryImpl implements TravelPlanUserQueryRep
 		TravelPlanUser response = jpaQueryFactory
 			.selectFrom(travelPlanUser)
 			.where(
-				travelPlanUser.user.eq(user)
+				travelPlanUser.user.eq(user), travelPlanUser.travelPlan.isDeleted.isFalse()
 			)
 			.orderBy(travelPlanUser.createdAt.desc())
 			.fetchFirst();
@@ -68,7 +68,7 @@ public class TravelPlanUserQueryRepositoryImpl implements TravelPlanUserQueryRep
 	public Slice<TravelPlanUser> findByUserPagination(User user, Pageable pageable) {
 		List<TravelPlanUser> contents = jpaQueryFactory
 			.selectFrom(travelPlanUser)
-			.where(travelPlanUser.user.eq(user))
+			.where(travelPlanUser.user.eq(user), travelPlanUser.travelPlan.isDeleted.isFalse())
 			.orderBy(readOrderSpecifiers(pageable).toArray(OrderSpecifier[]::new))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize() + 1)

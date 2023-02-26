@@ -33,7 +33,7 @@ public class DayScheduleQueryRepositoryImpl implements DayScheduleQueryRepositor
 		return jpaQueryFactory
 			.selectFrom(daySchedule)
 			.where(
-				daySchedule.travelPlan.id.eq(travelPlanId)
+				daySchedule.travelPlan.id.eq(travelPlanId), daySchedule.isDeleted.isFalse()
 			)
 			.fetch();
 	}
