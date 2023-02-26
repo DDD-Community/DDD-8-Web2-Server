@@ -70,7 +70,7 @@ public class User extends AuditingTimeEntity implements UserDetails {
 		this.name = name;
 	}
 
-	public void delete(User user) {
+	public void delete() {
 		this.status = UserStatus.DELETED;
 	}
 
