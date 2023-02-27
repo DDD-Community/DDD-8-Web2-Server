@@ -96,7 +96,7 @@ public class DaySchedulePlaceService {
 		daySchedulePlaceRepository.deleteAllInBatch(daySchedulePlaces);
 	}
 
-	public void deleteAllDaySchedulePlaceByDayScheduleUUID(UUID dayScheduleUUID) { //TODO - 쿼리 확인해보기
+	public void deleteAllDaySchedulePlaceByDayScheduleUUID(UUID dayScheduleUUID) {
 		List<DaySchedulePlace> daySchedulePlaces = daySchedulePlaceRepository.findByDayScheduleUUID(dayScheduleUUID);
 
 		for (DaySchedulePlace daySchedulePlace : daySchedulePlaces) {

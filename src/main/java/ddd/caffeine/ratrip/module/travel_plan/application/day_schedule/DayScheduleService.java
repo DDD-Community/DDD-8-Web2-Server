@@ -34,7 +34,7 @@ public class DayScheduleService {
 		}
 	}
 
-	public void deleteDaySchedule(UUID travelPlanUUID) { //TODO - 쿼리 확인해보기
+	public void deleteDaySchedule(UUID travelPlanUUID) {
 		List<DaySchedule> daySchedules = dayScheduleRepository.findByTravelPlanId(travelPlanUUID);
 
 		for (DaySchedule daySchedule : daySchedules) {

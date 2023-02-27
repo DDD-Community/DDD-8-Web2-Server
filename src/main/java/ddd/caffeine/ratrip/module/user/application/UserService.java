@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
 
 	@Transactional
 	public UserStatus withdrawal(User user) {
-		travelPlanService.deleteAllTravelPlan(user); //TODO -  조회시 isDeleted 속성 확인하는 부분 추가
+		travelPlanService.deleteAllTravelPlan(user);
 		placeService.deleteAllBookmark(user);
 		user.delete();
 		return userRepository.save(user).getStatus();

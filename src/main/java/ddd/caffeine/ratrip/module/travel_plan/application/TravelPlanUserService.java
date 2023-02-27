@@ -30,7 +30,7 @@ public class TravelPlanUserService {
 		travelPlanUserRepository.deleteAllInBatch(travelPlanUser);
 	}
 
-	public void deleteTravelPlanUser(TravelPlanUser travelPlanUser) { //TODO - 쿼리 확인하기
+	public void deleteTravelPlanUser(TravelPlanUser travelPlanUser) {
 		travelPlanUser.delete();
 	}
 
