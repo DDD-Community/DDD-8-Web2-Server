@@ -30,3 +30,6 @@
 ## ERD 
 <img width="569" alt="스크린샷 2023-02-17 오후 1 40 27" src="https://user-images.githubusercontent.com/80501465/219551170-718970fb-b64b-4a72-94a7-6fe461421262.png">
 
+
+## 프로젝트 구조도
+<img width="672" alt="image" src="https://user-images.githubusercontent.com/62228195/221605031-1621a6aa-a99c-474c-86a5-a850724b18ab.png">
