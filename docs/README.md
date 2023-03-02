@@ -15,7 +15,7 @@
 
 ⚒️ Infra
 
-![EB](https://img.shields.io/badge/Beanstalk-FF9900?style=flat&logo=Amazonaws&logoColor=000000) ![EC2](https://img.shields.io/badge/EC2-FF9900?style=flat&logo=AmazonEC2&logoColor=000000) ![EC](https://img.shields.io/badge/ElastiCache-FF9900?style=flat&logo=AmazonAWS&logoColor=000000) ![ALB](https://img.shields.io/badge/ALB-FF9900?style=flat&logo=AmazonAWS&logoColor=000000) ![Route53](https://img.shields.io/badge/Route53-FF9900?style=flat&logo=AmazonAWS&logoColor=000000) ![RDS](https://img.shields.io/badge/RDS-527FFF?style=flat&logo=AmazonRDS&logoColor=000000) ![S3](https://img.shields.io/badge/S3-569A31?style=flat&logo=AmazonS3&logoColor=000000)
+![Github Actions](https://img.shields.io/badge/GithubActions-2088FF?style=flat&logo=githubactions&logoColor=000000) ![EB](https://img.shields.io/badge/Beanstalk-FF9900?style=flat&logo=Amazonaws&logoColor=000000) ![EC2](https://img.shields.io/badge/EC2-FF9900?style=flat&logo=AmazonEC2&logoColor=000000) ![EC](https://img.shields.io/badge/ElastiCache-FF9900?style=flat&logo=AmazonAWS&logoColor=000000) ![ALB](https://img.shields.io/badge/ALB-FF9900?style=flat&logo=AmazonAWS&logoColor=000000) ![Route53](https://img.shields.io/badge/Route53-FF9900?style=flat&logo=AmazonAWS&logoColor=000000) ![RDS](https://img.shields.io/badge/RDS-527FFF?style=flat&logo=AmazonRDS&logoColor=000000) ![S3](https://img.shields.io/badge/S3-569A31?style=flat&logo=AmazonS3&logoColor=000000)
 
 
 </br>
