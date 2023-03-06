@@ -173,6 +173,11 @@ public class PlaceService {
 		return new CategoryPlacesByCoordinateResponseDto(places.getContent(), places.hasNext());
 	}
 
+	@Transactional
+	public void deleteAllBookmark(User user) {
+		bookmarkService.deleteAllBookmark(user);
+	}
+
 	/**
 	 * 장소 데이터 업데이트 처리 메서드.
 	 */

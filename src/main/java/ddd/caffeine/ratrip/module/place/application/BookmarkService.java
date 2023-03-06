@@ -67,4 +67,12 @@ public class BookmarkService {
 	public Slice<BookmarkPlaceByRegionDao> getBookmarkPlacesByRegion(User user, Region region, Pageable pageable) {
 		return bookmarkRepository.findBookmarkPlacesByRegion(user, region, pageable);
 	}
+
+	public void deleteAllBookmark(User user) {
+		List<Bookmark> bookmarks = bookmarkRepository.findByUserId(user.getId());
+
+		for (Bookmark bookmark : bookmarks) {
+			bookmark.delete();
+		}
+	}
 }

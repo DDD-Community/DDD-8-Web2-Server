@@ -1,6 +1,7 @@
 package ddd.caffeine.ratrip.module.place.domain.bookmark.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -23,4 +24,7 @@ public interface BookmarkQueryRepository {
 	Long deleteBookMark(Bookmark entity);
 
 	Slice<BookmarkPlaceByRegionDao> findBookmarkPlacesByRegion(User user, Region region, Pageable pageable);
+
+	List<Bookmark> findByUserId(UUID id);
+
 }

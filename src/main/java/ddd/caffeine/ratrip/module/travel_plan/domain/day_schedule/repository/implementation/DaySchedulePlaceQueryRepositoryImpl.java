@@ -44,7 +44,7 @@ public class DaySchedulePlaceQueryRepositoryImpl implements DaySchedulePlaceQuer
 			.from(daySchedulePlace)
 			.innerJoin(daySchedulePlace.place, place)
 			.where(
-				daySchedulePlace.daySchedule.id.eq(dayScheduleUUID),
+				daySchedulePlace.daySchedule.id.eq(dayScheduleUUID), daySchedulePlace.isDeleted.isFalse(),
 				placeUUIDEq(placeUUID)
 			)
 			.orderBy(daySchedulePlace.sequence.asc())

@@ -93,8 +93,14 @@ public class DaySchedulePlaceService {
 	 */
 	public void delete(UUID dayScheduleUUID) {
 		List<DaySchedulePlace> daySchedulePlaces = daySchedulePlaceRepository.findByDayScheduleUUID(dayScheduleUUID);
+		daySchedulePlaceRepository.deleteAllInBatch(daySchedulePlaces);
+	}
+
+	public void deleteAllDaySchedulePlaceByDayScheduleUUID(UUID dayScheduleUUID) {
+		List<DaySchedulePlace> daySchedulePlaces = daySchedulePlaceRepository.findByDayScheduleUUID(dayScheduleUUID);
+
 		for (DaySchedulePlace daySchedulePlace : daySchedulePlaces) {
-			daySchedulePlaceRepository.delete(daySchedulePlace);
+			daySchedulePlace.delete();
 		}
 	}
 }

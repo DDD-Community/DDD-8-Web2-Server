@@ -50,6 +50,10 @@ public class TravelPlan extends AuditingTimeEntity implements Serializable {
 	@Column(name = "is_end", columnDefinition = "TINYINT(1)")
 	private boolean isEnd = Boolean.FALSE;
 
+	@NotNull
+	@Column(name = "is_deleted", columnDefinition = "TINYINT(1)")
+	private boolean isDeleted = Boolean.FALSE;
+
 	public void endTheTrip() {
 		isEnd = Boolean.TRUE;
 	}
@@ -70,5 +74,9 @@ public class TravelPlan extends AuditingTimeEntity implements Serializable {
 		this.region = region;
 		this.travelDays = travelDays;
 		this.startDate = startDate;
+	}
+
+	public void delete() {
+		this.isDeleted = Boolean.TRUE;
 	}
 }
