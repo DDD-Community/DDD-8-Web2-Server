@@ -2,11 +2,16 @@ package ddd.caffeine.ratrip.module.auth.presentation.dto.response;
 
 import java.util.UUID;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class SignOutResponseDto {
 	private final UUID id;
+
+	public static SignOutResponseDto of(final UUID id) {
+		return new SignOutResponseDto(id);
+	}
 }

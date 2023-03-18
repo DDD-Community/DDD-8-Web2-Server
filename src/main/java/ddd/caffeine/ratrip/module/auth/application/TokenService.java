@@ -34,6 +34,7 @@ public class TokenService {
 	public SignOutResponseDto deleteToken(final SignOutDto request) {
 		UUID userId = jwtUtil.validateTokensAndGetUserId(request.getAccessToken(), request.getRefreshToken());
 		jwtRemover.deleteRefreshToken(userId);
-		return new SignOutResponseDto(userId);
+
+		return SignOutResponseDto.of(userId);
 	}
 }
