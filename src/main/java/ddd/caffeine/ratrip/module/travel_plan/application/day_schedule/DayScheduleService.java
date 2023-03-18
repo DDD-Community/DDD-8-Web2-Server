@@ -9,10 +9,10 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedule;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.DaySchedule;
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.repository.DayScheduleRepository;
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.repository.dao.DaySchedulePlaceDao;
+import ddd.caffeine.ratrip.module.travel_plan.domain.repository.DayScheduleRepository;
+import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.DaySchedulePlaceDao;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.response.DaySchedulePlaceDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.response.DayScheduleResponseDto;
 import lombok.RequiredArgsConstructor;

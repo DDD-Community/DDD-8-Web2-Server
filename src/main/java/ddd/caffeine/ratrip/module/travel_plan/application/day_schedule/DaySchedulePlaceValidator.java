@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import ddd.caffeine.ratrip.common.exception.domain.DayScheduleException;
 import ddd.caffeine.ratrip.common.exception.domain.DaySchedulePlaceException;
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.DaySchedulePlace;
+import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedulePlace;
 
 @Component
 public class DaySchedulePlaceValidator {

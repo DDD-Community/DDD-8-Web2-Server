@@ -15,10 +15,8 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import ddd.caffeine.ratrip.module.travel_plan.application.day_schedule.DaySchedulePlaceService;
-import ddd.caffeine.ratrip.module.travel_plan.application.day_schedule.DaySchedulePlaceValidator;
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.DaySchedulePlace;
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.repository.DaySchedulePlaceRepository;
+import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedulePlace;
+import ddd.caffeine.ratrip.module.travel_plan.domain.repository.DaySchedulePlaceRepository;
 
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

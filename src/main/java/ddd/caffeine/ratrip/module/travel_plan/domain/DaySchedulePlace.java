@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule;
+package ddd.caffeine.ratrip.module.travel_plan.domain;
 
 import java.util.UUID;
 

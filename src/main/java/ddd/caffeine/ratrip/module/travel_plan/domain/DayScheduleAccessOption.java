@@ -1,8 +1,7 @@
-package ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule;
+package ddd.caffeine.ratrip.module.travel_plan.domain;
 
 import java.util.UUID;
 
-import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanAccessOption;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.Getter;
 

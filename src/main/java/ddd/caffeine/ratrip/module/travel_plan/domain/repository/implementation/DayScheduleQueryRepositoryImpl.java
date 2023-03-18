@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.repository.implementation;
+package ddd.caffeine.ratrip.module.travel_plan.domain.repository.implementation;
 
 import static ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.QDaySchedule.*;
 
@@ -8,8 +8,8 @@ import java.util.UUID;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.DaySchedule;
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.repository.DayScheduleQueryRepository;
+import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedule;
+import ddd.caffeine.ratrip.module.travel_plan.domain.repository.DayScheduleQueryRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

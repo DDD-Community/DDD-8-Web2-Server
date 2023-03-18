@@ -3,7 +3,7 @@ package ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.res
 import java.util.ArrayList;
 import java.util.List;
 
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.DaySchedule;
+import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedule;
 import lombok.Getter;
 
 @Getter

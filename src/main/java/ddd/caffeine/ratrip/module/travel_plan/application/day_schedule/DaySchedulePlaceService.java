@@ -7,10 +7,10 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import ddd.caffeine.ratrip.module.place.domain.Place;
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.DaySchedule;
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.DaySchedulePlace;
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.repository.DaySchedulePlaceRepository;
-import ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.repository.dao.DaySchedulePlaceDao;
+import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedule;
+import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedulePlace;
+import ddd.caffeine.ratrip.module.travel_plan.domain.repository.DaySchedulePlaceRepository;
+import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.DaySchedulePlaceDao;
 import lombok.RequiredArgsConstructor;
 
 @Service
