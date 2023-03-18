@@ -23,7 +23,7 @@ public class SignUpUserDto {
 		this.email = email;
 	}
 
-	public static SignUpUserDto ofKakao(KakaoProfile kakaoProfile, UserSocialType socialType) {
+	public static SignUpUserDto ofKakao(final KakaoProfile kakaoProfile, final UserSocialType socialType) {
 		return SignUpUserDto.builder()
 			.socialId(kakaoProfile.getId())
 			.socialType(socialType)

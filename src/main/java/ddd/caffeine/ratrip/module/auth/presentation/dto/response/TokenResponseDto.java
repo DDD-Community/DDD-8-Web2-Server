@@ -14,7 +14,7 @@ public class TokenResponseDto {
 	@Schema(description = "리프레시 토큰", example = "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2NzE2ODI1MDB9.7mT7V4dmH7YDYJiTipppSRV5w8x18fEZD4mWXakKpxiRgiXfzBK-94658XRq8DJ51dr9tuzV5WScMVoXxs_GlQ")
 	private String refreshToken;
 
-	public static TokenResponseDto of(String accessToken, String refreshToken) {
+	public static TokenResponseDto of(final String accessToken, final String refreshToken) {
 		return new TokenResponseDto(accessToken, refreshToken);
 	}
 }
