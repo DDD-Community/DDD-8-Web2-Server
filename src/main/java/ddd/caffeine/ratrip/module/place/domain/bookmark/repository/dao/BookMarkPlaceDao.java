@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import com.querydsl.core.annotations.QueryProjection;
 
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Category;
 import lombok.Getter;
 
 @Getter

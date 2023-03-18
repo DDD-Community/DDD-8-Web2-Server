@@ -1,6 +1,6 @@
 package ddd.caffeine.ratrip.module.place.application.dto;
 
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

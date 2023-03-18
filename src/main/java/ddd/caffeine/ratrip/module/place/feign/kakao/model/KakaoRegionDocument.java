@@ -1,6 +1,6 @@
 package ddd.caffeine.ratrip.module.place.feign.kakao.model;
 
-import ddd.caffeine.ratrip.common.model.Region;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import lombok.Getter;
 
 @Getter

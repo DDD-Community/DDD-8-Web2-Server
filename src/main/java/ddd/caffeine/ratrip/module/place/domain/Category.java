@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.place.domain.sub_domain;
+package ddd.caffeine.ratrip.module.place.domain;
 
 import java.util.ArrayList;
 import java.util.Arrays;

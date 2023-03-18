@@ -3,7 +3,7 @@ package ddd.caffeine.ratrip.module.place.feign.naver.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Blog;
+import ddd.caffeine.ratrip.module.place.domain.Blog;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

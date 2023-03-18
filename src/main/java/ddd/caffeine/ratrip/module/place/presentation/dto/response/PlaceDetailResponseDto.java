@@ -3,10 +3,10 @@ package ddd.caffeine.ratrip.module.place.presentation.dto.response;
 import java.util.List;
 import java.util.UUID;
 
+import ddd.caffeine.ratrip.module.place.domain.Blog;
+import ddd.caffeine.ratrip.module.place.domain.Location;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceDetailBookmarkDao;
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Blog;
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Location;
 import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
 import lombok.Getter;
 

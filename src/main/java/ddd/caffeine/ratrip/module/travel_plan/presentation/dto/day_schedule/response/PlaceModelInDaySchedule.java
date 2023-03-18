@@ -2,8 +2,8 @@ package ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.res
 
 import java.util.UUID;
 
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Category;
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Location;
+import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Location;
 import lombok.Builder;
 import lombok.Getter;
 

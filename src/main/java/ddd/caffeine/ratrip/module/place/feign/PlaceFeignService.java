@@ -2,9 +2,9 @@ package ddd.caffeine.ratrip.module.place.feign;
 
 import org.springframework.stereotype.Service;
 
-import ddd.caffeine.ratrip.common.model.Region;
 import ddd.caffeine.ratrip.common.secret.SecretKeyManager;
 import ddd.caffeine.ratrip.common.util.HttpHeaderUtils;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.place.domain.ThirdPartySearchOption;
 import ddd.caffeine.ratrip.module.place.feign.kakao.KakaoFeignClient;
 import ddd.caffeine.ratrip.module.place.feign.kakao.model.FeignPlaceModel;

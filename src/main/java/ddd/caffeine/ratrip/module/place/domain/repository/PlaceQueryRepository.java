@@ -6,12 +6,11 @@ import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
-import ddd.caffeine.ratrip.common.model.Region;
+import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.CategoryPlaceByRegionDao;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceBookmarkDao;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceDetailBookmarkDao;
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Category;
-import ddd.caffeine.ratrip.module.user.domain.User;
 
 public interface PlaceQueryRepository {
 	Slice<PlaceBookmarkDao> findPlacesInRegions(List<Region> regions, Pageable pageable);

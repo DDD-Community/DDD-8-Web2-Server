@@ -2,8 +2,8 @@ package ddd.caffeine.ratrip.module.place.presentation.dto.response;
 
 import java.util.UUID;
 
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Address;
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Location;
+import ddd.caffeine.ratrip.module.place.domain.Address;
+import ddd.caffeine.ratrip.module.place.domain.Location;
 import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
 import lombok.Builder;
 import lombok.Getter;

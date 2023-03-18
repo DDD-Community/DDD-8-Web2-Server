@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.place.domain.sub_domain;
+package ddd.caffeine.ratrip.module.place.domain;
 
 import java.util.Objects;
 
@@ -8,7 +8,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
-import ddd.caffeine.ratrip.common.model.Region;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

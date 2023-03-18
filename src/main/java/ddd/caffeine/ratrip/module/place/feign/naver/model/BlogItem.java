@@ -3,7 +3,7 @@ package ddd.caffeine.ratrip.module.place.feign.naver.model;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Blog;
+import ddd.caffeine.ratrip.module.place.domain.Blog;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

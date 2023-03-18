@@ -2,8 +2,8 @@ package ddd.caffeine.ratrip.module.place.presentation.dto.bookmark;
 
 import java.util.UUID;
 
+import ddd.caffeine.ratrip.module.place.domain.Category;
 import ddd.caffeine.ratrip.module.place.domain.bookmark.repository.dao.BookMarkPlaceDao;
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Category;
 import lombok.Getter;
 
 @Getter

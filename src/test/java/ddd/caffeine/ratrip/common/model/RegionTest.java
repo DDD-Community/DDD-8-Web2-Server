@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import ddd.caffeine.ratrip.common.model.Region;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 
 class RegionTest {
 	@Test

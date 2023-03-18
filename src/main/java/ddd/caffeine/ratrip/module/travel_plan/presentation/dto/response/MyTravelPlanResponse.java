@@ -3,7 +3,7 @@ package ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import ddd.caffeine.ratrip.common.model.Region;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import lombok.Getter;
 

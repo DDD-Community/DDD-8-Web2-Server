@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.common.validator.RequestDataValidator;
 import ddd.caffeine.ratrip.module.place.application.dto.CategoryPlaceByCoordinateDto;
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Category;
 import lombok.Getter;
 
 @Getter

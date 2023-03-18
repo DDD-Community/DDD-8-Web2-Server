@@ -2,9 +2,9 @@ package ddd.caffeine.ratrip.module.place.presentation.dto.request;
 
 import javax.validation.constraints.NotNull;
 
-import ddd.caffeine.ratrip.common.model.Region;
 import ddd.caffeine.ratrip.module.place.application.dto.CategoryPlaceByRegionDto;
-import ddd.caffeine.ratrip.module.place.domain.sub_domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import lombok.Getter;
 
 @Getter
