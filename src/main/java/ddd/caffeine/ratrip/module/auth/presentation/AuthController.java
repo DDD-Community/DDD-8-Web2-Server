@@ -28,19 +28,19 @@ public class AuthController {
 
 	@Operation(summary = "카카오 로그인")
 	@GetMapping("/signin/kakao")
-	public ResponseEntity<SignInResponseDto> signInWithKakao(@RequestParam("code") final String code) {
+	public ResponseEntity<SignInResponseDto> signInWithKakao(@RequestParam("code") String code) {
 		return ResponseEntity.ok(authService.signInWithKakao(code));
 	}
 
 	@Operation(summary = "엑세스 토큰 재발급")
 	@PostMapping("/reissue")
-	public ResponseEntity<TokenResponseDto> reissueToken(@Valid @RequestBody final TokenReissueRequestDto request) {
+	public ResponseEntity<TokenResponseDto> reissueToken(@Valid @RequestBody TokenReissueRequestDto request) {
 		return ResponseEntity.ok(authService.reissueToken(request.toServiceDto()));
 	}
 
 	@Operation(summary = "로그아웃")
 	@PostMapping("/signout")
-	public ResponseEntity<SignOutResponseDto> signOut(@Valid @RequestBody final SignOutRequestDto request) {
+	public ResponseEntity<SignOutResponseDto> signOut(@Valid @RequestBody SignOutRequestDto request) {
 		return ResponseEntity.ok(authService.signOut(request.toServiceDto()));
 	}
 }
