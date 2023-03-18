@@ -34,11 +34,11 @@ public class AuthService {
 		return SignInResponseDto.of(user.getId(), tokenResponseDto);
 	}
 
-	public SignOutResponseDto signOut(final SignOutDto request) {
-		return tokenService.deleteToken(request);
-	}
-
 	public TokenResponseDto reissueToken(final TokenReissueDto request) {
 		return tokenService.reissueToken(request);
+	}
+
+	public SignOutResponseDto signOut(final SignOutDto request) {
+		return tokenService.deleteToken(request);
 	}
 }
