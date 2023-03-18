@@ -28,10 +28,10 @@ import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceDetailBookmar
 import ddd.caffeine.ratrip.module.place.feign.kakao.model.FeignPlaceModel;
 import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignBlogModel;
 import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignImageModel;
-import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlaceResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlacesByCoordinateResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlacesByRegionResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.BookmarkPlaceResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.BookmarkPlacesByCoordinateResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.BookmarkPlacesByRegionResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.BookmarkResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.CategoryPlacesByCoordinateResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.CategoryPlacesByRegionResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceDetailResponseDto;

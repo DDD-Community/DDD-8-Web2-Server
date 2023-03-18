@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceBookmarkDao;
-import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
 import lombok.Getter;
 
 @Getter

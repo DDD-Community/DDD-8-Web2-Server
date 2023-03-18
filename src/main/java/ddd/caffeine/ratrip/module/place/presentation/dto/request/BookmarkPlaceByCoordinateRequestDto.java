@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.place.presentation.dto.bookmark;
+package ddd.caffeine.ratrip.module.place.presentation.dto.request;
 
 import javax.validation.constraints.NotNull;
 

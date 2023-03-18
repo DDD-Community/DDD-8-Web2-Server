@@ -16,8 +16,8 @@ import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.place.domain.repository.BookmarkRepository;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.BookMarkPlaceDao;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.BookmarkPlaceByRegionDao;
-import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlaceResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.BookmarkPlaceResponseDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.BookmarkResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 

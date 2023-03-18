@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.place.presentation.dto.bookmark;
+package ddd.caffeine.ratrip.module.place.presentation.dto.response;
 
 import java.util.UUID;
 

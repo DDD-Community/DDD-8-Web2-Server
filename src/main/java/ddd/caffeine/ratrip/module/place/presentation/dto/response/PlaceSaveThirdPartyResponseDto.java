@@ -5,7 +5,6 @@ import java.util.UUID;
 import ddd.caffeine.ratrip.module.place.domain.Location;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceBookmarkDao;
-import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
 import lombok.Getter;
 
 /**

@@ -7,7 +7,6 @@ import ddd.caffeine.ratrip.module.place.domain.Blog;
 import ddd.caffeine.ratrip.module.place.domain.Location;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceDetailBookmarkDao;
-import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkResponseDto;
 import lombok.Getter;
 
 /**
