@@ -53,6 +53,7 @@ public class PlaceService {
 
 	public BookmarkPlacesByRegionResponseDto getBookmarkPlacesByRegion(final User user, final Region region,
 		final Pageable pageable) {
+
 		Slice<BookmarkPlaceByRegionDao> places = bookmarkService.getBookmarkPlacesByRegion(user, region, pageable);
 
 		return BookmarkPlacesByRegionResponseDto.of(places.getContent(), places.hasNext());

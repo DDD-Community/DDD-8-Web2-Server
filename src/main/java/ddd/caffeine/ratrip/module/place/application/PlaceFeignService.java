@@ -21,6 +21,16 @@ public class PlaceFeignService {
 	private final KakaoFeignClient kakaoFeignClient;
 	private final NaverFeignClient naverFeignClient;
 
+	public Region convertLongituteAndLatitudeToRegion(final double longitude, final double latitude) {
+		final String KAKAO_REQUEST_HEADER = HttpHeaderUtils.concatWithKakaoAKPrefix(
+			secretKeyManager.getKakaoRestApiKey());
+
+		KakaoRegionResponse kakaoRegionResponse = kakaoFeignClient.getRegion(KAKAO_REQUEST_HEADER, longitude,
+			latitude);
+
+		return kakaoRegionResponse.getDocuments().get(0).getRegion_1depth_name();
+	}
+
 	/**
 	 * 주소와 장소이름을 토대로 하나의 장소를 읽어옵니다.
 	 */
@@ -37,8 +47,6 @@ public class PlaceFeignService {
 
 	/**
 	 * keyword 를 토대로 주변 5km 내의 장소들을 읽어옵니다.
-	 *
-	 * @Todo : 반경 몇 km 까지 할 것인지 프론트 개발자님들과 상의.
 	 */
 	public FeignPlaceModel readPlacesByKeywordAndCoordinate(
 		ThirdPartySearchOption option) {
@@ -69,9 +77,6 @@ public class PlaceFeignService {
 		return imageModel;
 	}
 
-	/**
-	 * todo: 정확성 있는 키워드 고민.
-	 */
 	public FeignBlogModel readBlogModel(String keyword) {
 		final int DATA_COUNT = 3;
 		final String SORT_TYPE = "sim";
@@ -83,13 +88,5 @@ public class PlaceFeignService {
 		);
 
 		return feignBlogModel;
-	}
-
-	public Region convertLongituteAndLatitudeToRegion(double longitude, double latitude) {
-		final String KAKAO_REQUEST_HEADER = HttpHeaderUtils.concatWithKakaoAKPrefix(
-			secretKeyManager.getKakaoRestApiKey());
-		KakaoRegionResponse kakaoRegionResponse = kakaoFeignClient.getRegion(KAKAO_REQUEST_HEADER, longitude,
-			latitude);
-		return kakaoRegionResponse.getDocuments().get(0).getRegion_1depth_name();
 	}
 }

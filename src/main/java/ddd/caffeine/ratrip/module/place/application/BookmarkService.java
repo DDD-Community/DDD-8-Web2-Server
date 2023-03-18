@@ -28,6 +28,10 @@ public class BookmarkService {
 	private final BookmarkRepository bookmarkRepository;
 	private final BookmarkValidator bookmarkValidator;
 
+	public Slice<BookmarkPlaceByRegionDao> getBookmarkPlacesByRegion(User user, Region region, Pageable pageable) {
+		return bookmarkRepository.findBookmarkPlacesByRegion(user, region, pageable);
+	}
+
 	public BookmarkResponseDto readBookmark(User user, Place place) {
 		BookmarkId bookmarkId = new BookmarkId(user.getId(), place.getId());
 		Bookmark bookmark = bookmarkRepository.findByBookmarkId(bookmarkId);
@@ -61,10 +65,6 @@ public class BookmarkService {
 			page);
 
 		return new BookmarkPlaceResponseDto(bookmarkPlaceDtos.getContent(), bookmarkPlaceDtos.hasNext());
-	}
-
-	public Slice<BookmarkPlaceByRegionDao> getBookmarkPlacesByRegion(User user, Region region, Pageable pageable) {
-		return bookmarkRepository.findBookmarkPlacesByRegion(user, region, pageable);
 	}
 
 	public void deleteAllBookmark(User user) {
