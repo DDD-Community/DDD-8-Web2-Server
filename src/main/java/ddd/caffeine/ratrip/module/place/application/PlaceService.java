@@ -13,6 +13,7 @@ import ddd.caffeine.ratrip.module.place.application.dto.BookmarkPlaceByRegionDto
 import ddd.caffeine.ratrip.module.place.application.dto.CategoryPlaceByCoordinateDto;
 import ddd.caffeine.ratrip.module.place.application.dto.CategoryPlaceByRegionDto;
 import ddd.caffeine.ratrip.module.place.application.dto.PlaceByCoordinateDto;
+import ddd.caffeine.ratrip.module.place.application.validator.PlaceValidator;
 import ddd.caffeine.ratrip.module.place.domain.Address;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.Region;
@@ -23,7 +24,6 @@ import ddd.caffeine.ratrip.module.place.domain.repository.dao.BookmarkPlaceByReg
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.CategoryPlaceByRegionDao;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceBookmarkDao;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceDetailBookmarkDao;
-import ddd.caffeine.ratrip.module.place.feign.PlaceFeignService;
 import ddd.caffeine.ratrip.module.place.feign.kakao.model.FeignPlaceModel;
 import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignBlogModel;
 import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignImageModel;

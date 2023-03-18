@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.place.feign;
+package ddd.caffeine.ratrip.module.place.application;
 
 import org.springframework.stereotype.Service;
 
