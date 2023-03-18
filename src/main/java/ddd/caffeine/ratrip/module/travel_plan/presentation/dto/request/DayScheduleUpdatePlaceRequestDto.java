@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.request;
+package ddd.caffeine.ratrip.module.travel_plan.presentation.dto.request;
 
 import javax.validation.constraints.Size;
 

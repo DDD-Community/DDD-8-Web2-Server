@@ -1,6 +1,6 @@
 package ddd.caffeine.ratrip.module.travel_plan.domain.repository.implementation;
 
-import static ddd.caffeine.ratrip.module.travel_plan.domain.day_schedule.QDaySchedule.*;
+import static ddd.caffeine.ratrip.module.travel_plan.domain.QDaySchedule.*;
 
 import java.time.LocalDate;
 import java.util.List;

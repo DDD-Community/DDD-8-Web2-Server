@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.travel_plan.application.day_schedule;
+package ddd.caffeine.ratrip.module.travel_plan.application;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,12 +9,13 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.travel_plan.application.validator.DayScheduleValidator;
 import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedule;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.DayScheduleRepository;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.DaySchedulePlaceDao;
-import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.response.DaySchedulePlaceDto;
-import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.response.DayScheduleResponseDto;
+import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.DaySchedulePlaceDto;
+import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.DayScheduleResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @Service

@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.travel_plan.presentation.dto.day_schedule.response;
+package ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response;
 
 import java.util.ArrayList;
 import java.util.List;
