@@ -13,26 +13,26 @@ import ddd.caffeine.ratrip.module.auth.external.kakao.dto.response.KakaoProfile;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class KakaoAuthService {
 	private final SecretKeyManager secretKeyManager;
 	private final KakaoAuthorizeApiClient kakaoAuthorizeApiClient;
 	private final KakaoUserApiClient kakaoUserApiClient;
 
-	@Transactional(readOnly = true)
-	public KakaoProfile getKakaoProfile(String authorizationCode) {
+	public KakaoProfile getKakaoProfile(final String authorizationCode) {
 		String accessToken = getKakaoAccessToken(authorizationCode);
+
 		return kakaoUserApiClient.getKakaoProfile(HttpHeaderUtils.concatWithBearerPrefix(accessToken));
 	}
 
-	@Transactional(readOnly = true)
-	public String getKakaoAccessToken(String authorizationCode) {
+	public String getKakaoAccessToken(final String authorizationCode) {
 		final String KAKAO_API_KEY = secretKeyManager.getKakaoRestApiKey();
 		final String KAKAO_REDIRECT_URI = secretKeyManager.getKakaoRedirectUri();
 
 		KakaoBearerTokenResponse kakaoBearerTokenResponse = kakaoAuthorizeApiClient.getBearerToken(
 			KakaoBearerTokenRequest.of(KAKAO_API_KEY, KAKAO_REDIRECT_URI, authorizationCode));
+
 		return kakaoBearerTokenResponse.getAccessToken();
 	}
 }
