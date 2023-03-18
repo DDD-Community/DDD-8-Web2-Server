@@ -1,7 +1,6 @@
 package ddd.caffeine.ratrip.module.user.application.dto;
 
 import ddd.caffeine.ratrip.module.auth.external.kakao.dto.response.KakaoProfile;
-import ddd.caffeine.ratrip.module.auth.presentation.dto.request.AppleProfile;
 import ddd.caffeine.ratrip.module.user.domain.UserSocialType;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,15 +29,6 @@ public class SignUpUserDto {
 			.socialType(socialType)
 			.name(kakaoProfile.getKakaoAccount().getProfile().getNickname())
 			.email(kakaoProfile.getKakaoAccount().getEmail())
-			.build();
-	}
-
-	public static SignUpUserDto ofApple(AppleProfile appleProfile, String socialId, UserSocialType socialType) {
-		return SignUpUserDto.builder()
-			.socialId(socialId)
-			.socialType(socialType)
-			.name(appleProfile.getName().getLastName() + appleProfile.getName().getFirstName())
-			.email(appleProfile.getEmail())
 			.build();
 	}
 }
