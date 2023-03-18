@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.user.application.presentation.dto.response;
+package ddd.caffeine.ratrip.module.auth.presentation.dto.response;
 
 import java.util.UUID;
 

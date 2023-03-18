@@ -10,8 +10,8 @@ import ddd.caffeine.ratrip.common.jwt.JwtRemover;
 import ddd.caffeine.ratrip.common.jwt.JwtUtil;
 import ddd.caffeine.ratrip.module.auth.application.dto.SignOutDto;
 import ddd.caffeine.ratrip.module.auth.application.dto.TokenReissueDto;
-import ddd.caffeine.ratrip.module.user.application.presentation.dto.response.SignOutResponseDto;
-import ddd.caffeine.ratrip.module.user.application.presentation.dto.response.TokenResponseDto;
+import ddd.caffeine.ratrip.module.auth.presentation.dto.response.SignOutResponseDto;
+import ddd.caffeine.ratrip.module.auth.presentation.dto.response.TokenResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @Service

@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.user.application.presentation;
+package ddd.caffeine.ratrip.module.auth.presentation;
 
 import javax.validation.Valid;
 
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ddd.caffeine.ratrip.module.auth.application.AuthService;
-import ddd.caffeine.ratrip.module.user.application.presentation.dto.request.SignOutRequestDto;
-import ddd.caffeine.ratrip.module.user.application.presentation.dto.request.TokenReissueRequestDto;
-import ddd.caffeine.ratrip.module.user.application.presentation.dto.response.SignInResponseDto;
-import ddd.caffeine.ratrip.module.user.application.presentation.dto.response.SignOutResponseDto;
-import ddd.caffeine.ratrip.module.user.application.presentation.dto.response.TokenResponseDto;
+import ddd.caffeine.ratrip.module.auth.presentation.dto.request.SignOutRequestDto;
+import ddd.caffeine.ratrip.module.auth.presentation.dto.request.TokenReissueRequestDto;
+import ddd.caffeine.ratrip.module.auth.presentation.dto.response.SignInResponseDto;
+import ddd.caffeine.ratrip.module.auth.presentation.dto.response.SignOutResponseDto;
+import ddd.caffeine.ratrip.module.auth.presentation.dto.response.TokenResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 

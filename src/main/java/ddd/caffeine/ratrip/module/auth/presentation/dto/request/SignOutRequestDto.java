@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.user.application.presentation.dto.request;
+package ddd.caffeine.ratrip.module.auth.presentation.dto.request;
 
 import javax.validation.constraints.NotBlank;
 
