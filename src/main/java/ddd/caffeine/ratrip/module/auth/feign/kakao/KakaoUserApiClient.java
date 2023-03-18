@@ -1,10 +1,10 @@
-package ddd.caffeine.ratrip.module.auth.external.kakao;
+package ddd.caffeine.ratrip.module.auth.feign.kakao;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-import ddd.caffeine.ratrip.module.auth.external.kakao.dto.response.KakaoProfile;
+import ddd.caffeine.ratrip.module.auth.feign.kakao.dto.response.KakaoProfile;
 
 @FeignClient(name = "kakaoUserApiClient", url = "https://kapi.kakao.com")
 public interface KakaoUserApiClient {
