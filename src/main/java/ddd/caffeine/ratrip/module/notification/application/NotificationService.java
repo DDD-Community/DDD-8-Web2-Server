@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ddd.caffeine.ratrip.module.notification.application.dto.CreateNotificationDto;
+import ddd.caffeine.ratrip.module.notification.application.validator.NotificationValidator;
 import ddd.caffeine.ratrip.module.notification.domain.Notification;
 import ddd.caffeine.ratrip.module.notification.domain.respository.NotificationRepository;
 import ddd.caffeine.ratrip.module.notification.presentation.dto.response.NotificationCreateResponseDto;
