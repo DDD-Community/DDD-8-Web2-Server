@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import ddd.caffeine.ratrip.module.auth.presentation.dto.response.TokenResponseDto;
+import ddd.caffeine.ratrip.module.user.application.presentation.dto.response.TokenResponseDto;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
