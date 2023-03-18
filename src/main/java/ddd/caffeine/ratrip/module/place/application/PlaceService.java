@@ -15,6 +15,7 @@ import ddd.caffeine.ratrip.module.place.application.dto.CategoryPlaceByRegionDto
 import ddd.caffeine.ratrip.module.place.application.dto.PlaceByCoordinateDto;
 import ddd.caffeine.ratrip.module.place.application.validator.PlaceValidator;
 import ddd.caffeine.ratrip.module.place.domain.Address;
+import ddd.caffeine.ratrip.module.place.domain.Category;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.place.domain.ThirdPartyDetailSearchOption;
@@ -42,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-
+@Transactional(readOnly = true)
 public class PlaceService {
 
 	private final PlaceFeignService placeFeignService;
@@ -50,7 +51,45 @@ public class PlaceService {
 	private final BookmarkService bookmarkService;
 	private final PlaceRepository placeRepository;
 
-	@Transactional(readOnly = true)
+	public BookmarkPlacesByRegionResponseDto getBookmarkPlacesByRegion(final User user, final Region region,
+		final Pageable pageable) {
+		Slice<BookmarkPlaceByRegionDao> places = bookmarkService.getBookmarkPlacesByRegion(user, region, pageable);
+
+		return BookmarkPlacesByRegionResponseDto.of(places.getContent(), places.hasNext());
+	}
+
+	public BookmarkPlacesByCoordinateResponseDto getBookmarkPlacesByCoordinate(final User user,
+		final BookmarkPlaceByRegionDto request, final Pageable pageable) {
+
+		Region region = placeFeignService.convertLongituteAndLatitudeToRegion(request.getLongitude(),
+			request.getLatitude());
+
+		Slice<BookmarkPlaceByRegionDao> places = bookmarkService.getBookmarkPlacesByRegion(user, region, pageable);
+
+		return BookmarkPlacesByCoordinateResponseDto.of(places.getContent(), places.hasNext());
+	}
+
+	public CategoryPlacesByRegionResponseDto getCategoryPlacesByRegion(final CategoryPlaceByRegionDto request,
+		final Pageable pageable) {
+
+		Slice<CategoryPlaceByRegionDao> places = placeRepository.getCategoryPlacesByRegion(request.getRegion(),
+			request.getCategory(), pageable);
+
+		return CategoryPlacesByRegionResponseDto.of(places.getContent(), places.hasNext());
+	}
+
+	public CategoryPlacesByCoordinateResponseDto getCategoryPlacesByCoordinate(
+		final CategoryPlaceByCoordinateDto request, final Pageable pageable) {
+
+		Region region = placeFeignService.convertLongituteAndLatitudeToRegion(request.getLongitude(),
+			request.getLatitude());
+
+		Slice<CategoryPlaceByRegionDao> places = placeRepository.getCategoryPlacesByRegion(region,
+			request.getCategory(), pageable);
+
+		return CategoryPlacesByCoordinateResponseDto.of(places.getContent(), places.hasNext());
+	}
+
 	public PlaceInRegionResponseDto readPlacesInRegions(List<Region> regions, Pageable page) {
 		Slice<PlaceBookmarkDao> places = placeRepository.findPlacesInRegions(regions, page);
 		PlaceInRegionResponseDto response = new PlaceInRegionResponseDto(places.getContent(), places.hasNext());
@@ -58,7 +97,6 @@ public class PlaceService {
 		return response;
 	}
 
-	@Transactional(readOnly = true)
 	public PlaceSearchResponseDto searchPlaces(ThirdPartySearchOption searchOption) {
 		FeignPlaceModel feignPlaceModel = placeFeignService.readPlacesByKeywordAndCoordinate(
 			searchOption);
@@ -66,9 +104,8 @@ public class PlaceService {
 		return feignPlaceModel.mapByPlaceSearchResponseDto();
 	}
 
-	@Transactional(readOnly = true)
-	public PlaceDetailResponseDto readPlaceDetailsByUUID(String uuid) {
-		PlaceDetailBookmarkDao content = placeRepository.findByUUID(UUID.fromString(uuid));
+	public PlaceDetailResponseDto readPlaceDetailsByUUID(UUID id) {
+		PlaceDetailBookmarkDao content = placeRepository.findByUUID(id);
 		placeValidator.validateExistPlaceDetailDao(content);
 
 		return new PlaceDetailResponseDto(content);
@@ -89,27 +126,25 @@ public class PlaceService {
 	}
 
 	@Transactional
-	public BookmarkResponseDto changeBookmarkState(User user, String placeUUID) {
-		Optional<Place> place = placeRepository.findById(UUID.fromString(placeUUID));
+	public BookmarkResponseDto changeBookmarkState(User user, UUID id) {
+		Optional<Place> place = placeRepository.findById(id);
 		placeValidator.validateExistPlace(place);
 		return bookmarkService.changeBookmarkState(user, place.get());
 	}
 
-	@Transactional(readOnly = true)
-	public BookmarkPlaceResponseDto readBookmarks(User user, List<String> categories, Pageable pageable) {
+	public BookmarkPlaceResponseDto readBookmarks(User user, List<Category> categories, Pageable pageable) {
 		return bookmarkService.getBookmarks(user, categories, pageable);
 	}
 
-	@Transactional(readOnly = true)
-	public BookmarkResponseDto readBookmark(User user, String placeUUID) {
-		Optional<Place> place = placeRepository.findById(UUID.fromString(placeUUID));
+	public BookmarkResponseDto readBookmark(User user, UUID id) {
+		Optional<Place> place = placeRepository.findById(id);
 		placeValidator.validateExistPlace(place);
 		return bookmarkService.readBookmark(user, place.get());
 	}
 
 	@Transactional
-	public BookmarkResponseDto createBookmark(User user, String placeUUID) {
-		Place place = readPlaceByUUID(UUID.fromString(placeUUID));
+	public BookmarkResponseDto createBookmark(User user, UUID placeId) {
+		Place place = readPlaceByUUID(placeId);
 		return bookmarkService.createBookmark(user, place);
 	}
 
@@ -118,28 +153,6 @@ public class PlaceService {
 		return placeValidator.validateExistPlace(place);
 	}
 
-	@Transactional(readOnly = true)
-	public BookmarkPlacesByRegionResponseDto getBookmarkPlacesByRegion(User user, Region region,
-		Pageable pageable) {
-
-		Slice<BookmarkPlaceByRegionDao> places = bookmarkService.getBookmarkPlacesByRegion(user, region, pageable);
-
-		return new BookmarkPlacesByRegionResponseDto(places.getContent(), places.hasNext());
-	}
-
-	@Transactional(readOnly = true)
-	public BookmarkPlacesByCoordinateResponseDto getBookmarkPlacesByCoordinate(User user,
-		BookmarkPlaceByRegionDto request, Pageable pageable) {
-
-		Region region = placeFeignService.convertLongituteAndLatitudeToRegion(request.getLongitude(),
-			request.getLatitude());
-
-		Slice<BookmarkPlaceByRegionDao> places = bookmarkService.getBookmarkPlacesByRegion(user, region, pageable);
-
-		return new BookmarkPlacesByCoordinateResponseDto(places.getContent(), places.hasNext());
-	}
-
-	@Transactional(readOnly = true)
 	public PlaceInRegionResponseDto readPlacesInCoordinate(PlaceByCoordinateDto request, Pageable pageable) {
 		Region region = placeFeignService.convertLongituteAndLatitudeToRegion(request.getLongitude(),
 			request.getLatitude());
@@ -148,29 +161,6 @@ public class PlaceService {
 		PlaceInRegionResponseDto response = new PlaceInRegionResponseDto(places.getContent(), places.hasNext());
 
 		return response;
-	}
-
-	@Transactional(readOnly = true)
-	public CategoryPlacesByRegionResponseDto getCategoryPlacesByRegion(CategoryPlaceByRegionDto request,
-		Pageable pageable) {
-
-		Slice<CategoryPlaceByRegionDao> places = placeRepository.getCategoryPlacesByRegion(request.getRegion(),
-			request.getCategory(), pageable);
-
-		return new CategoryPlacesByRegionResponseDto(places.getContent(), places.hasNext());
-	}
-
-	@Transactional(readOnly = true)
-	public CategoryPlacesByCoordinateResponseDto getCategoryPlacesByCoordinate(
-		CategoryPlaceByCoordinateDto request, Pageable pageable) {
-
-		Region region = placeFeignService.convertLongituteAndLatitudeToRegion(request.getLongitude(),
-			request.getLatitude());
-
-		Slice<CategoryPlaceByRegionDao> places = placeRepository.getCategoryPlacesByRegion(region,
-			request.getCategory(), pageable);
-
-		return new CategoryPlacesByCoordinateResponseDto(places.getContent(), places.hasNext());
 	}
 
 	@Transactional

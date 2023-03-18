@@ -1,6 +1,7 @@
 package ddd.caffeine.ratrip.module.place.presentation;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -20,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ddd.caffeine.ratrip.common.annotation.UUIDFormat;
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
+import ddd.caffeine.ratrip.module.place.domain.Category;
 import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlaceByCoordinateRequestDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.bookmark.BookmarkPlaceResponseDto;
@@ -53,104 +54,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping(value = "v1/places")
 public class PlaceController {
 	private final PlaceService placeService;
-
-	@Operation(summary = "[인증] 장소 키워드 검색 API")
-	@GetMapping("search")
-	public ResponseEntity<PlaceSearchResponseDto> callPlaceSearchApi(
-		@Valid @ModelAttribute PlaceSearchRequestDto request) {
-
-		PlaceSearchResponseDto response = placeService.searchPlaces(request.mapByThirdPartySearchOption());
-		return ResponseEntity.ok(response);
-	}
-
-	@Operation(summary = "[인증] 카카오 정보를 통한 장소 저장 및 업데이트 API")
-	@PostMapping
-	public ResponseEntity<PlaceSaveThirdPartyResponseDto> callSavePlaceByThirdPartyData(
-		@Parameter(hidden = true) @AuthenticationPrincipal User user,
-		@Valid @RequestBody PlaceSaveByThirdPartyRequestDto request) {
-
-		PlaceSaveThirdPartyResponseDto response = placeService.savePlaceByThirdPartyData(
-			user, request.mapByThirdPartyDetailSearchOption());
-		return ResponseEntity.ok(response);
-	}
-
-	@Operation(summary = "[인증] 장소 기본키(UUID)로 장소 상세 읽기 API")
-	@GetMapping("/{id}")
-	public ResponseEntity<PlaceDetailResponseDto> callPlaceDetailsApiByUUID(
-		@PathVariable @UUIDFormat String id) {
-
-		PlaceDetailResponseDto response = placeService.readPlaceDetailsByUUID(id);
-		return ResponseEntity.ok(response);
-	}
-
-	/**
-	 * default page = 0
-	 * Todo : default size 정하기.
-	 */
-	@Operation(summary = "[인증] 지역기반 장소 불러오기 (default 옵션 : 인기순정렬, 데이터 5개씩, 내림차순)")
-	@GetMapping("/regions")
-	public ResponseEntity<PlaceInRegionResponseDto> callPlacesInRegionsApi(
-		@RequestParam(name = "region") List<Region> regions,
-		@PageableDefault(
-			size = 5, sort = "popular", direction = Sort.Direction.DESC) Pageable pageable) {
-		PlaceInRegionResponseDto response = placeService.readPlacesInRegions(regions, pageable);
-		return ResponseEntity.ok(response);
-	}
-
-	/**
-	 * default page = 0
-	 * Todo : default size 정하기.
-	 */
-	@Operation(summary = "[인증] 좌표데이터를 통해 위치 기반 장소 불러오기 (default 옵션 : 인기순정렬, 데이터 5개씩, 내림차순)")
-	@GetMapping("/coordinates")
-	public ResponseEntity<PlaceInRegionResponseDto> callPlacesInCoordinateApi(
-		@Valid @ModelAttribute PlaceCoordinateRequestDto request,
-		@PageableDefault(
-			size = 5, sort = "popular", direction = Sort.Direction.DESC) Pageable pageable) {
-		PlaceInRegionResponseDto response = placeService.readPlacesInCoordinate(request.toServiceDto(),
-			pageable);
-		return ResponseEntity.ok(response);
-	}
-
-	@Operation(summary = "[인증] 카테고리별 북마크 리스트 페이지네이션 조회")
-	@GetMapping("/bookmarks")
-	public ResponseEntity<BookmarkPlaceResponseDto> callReadBookmarksApi(
-		@Parameter(hidden = true) @AuthenticationPrincipal User user,
-		@RequestParam(name = "category", defaultValue = "모든 카테고리", required = false) List<String> categories,
-		@PageableDefault(size = 7, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-		BookmarkPlaceResponseDto response = placeService.readBookmarks(user, categories, pageable);
-		return ResponseEntity.ok(response);
-	}
-
-	@Operation(summary = "[인증] 특정 장소에 대한 북마크 조회")
-	@GetMapping("/{place_id}/bookmarks")
-	public ResponseEntity<BookmarkResponseDto> callReadBookmarkOfPlaceApi(
-		@Parameter(hidden = true) @AuthenticationPrincipal User user,
-		@PathVariable(name = "place_id") @UUIDFormat String placeUUID) {
-		BookmarkResponseDto response = placeService.readBookmark(user, placeUUID);
-
-		return ResponseEntity.ok(response);
-	}
-
-	@Operation(summary = "[인증] 북마크 생성")
-	@PostMapping("/{place_id}/bookmarks")
-	public ResponseEntity<BookmarkResponseDto> callCreateBookmarkApi(
-		@Parameter(hidden = true) @AuthenticationPrincipal User user,
-		@PathVariable(name = "place_id") @UUIDFormat String placeUUID) {
-		BookmarkResponseDto response = placeService.createBookmark(user, placeUUID);
-
-		return ResponseEntity.ok(response);
-	}
-
-	@Operation(summary = "[인증] 북마크 상태 변경")
-	@PatchMapping("/{place_id}/bookmarks")
-	public ResponseEntity<BookmarkResponseDto> callChangeBookmarkStateApi(
-		@Parameter(hidden = true) @AuthenticationPrincipal User user,
-		@PathVariable(name = "place_id") @UUIDFormat String placeUUID) {
-		BookmarkResponseDto response = placeService.changeBookmarkState(user, placeUUID);
-
-		return ResponseEntity.ok(response);
-	}
 
 	@Operation(summary = "[인증] 유저가 선택한 지역 기반 북마크 추천 페이지네이션 조회")
 	@GetMapping("/bookmarks/regions")
@@ -187,5 +90,87 @@ public class PlaceController {
 		@PageableDefault(size = 20) Pageable pageable) {
 
 		return ResponseEntity.ok(placeService.getCategoryPlacesByCoordinate(request.toServiceDto(), pageable));
+	}
+
+	@Operation(summary = "[인증] 장소 키워드 검색 API")
+	@GetMapping("search")
+	public ResponseEntity<PlaceSearchResponseDto> callPlaceSearchApi(
+		@Valid @ModelAttribute PlaceSearchRequestDto request) {
+
+		return ResponseEntity.ok(placeService.searchPlaces(request.mapByThirdPartySearchOption()));
+	}
+
+	@Operation(summary = "[인증] 카카오 정보를 통한 장소 저장 및 업데이트 API")
+	@PostMapping
+	public ResponseEntity<PlaceSaveThirdPartyResponseDto> callSavePlaceByThirdPartyData(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user,
+		@Valid @RequestBody PlaceSaveByThirdPartyRequestDto request) {
+
+		return ResponseEntity.ok(placeService.savePlaceByThirdPartyData(user,
+			request.mapByThirdPartyDetailSearchOption()));
+	}
+
+	@Operation(summary = "[인증] 장소 기본키(UUID)로 장소 상세 읽기 API")
+	@GetMapping("/{id}")
+	public ResponseEntity<PlaceDetailResponseDto> callPlaceDetailsApiByUUID(
+		@PathVariable UUID id) {
+
+		return ResponseEntity.ok(placeService.readPlaceDetailsByUUID(id));
+	}
+
+	@Operation(summary = "[인증] 지역기반 장소 불러오기 (default 옵션 : 인기순정렬, 데이터 5개씩, 내림차순)")
+	@GetMapping("/regions")
+	public ResponseEntity<PlaceInRegionResponseDto> callPlacesInRegionsApi(
+		@RequestParam(name = "region") List<Region> regions,
+		@PageableDefault(size = 5, sort = "popular", direction = Sort.Direction.DESC) Pageable pageable) {
+
+		return ResponseEntity.ok(placeService.readPlacesInRegions(regions, pageable));
+	}
+
+	@Operation(summary = "[인증] 좌표데이터를 통해 위치 기반 장소 불러오기 (default 옵션 : 인기순정렬, 데이터 5개씩, 내림차순)")
+	@GetMapping("/coordinates")
+	public ResponseEntity<PlaceInRegionResponseDto> callPlacesInCoordinateApi(
+		@Valid @ModelAttribute PlaceCoordinateRequestDto request,
+		@PageableDefault(size = 5, sort = "popular", direction = Sort.Direction.DESC) Pageable pageable) {
+
+		return ResponseEntity.ok(placeService.readPlacesInCoordinate(request.toServiceDto(), pageable));
+	}
+
+	@Operation(summary = "[인증] 카테고리별 북마크 리스트 페이지네이션 조회")
+	@GetMapping("/bookmarks")
+	public ResponseEntity<BookmarkPlaceResponseDto> callReadBookmarksApi(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user,
+		@RequestParam(name = "category", defaultValue = "모든 카테고리", required = false) List<Category> categories,
+		@PageableDefault(size = 7, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+
+		return ResponseEntity.ok(placeService.readBookmarks(user, categories, pageable));
+	}
+
+	@Operation(summary = "[인증] 특정 장소에 대한 북마크 조회")
+	@GetMapping("/{id}/bookmarks")
+	public ResponseEntity<BookmarkResponseDto> callReadBookmarkOfPlaceApi(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user,
+		@PathVariable(name = "id") UUID id) {
+
+		return ResponseEntity.ok(placeService.readBookmark(user, id));
+	}
+
+	@Operation(summary = "[인증] 북마크 생성")
+	@PostMapping("/{place_id}/bookmarks")
+	public ResponseEntity<BookmarkResponseDto> callCreateBookmarkApi(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user,
+		@PathVariable(name = "place_id") UUID placeId) {
+
+		return ResponseEntity.ok(placeService.createBookmark(user, placeId));
+	}
+
+	@Operation(summary = "[인증] 북마크 상태 변경")
+	@PatchMapping("/{id}/bookmarks")
+	public ResponseEntity<BookmarkResponseDto> callChangeBookmarkStateApi(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user,
+		@PathVariable(name = "id") UUID id) {
+		BookmarkResponseDto response = placeService.changeBookmarkState(user, id);
+
+		return ResponseEntity.ok(response);
 	}
 }

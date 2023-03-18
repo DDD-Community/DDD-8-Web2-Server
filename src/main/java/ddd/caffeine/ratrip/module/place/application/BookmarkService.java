@@ -56,11 +56,9 @@ public class BookmarkService {
 		return new BookmarkResponseDto(bookmark.isActivated());
 	}
 
-	public BookmarkPlaceResponseDto getBookmarks(User user, List<String> categories,
-		Pageable page) {
-		Slice<BookMarkPlaceDao> bookmarkPlaceDtos = bookmarkRepository.findBookmarkPlacesInCategories(
-			Category.createCategories(categories),
-			user, page);
+	public BookmarkPlaceResponseDto getBookmarks(User user, List<Category> categories, Pageable page) {
+		Slice<BookMarkPlaceDao> bookmarkPlaceDtos = bookmarkRepository.findBookmarkPlacesInCategories(categories, user,
+			page);
 
 		return new BookmarkPlaceResponseDto(bookmarkPlaceDtos.getContent(), bookmarkPlaceDtos.hasNext());
 	}
