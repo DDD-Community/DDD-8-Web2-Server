@@ -1,8 +1,7 @@
-<img width="200" alt="image" src="https://user-images.githubusercontent.com/62228195/222357913-dffac538-e221-4b5b-99d1-621d55a459d6.png">
+<p align="center"><img width="200" alt="image" src="https://user-images.githubusercontent.com/62228195/222357913-dffac538-e221-4b5b-99d1-621d55a459d6.png"></p>
 
-*여행 일정을 관리하고, 기록하는 서비스 Ratrip 입니다.*
+<p align = center> <em> 여행 일정을 관리하고, 기록하는 서비스 Ratrip 입니다. </em> </p>
 
-# 시연영상 잘게 쪼개서 넣기
 
 
 </br>
