@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
 
 	private User findUserBySocialInfo(final SignUpUserDto request) {
 		return userRepository.findUserBySocialInfo(SocialInfo.of(request.getSocialId(), request.getSocialType()))
-			.orElse(signUpUser(request));
+			.orElseGet(() -> signUpUser(request));
 	}
 
 	private User signUpUser(final SignUpUserDto request) {
