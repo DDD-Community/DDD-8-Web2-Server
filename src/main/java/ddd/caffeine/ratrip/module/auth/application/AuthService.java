@@ -24,20 +24,22 @@ public class AuthService {
 	private final TokenService tokenService;
 	private final KakaoAuthService kakaoAuthService;
 
-	public SignInResponseDto signInWithKakao(String authorizationCode) {
+	public SignInResponseDto signInWithKakao(final String authorizationCode) {
 		KakaoProfile kakaoProfile = kakaoAuthService.getKakaoProfile(authorizationCode);
+
 		UUID userId = userService.findUserIdBySocialIdAndSocialType(
 			SignUpUserDto.ofKakao(kakaoProfile, UserSocialType.KAKAO));
+
 		TokenResponseDto tokenResponseDto = tokenService.createJwtToken(userId);
 
 		return SignInResponseDto.of(userId, tokenResponseDto);
 	}
 
-	public SignOutResponseDto signOut(SignOutDto request) {
+	public SignOutResponseDto signOut(final SignOutDto request) {
 		return tokenService.deleteToken(request);
 	}
 
-	public TokenResponseDto reissueToken(TokenReissueDto request) {
+	public TokenResponseDto reissueToken(final TokenReissueDto request) {
 		return tokenService.reissueToken(request);
 	}
 }
