@@ -1,7 +1,5 @@
 package ddd.caffeine.ratrip.module.auth.application;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +11,7 @@ import ddd.caffeine.ratrip.module.auth.presentation.dto.response.SignOutResponse
 import ddd.caffeine.ratrip.module.auth.presentation.dto.response.TokenResponseDto;
 import ddd.caffeine.ratrip.module.user.application.UserService;
 import ddd.caffeine.ratrip.module.user.application.dto.SignUpUserDto;
+import ddd.caffeine.ratrip.module.user.domain.User;
 import ddd.caffeine.ratrip.module.user.domain.UserSocialType;
 import lombok.RequiredArgsConstructor;
 
@@ -27,12 +26,12 @@ public class AuthService {
 	public SignInResponseDto signInWithKakao(final String authorizationCode) {
 		KakaoProfile kakaoProfile = kakaoAuthService.getKakaoProfile(authorizationCode);
 
-		UUID userId = userService.findUserIdBySocialIdAndSocialType(
+		User user = userService.findUserIdBySocialIdAndSocialType(
 			SignUpUserDto.ofKakao(kakaoProfile, UserSocialType.KAKAO));
 
-		TokenResponseDto tokenResponseDto = tokenService.createJwtToken(userId);
+		TokenResponseDto tokenResponseDto = tokenService.createJwtToken(user.getId());
 
-		return SignInResponseDto.of(userId, tokenResponseDto);
+		return SignInResponseDto.of(user.getId(), tokenResponseDto);
 	}
 
 	public SignOutResponseDto signOut(final SignOutDto request) {
