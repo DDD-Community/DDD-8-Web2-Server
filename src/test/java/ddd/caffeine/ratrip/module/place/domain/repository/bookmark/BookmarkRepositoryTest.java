@@ -12,10 +12,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import ddd.caffeine.ratrip.TestConfig;
+import ddd.caffeine.ratrip.module.place.domain.Bookmark;
+import ddd.caffeine.ratrip.module.place.domain.BookmarkId;
 import ddd.caffeine.ratrip.module.place.domain.Place;
-import ddd.caffeine.ratrip.module.place.domain.bookmark.Bookmark;
-import ddd.caffeine.ratrip.module.place.domain.bookmark.BookmarkId;
-import ddd.caffeine.ratrip.module.place.domain.bookmark.repository.BookmarkRepository;
+import ddd.caffeine.ratrip.module.place.domain.repository.BookmarkRepository;
 import ddd.caffeine.ratrip.module.place.domain.repository.PlaceRepository;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import ddd.caffeine.ratrip.module.user.domain.UserSocialType;

@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 import ddd.caffeine.ratrip.common.exception.domain.BookmarkException;
-import ddd.caffeine.ratrip.module.place.domain.bookmark.Bookmark;
+import ddd.caffeine.ratrip.module.place.domain.Bookmark;
 
 @Component
 public class BookmarkValidator {

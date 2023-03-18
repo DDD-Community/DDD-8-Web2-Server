@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.place.domain.bookmark;
+package ddd.caffeine.ratrip.module.place.domain;
 
 import java.io.Serializable;
 import java.util.Objects;

@@ -1,9 +1,10 @@
 package ddd.caffeine.ratrip.module.place.application.dto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class PlaceByCoordinateDto {
 	private final double latitude;
