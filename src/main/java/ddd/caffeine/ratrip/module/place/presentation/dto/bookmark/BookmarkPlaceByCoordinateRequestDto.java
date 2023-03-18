@@ -2,7 +2,7 @@ package ddd.caffeine.ratrip.module.place.presentation.dto.bookmark;
 
 import javax.validation.constraints.NotNull;
 
-import ddd.caffeine.ratrip.common.RequestDataValidator;
+import ddd.caffeine.ratrip.common.validator.RequestDataValidator;
 import ddd.caffeine.ratrip.module.place.application.dto.BookmarkPlaceByRegionDto;
 import lombok.Getter;
 

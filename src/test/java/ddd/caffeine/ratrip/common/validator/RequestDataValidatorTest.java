@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.fasterxml.uuid.Generators;
 
-import ddd.caffeine.ratrip.common.RequestDataValidator;
 import ddd.caffeine.ratrip.common.exception.domain.CommonException;
 
 class RequestDataValidatorTest {

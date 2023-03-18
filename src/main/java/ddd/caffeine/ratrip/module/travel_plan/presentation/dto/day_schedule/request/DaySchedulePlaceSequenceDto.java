@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import ddd.caffeine.ratrip.common.RequestDataValidator;
+import ddd.caffeine.ratrip.common.validator.RequestDataValidator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
