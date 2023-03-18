@@ -7,9 +7,9 @@ import ddd.caffeine.ratrip.common.secret.SecretKeyManager;
 import ddd.caffeine.ratrip.common.util.HttpHeaderUtils;
 import ddd.caffeine.ratrip.module.auth.feign.kakao.KakaoAuthorizeApiClient;
 import ddd.caffeine.ratrip.module.auth.feign.kakao.KakaoUserApiClient;
-import ddd.caffeine.ratrip.module.auth.feign.kakao.dto.request.KakaoBearerTokenRequest;
-import ddd.caffeine.ratrip.module.auth.feign.kakao.dto.response.KakaoBearerTokenResponse;
-import ddd.caffeine.ratrip.module.auth.feign.kakao.dto.response.KakaoProfile;
+import ddd.caffeine.ratrip.module.auth.feign.kakao.model.KakaoBearerTokenRequest;
+import ddd.caffeine.ratrip.module.auth.feign.kakao.model.KakaoBearerTokenResponse;
+import ddd.caffeine.ratrip.module.auth.feign.kakao.model.KakaoProfile;
 import lombok.RequiredArgsConstructor;
 
 @Service

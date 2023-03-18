@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ddd.caffeine.ratrip.module.auth.application.dto.SignOutDto;
 import ddd.caffeine.ratrip.module.auth.application.dto.TokenReissueDto;
-import ddd.caffeine.ratrip.module.auth.feign.kakao.dto.response.KakaoProfile;
+import ddd.caffeine.ratrip.module.auth.feign.kakao.model.KakaoProfile;
 import ddd.caffeine.ratrip.module.auth.presentation.dto.response.SignInResponseDto;
 import ddd.caffeine.ratrip.module.auth.presentation.dto.response.SignOutResponseDto;
 import ddd.caffeine.ratrip.module.auth.presentation.dto.response.TokenResponseDto;

@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.auth.feign.kakao.dto.response;
+package ddd.caffeine.ratrip.module.auth.feign.kakao.model;
 
 import lombok.Getter;
 

@@ -4,8 +4,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import ddd.caffeine.ratrip.module.auth.feign.kakao.dto.request.KakaoBearerTokenRequest;
-import ddd.caffeine.ratrip.module.auth.feign.kakao.dto.response.KakaoBearerTokenResponse;
+import ddd.caffeine.ratrip.module.auth.feign.kakao.model.KakaoBearerTokenRequest;
+import ddd.caffeine.ratrip.module.auth.feign.kakao.model.KakaoBearerTokenResponse;
 
 @FeignClient(name = "kakaoAuthorizeApiClient", url = "https://kauth.kakao.com")
 public interface KakaoAuthorizeApiClient {

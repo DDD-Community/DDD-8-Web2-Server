@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.auth.feign.kakao.dto.request;
+package ddd.caffeine.ratrip.module.auth.feign.kakao.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
