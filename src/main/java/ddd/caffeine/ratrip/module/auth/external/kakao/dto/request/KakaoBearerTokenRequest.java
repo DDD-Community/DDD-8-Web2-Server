@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@AllArgsConstructor
+@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class KakaoBearerTokenRequest {
 	private static final String GRANT_TYPE = "authorization_code";
 	private String grant_type;

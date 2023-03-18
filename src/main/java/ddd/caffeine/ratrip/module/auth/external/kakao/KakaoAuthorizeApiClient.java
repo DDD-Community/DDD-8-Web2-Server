@@ -10,5 +10,5 @@ import ddd.caffeine.ratrip.module.auth.external.kakao.dto.response.KakaoBearerTo
 @FeignClient(name = "kakaoAuthorizeApiClient", url = "https://kauth.kakao.com")
 public interface KakaoAuthorizeApiClient {
 	@PostMapping(value = "/oauth/token", consumes = "application/x-www-form-urlencoded")
-	KakaoBearerTokenResponse getBearerToken(@RequestBody KakaoBearerTokenRequest kakaoBearerTokenRequest);
+	KakaoBearerTokenResponse getBearerToken(@RequestBody final KakaoBearerTokenRequest kakaoBearerTokenRequest);
 }
