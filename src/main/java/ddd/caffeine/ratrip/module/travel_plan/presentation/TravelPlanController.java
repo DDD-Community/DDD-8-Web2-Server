@@ -1,5 +1,7 @@
 package ddd.caffeine.ratrip.module.travel_plan.presentation;
 
+import java.util.UUID;
+
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
@@ -27,12 +29,14 @@ import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanAccessOption;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.request.DayScheduleAddPlaceRequestDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.request.DaySchedulePlaceSequenceDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.request.DayScheduleUpdatePlaceRequestDto;
+import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.request.ShortestPathRequestDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.request.TravelPlanInitRequestDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.DayScheduleInTravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.DaySchedulePlaceResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.DayScheduleResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.LatestTravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.MyTravelPlanResponseDto;
+import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.ShortestPathResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.TravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,6 +51,18 @@ import lombok.RequiredArgsConstructor;
 public class TravelPlanController {
 
 	private final TravelPlanService travelPlanService;
+
+	@Operation(summary = "[인증] 선택한 여행지 기반 나머지 일정 최단 경로 구하기")
+	@GetMapping("/{travel_plan_id}/day-schedules/{day_schedule_id}/shortest-path")
+	public ResponseEntity<ShortestPathResponseDto> getShortestPath(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user,
+		@PathVariable("travel_plan_id") UUID travelPlanId,
+		@PathVariable("day_schedule_id") UUID dayScheduleId,
+		@Valid @RequestBody ShortestPathRequestDto request) {
+
+		return ResponseEntity.ok(
+			travelPlanService.getShortestPath(request.toServiceDto(user, travelPlanId, dayScheduleId)));
+	}
 
 	@Operation(summary = "[인증] 진행 했던 모든 여행계획 불러오기")
 	@GetMapping
