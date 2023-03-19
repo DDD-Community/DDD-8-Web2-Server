@@ -22,10 +22,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * 장소 도메인.
- * TODO: field columnDefinition 상의 하여 정할 것.
- */
 @Getter
 @Entity
 @NoArgsConstructor
@@ -74,7 +70,16 @@ public class Place extends AuditingTimeEntity {
 	private String telephone;
 
 	@Column
-	private int tripCount;
+	private long viewCount;
+
+	@Column
+	private long tripCount;
+
+	@Column
+	private long bookmarkCount;
+
+	@Column
+	private long totalScore;
 
 	@OneToMany(mappedBy = "place")
 	private List<Bookmark> bookmarks = new ArrayList<>();
