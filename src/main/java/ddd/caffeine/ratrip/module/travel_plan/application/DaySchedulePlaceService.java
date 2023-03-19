@@ -12,6 +12,7 @@ import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedule;
 import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedulePlace;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.DaySchedulePlaceRepository;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.DaySchedulePlaceDao;
+import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.PlaceNameLongitudeLatitudeDao;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -20,6 +21,10 @@ public class DaySchedulePlaceService {
 
 	private final DaySchedulePlaceValidator daySchedulePlaceValidator;
 	private final DaySchedulePlaceRepository daySchedulePlaceRepository;
+
+	public List<PlaceNameLongitudeLatitudeDao> findPlacesNameLongitudeLatitudeById(UUID id) {
+		return daySchedulePlaceRepository.findPlacesNameLongitudeLatitudeById(id);
+	}
 
 	public List<DaySchedulePlaceDao> readDaySchedulePlaces(UUID dayScheduleUUID, String placeUUID) {
 		return daySchedulePlaceRepository.findDaySchedulePlaceDaoByDayScheduleUUIDAndPlaceUUID(dayScheduleUUID,
@@ -87,14 +92,6 @@ public class DaySchedulePlaceService {
 	private void validateAddPlaceInSchedule(DaySchedule daySchedule, Place place) {
 		boolean exist = daySchedulePlaceRepository.existByDayScheduleAndPlace(daySchedule, place);
 		daySchedulePlaceValidator.validateNotExist(exist);
-	}
-
-	/**
-	 * Todo : 개발용 추후 삭제
-	 */
-	public void delete(UUID dayScheduleUUID) {
-		List<DaySchedulePlace> daySchedulePlaces = daySchedulePlaceRepository.findByDayScheduleUUID(dayScheduleUUID);
-		daySchedulePlaceRepository.deleteAllInBatch(daySchedulePlaces);
 	}
 
 	public void deleteAllDaySchedulePlaceByDayScheduleUUID(UUID dayScheduleUUID) {

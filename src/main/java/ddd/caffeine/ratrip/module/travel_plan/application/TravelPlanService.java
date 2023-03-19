@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ddd.caffeine.ratrip.common.exception.domain.TravelPlanException;
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
 import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.travel_plan.application.dto.ShortestPathDto;
 import ddd.caffeine.ratrip.module.travel_plan.application.validator.TravelPlanValidator;
 import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedule;
 import ddd.caffeine.ratrip.module.travel_plan.domain.DayScheduleAccessOption;
@@ -22,26 +23,45 @@ import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanAccessOption;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanUser;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.TravelPlanRepository;
+import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.PlaceNameLongitudeLatitudeDao;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.DayScheduleInTravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.DaySchedulePlaceResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.DayScheduleResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.LatestTravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.MyTravelPlanResponse;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.MyTravelPlanResponseDto;
+import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.ShortestPathResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.TravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class TravelPlanService {
 	private final TravelPlanUserService travelPlanUserService;
 	private final TravelPlanValidator travelPlanValidator;
 	private final DayScheduleService dayScheduleService;
+	private final DaySchedulePlaceService daySchedulePlaceService;
 	private final PlaceService placeService;
 	private final TravelPlanRepository travelPlanRepository;
 
-	@Transactional
+	public ShortestPathResponseDto getShortestPath(ShortestPathDto request) {
+		TravelPlan travelPlan = travelPlanRepository.findById(request.getTravelPlanId())
+			.orElseThrow(() -> new TravelPlanException(NOT_FOUND_TRAVEL_PLAN_EXCEPTION));
+
+		DaySchedule daySchedule = dayScheduleService.findByIdAndTravelPlanId(request.getDayScheduleId(),
+				travelPlan.getId())
+			.orElseThrow(() -> new TravelPlanException(NOT_FOUND_DAY_SCHEDULE_EXCEPTION));
+
+		List<PlaceNameLongitudeLatitudeDao> places = daySchedulePlaceService.findPlacesNameLongitudeLatitudeById(
+			daySchedule.getId());
+
+		//PlaceId를 기준으로 다익스트라 돌려서 최단거리 순으로 정렬
+
+		return null;
+	}
+
 	public void deleteAllTravelPlan(User user) {
 		List<TravelPlanUser> travelPlanUsers = travelPlanUserService.findByUser(user);
 
@@ -60,7 +80,6 @@ public class TravelPlanService {
 		dayScheduleService.deleteDaySchedule(travelPlanUser.getTravelPlan().readUUID());
 	}
 
-	@Transactional
 	public void deleteTravelPlan(UUID TravelPlanUUID) {
 		TravelPlan travelPlan = travelPlanRepository.findById(TravelPlanUUID)
 			.orElseThrow(() -> new TravelPlanException(NOT_FOUND_TRAVEL_PLAN_EXCEPTION));
@@ -104,7 +123,6 @@ public class TravelPlanService {
 		return response;
 	}
 
-	@Transactional
 	public TravelPlanResponseDto makeTravelPlan(TravelPlan travelPlan, User user) {
 		//진행중인 일정 있을 경우 예외
 		travelPlanUserService.validateMakeTravelPlan(user);
@@ -118,7 +136,6 @@ public class TravelPlanService {
 		return new TravelPlanResponseDto(travelPlan);
 	}
 
-	@Transactional
 	public TravelPlanResponseDto endTravelPlan(TravelPlanAccessOption accessOption) {
 		//접근 가능한 유저인지 확인
 		travelPlanUserService.validateAccessTravelPlan(accessOption);
@@ -147,7 +164,6 @@ public class TravelPlanService {
 		return new DayScheduleInTravelPlanResponseDto(daySchedules);
 	}
 
-	@Transactional
 	public DaySchedulePlaceResponseDto addPlaceInDaySchedule(DayScheduleAccessOption accessOption, String placeUUID,
 		String memo) {
 		//접근 가능한 유저인지 확인
@@ -160,7 +176,6 @@ public class TravelPlanService {
 		return new DaySchedulePlaceResponseDto(daySchedulePlaceUUID);
 	}
 
-	@Transactional
 	public DaySchedulePlaceResponseDto updatePlaceInDaySchedule(DayScheduleAccessOption accessOption,
 		String daySchedulePlaceUUID, String memo) {
 		//접근 가능한 유저인지 확인
@@ -170,7 +185,6 @@ public class TravelPlanService {
 		return new DaySchedulePlaceResponseDto(updatedDaySchedulePlaceUUID);
 	}
 
-	@Transactional
 	public void deletePlaceInDaySchedule(DayScheduleAccessOption accessOption, String daySchedulePlaceUUID) {
 		//접근 가능한 유저인지 확인
 		travelPlanUserService.validateAccessTravelPlan(accessOption.readTravelPlanAccessOption());
@@ -178,7 +192,6 @@ public class TravelPlanService {
 		dayScheduleService.deleteDaySchedulePlace(accessOption.readDayScheduleUUID(), daySchedulePlaceUUID);
 	}
 
-	@Transactional
 	public void updatePlacesSequenceInDaySchedule(DayScheduleAccessOption accessOption,
 		List<UUID> daySchedulePlaceUUIDs) {
 		//접근 가능한 유저인지 확인

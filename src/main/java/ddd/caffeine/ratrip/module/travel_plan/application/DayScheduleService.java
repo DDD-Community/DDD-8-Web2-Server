@@ -26,13 +26,8 @@ public class DayScheduleService {
 	private final DayScheduleValidator dayScheduleValidator;
 	private final DayScheduleRepository dayScheduleRepository;
 
-	//todo : 개발용 
-	public void TEMP_deleteDaySchedule(UUID travelPlanUUID) {
-		List<DaySchedule> daySchedule = dayScheduleRepository.findByTravelPlanId(travelPlanUUID);
-		for (DaySchedule schedule : daySchedule) {
-			daySchedulePlaceService.delete(schedule.getId());
-			dayScheduleRepository.delete(schedule);
-		}
+	public Optional<DaySchedule> findByIdAndTravelPlanId(UUID id, UUID travelPlanId) {
+		return dayScheduleRepository.findByIdAndTravelPlanId(id, travelPlanId);
 	}
 
 	public void deleteDaySchedule(UUID travelPlanUUID) {

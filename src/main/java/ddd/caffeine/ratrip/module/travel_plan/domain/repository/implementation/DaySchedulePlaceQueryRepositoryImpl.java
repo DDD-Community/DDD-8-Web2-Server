@@ -14,8 +14,9 @@ import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedule;
 import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedulePlace;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.DaySchedulePlaceQueryRepository;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.DaySchedulePlaceDao;
-import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.PlaceLongitudeLatitudeDao;
+import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.PlaceNameLongitudeLatitudeDao;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.QDaySchedulePlaceDao;
+import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.QPlaceNameLongitudeLatitudeDao;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -24,9 +25,21 @@ public class DaySchedulePlaceQueryRepositoryImpl implements DaySchedulePlaceQuer
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public List<PlaceLongitudeLatitudeDao> findPlacesNameLongitudeLatitudeByDayScheduleId(UUID travelPlanId,
-		UUID dayScheduleId) {
-		return null;
+	public List<PlaceNameLongitudeLatitudeDao> findPlacesNameLongitudeLatitudeById(UUID id) {
+		return jpaQueryFactory.select(new QPlaceNameLongitudeLatitudeDao(place.id, place.name, place.location.longitude,
+				place.location.latitude))
+			.from(daySchedulePlace)
+			.innerJoin(daySchedulePlace.place, place)
+			.where(daySchedulePlace.daySchedule.id.eq(id))
+			.fetch();
+	}
+
+	@Override
+	public List<DaySchedulePlace> findByDayScheduleUUID(UUID dayScheduleUUID) {
+		return jpaQueryFactory
+			.selectFrom(daySchedulePlace)
+			.where(daySchedulePlace.daySchedule.id.eq(dayScheduleUUID))
+			.fetch();
 	}
 
 	@Override
