@@ -93,7 +93,7 @@ public class PlaceQueryRepositoryImpl implements PlaceQueryRepository {
 			.select(new QCategoryPlaceByRegionDao(place.id, place.name))
 			.from(place)
 			.where(place.address.region.eq(region), place.category.eq(category))
-			.orderBy(place.numberOfTrips.desc())
+			.orderBy(place.tripCount.desc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
@@ -118,9 +118,9 @@ public class PlaceQueryRepositoryImpl implements PlaceQueryRepository {
 
 				switch (order.getProperty()) {
 					case "popular":
-						OrderSpecifier<?> numberOfTrips = QuerydslUtils
-							.getSortedColumn(direction, place, "numberOfTrips");
-						orders.add(numberOfTrips);
+						OrderSpecifier<?> tripCount = QuerydslUtils
+							.getSortedColumn(direction, place, "tripCount");
+						orders.add(tripCount);
 						break;
 					default:
 						break;

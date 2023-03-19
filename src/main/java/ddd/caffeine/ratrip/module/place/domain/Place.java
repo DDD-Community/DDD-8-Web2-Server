@@ -74,13 +74,13 @@ public class Place extends AuditingTimeEntity {
 	private String telephone;
 
 	@Column
-	private int numberOfTrips;
+	private int tripCount;
 
 	@OneToMany(mappedBy = "place")
 	private List<Bookmark> bookmarks = new ArrayList<>();
 
 	public void travelCome() {
-		this.numberOfTrips++;
+		this.tripCount++;
 	}
 
 	@PrePersist
@@ -134,7 +134,7 @@ public class Place extends AuditingTimeEntity {
 		this.telephone = telephone;
 		this.isDeleted = false;
 		this.isUpdated = false;
-		this.numberOfTrips = 0;
+		this.tripCount = 0;
 	}
 
 	public void updateBookmark(Bookmark bookmark) {
