@@ -78,15 +78,6 @@ public class TravelPlanController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "[인증 (개발용)] 여행 계획 삭제 API")
-	@DeleteMapping("/{travel_plan_id}")
-	public ResponseEntity<String> deleteTravelPlanApi(
-		@Parameter(hidden = true) @AuthenticationPrincipal User user,
-		@PathVariable("travel_plan_id") @UUIDFormat String travelPlanUUID) {
-		travelPlanService.TEMP_deleteTravelPlan(travelPlanUUID, user);
-		return ResponseEntity.ok("DELETE TO SUCCESS");
-	}
-
 	@Operation(summary = "[인증]최근여행 계획 정보 불러오기 API")
 	@GetMapping("latest")
 	public ResponseEntity<LatestTravelPlanResponseDto> readTravelPlanLatestApi(
