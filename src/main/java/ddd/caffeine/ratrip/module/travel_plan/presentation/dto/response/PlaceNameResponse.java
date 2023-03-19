@@ -6,7 +6,10 @@ import lombok.Getter;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class PlaceDistanceResponse {
+public class PlaceNameResponse {
 	private String name;
-	private int distance;
+
+	public static PlaceNameResponse of(final String name) {
+		return new PlaceNameResponse(name);
+	}
 }

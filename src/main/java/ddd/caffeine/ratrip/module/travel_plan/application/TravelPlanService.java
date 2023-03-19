@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ddd.caffeine.ratrip.common.exception.domain.TravelPlanException;
+import ddd.caffeine.ratrip.common.util.ShortestPathCalculator;
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.travel_plan.application.dto.ShortestPathDto;
@@ -59,7 +60,7 @@ public class TravelPlanService {
 
 		//PlaceId를 기준으로 다익스트라 돌려서 최단거리 순으로 정렬
 
-		return null;
+		return ShortestPathResponseDto.of(ShortestPathCalculator.byFloydWarshall(request.getPlaceId(), places));
 	}
 
 	public void deleteAllTravelPlan(User user) {

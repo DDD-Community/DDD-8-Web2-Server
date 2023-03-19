@@ -9,9 +9,9 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class ShortestPathResponseDto {
-	private List<PlaceDistanceResponse> placeDistanceResponses;
+	private List<PlaceNameResponse> placeNameResponses;
 
-	public static ShortestPathResponseDto of(final List<PlaceDistanceResponse> placeDistanceResponses) {
-		return new ShortestPathResponseDto(placeDistanceResponses);
+	public static ShortestPathResponseDto of(final List<PlaceNameResponse> placeNameResponses) {
+		return new ShortestPathResponseDto(placeNameResponses);
 	}
 }
