@@ -58,8 +58,6 @@ public class TravelPlanService {
 		List<PlaceNameLongitudeLatitudeDao> places = daySchedulePlaceService.findPlacesNameLongitudeLatitudeById(
 			daySchedule.getId());
 
-		//PlaceId를 기준으로 다익스트라 돌려서 최단거리 순으로 정렬
-
 		return ShortestPathResponseDto.of(ShortestPathCalculator.byFloydWarshall(request.getPlaceId(), places));
 	}
 
