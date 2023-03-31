@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.NOT_FOUND_PLACE_EXCEPTION;
 
-public class ShortestPathCalculator {
+public class RecommendationPathCalculator {
     static final int EARTH_RADIUS = 6371000;
 
     public static List<PlaceNameResponse> greedyAlgorithm(final UUID id,

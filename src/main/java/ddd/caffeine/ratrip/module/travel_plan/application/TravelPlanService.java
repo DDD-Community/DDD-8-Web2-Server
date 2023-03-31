@@ -1,10 +1,10 @@
 package ddd.caffeine.ratrip.module.travel_plan.application;
 
 import ddd.caffeine.ratrip.common.exception.domain.TravelPlanException;
-import ddd.caffeine.ratrip.common.util.ShortestPathCalculator;
+import ddd.caffeine.ratrip.common.util.RecommendationPathCalculator;
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
 import ddd.caffeine.ratrip.module.place.domain.Place;
-import ddd.caffeine.ratrip.module.travel_plan.application.dto.ShortestPathDto;
+import ddd.caffeine.ratrip.module.travel_plan.application.dto.RecommendationPathDto;
 import ddd.caffeine.ratrip.module.travel_plan.application.validator.TravelPlanValidator;
 import ddd.caffeine.ratrip.module.travel_plan.domain.*;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.TravelPlanRepository;
@@ -36,8 +36,7 @@ public class TravelPlanService {
     private final PlaceService placeService;
     private final TravelPlanRepository travelPlanRepository;
 
-    // Utils로 변경 및 TravelPlan, DaySchedule, DaySchedulePlace 관계 매핑 다시해;;;;;
-    public ShortestPathResponseDto getShortestPath(ShortestPathDto request) {
+    public RecommendationPathResponseDto getRecommendationPath(RecommendationPathDto request) {
         TravelPlan travelPlan = travelPlanRepository.findById(request.getTravelPlanId())
                 .orElseThrow(() -> new TravelPlanException(NOT_FOUND_TRAVEL_PLAN_EXCEPTION));
 
@@ -48,7 +47,7 @@ public class TravelPlanService {
         List<PlaceNameLongitudeLatitudeDao> places = daySchedulePlaceService.findPlacesNameLongitudeLatitudeById(
                 daySchedule.getId());
 
-        return ShortestPathResponseDto.of(ShortestPathCalculator.greedyAlgorithm(request.getPlaceId(), places));
+        return RecommendationPathResponseDto.of(RecommendationPathCalculator.greedyAlgorithm(request.getPlaceId(), places));
     }
 
     public void deleteAllTravelPlan(User user) {
