@@ -34,11 +34,11 @@ public class PlaceFeignService {
 	/**
 	 * 주소와 장소이름을 토대로 하나의 장소를 읽어옵니다.
 	 */
-	public FeignPlaceModel readPlacesByAddressAndPlaceName(String address, String placeName) {
+	public FeignPlaceModel findPlaceDetailByNameAndAddress(String name, String address) {
 		final String KAKAO_API_KEY = secretKeyManager.getKakaoRestApiKey();
 
 		final String KAKAO_REQUEST_HEADER = "KakaoAK " + KAKAO_API_KEY;
-		String keyword = address + " " + placeName;
+		final String keyword = address + " " + name;
 		final int DATA_COUNT = 1;
 
 		return kakaoFeignClient.readPlaceByKeyword(KAKAO_REQUEST_HEADER, keyword,

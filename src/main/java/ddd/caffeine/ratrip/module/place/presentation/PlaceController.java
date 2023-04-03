@@ -28,7 +28,7 @@ import ddd.caffeine.ratrip.module.place.presentation.dto.request.BookmarkPlaceBy
 import ddd.caffeine.ratrip.module.place.presentation.dto.request.CategoryPlaceByCoordinateRequestDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.request.CategoryPlaceByRegionRequestDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.request.PlaceCoordinateRequestDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.request.PlaceSaveByThirdPartyRequestDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.request.PlaceDetailRequestDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.request.PlaceSearchRequestDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.BookmarkPlaceResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.BookmarkPlacesByCoordinateResponseDto;
@@ -38,7 +38,6 @@ import ddd.caffeine.ratrip.module.place.presentation.dto.response.CategoryPlaces
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.CategoryPlacesByRegionResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceDetailResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceInRegionResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSaveThirdPartyResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSearchResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -100,22 +99,13 @@ public class PlaceController {
 		return ResponseEntity.ok(placeService.searchPlaces(request.mapByThirdPartySearchOption()));
 	}
 
-	@Operation(summary = "[인증] 카카오 정보를 통한 장소 저장 및 업데이트 API")
-	@PostMapping
-	public ResponseEntity<PlaceSaveThirdPartyResponseDto> callSavePlaceByThirdPartyData(
-		@Parameter(hidden = true) @AuthenticationPrincipal User user,
-		@Valid @RequestBody PlaceSaveByThirdPartyRequestDto request) {
-
-		return ResponseEntity.ok(placeService.savePlaceByThirdPartyData(user,
-			request.mapByThirdPartyDetailSearchOption()));
-	}
-
-	@Operation(summary = "[인증] 장소 기본키(UUID)로 장소 상세 읽기 API")
-	@GetMapping("/{id}")
+	@Operation(summary = "[인증] 장소 상세 정보 API")
+	@PostMapping("")
 	public ResponseEntity<PlaceDetailResponseDto> callPlaceDetailsApiByUUID(
-		@PathVariable UUID id) {
+		@Parameter(hidden = true) @AuthenticationPrincipal User user,
+		@Valid @RequestBody PlaceDetailRequestDto request) {
 
-		return ResponseEntity.ok(placeService.readPlaceDetailsByUUID(id));
+		return ResponseEntity.ok(placeService.getPlaceDetail(user, request.toServiceDto()));
 	}
 
 	@Operation(summary = "[인증] 지역기반 장소 불러오기 (default 옵션 : 인기순정렬, 데이터 5개씩, 내림차순)")

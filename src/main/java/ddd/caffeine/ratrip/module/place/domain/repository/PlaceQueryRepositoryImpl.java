@@ -19,6 +19,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import ddd.caffeine.ratrip.common.util.QuerydslUtils;
 import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.CategoryPlaceByRegionDao;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceBookmarkDao;
@@ -99,6 +100,14 @@ public class PlaceQueryRepositoryImpl implements PlaceQueryRepository {
 			.fetch();
 
 		return QuerydslUtils.toSlice(contents, pageable);
+	}
+
+	@Override
+	public Place findByKakaoId(String kakaoId) {
+		return jpaQueryFactory
+			.selectFrom(place)
+			.where(place.kakaoId.eq(kakaoId))
+			.fetchOne();
 	}
 
 	private BooleanExpression regionsIn(List<Region> region) {

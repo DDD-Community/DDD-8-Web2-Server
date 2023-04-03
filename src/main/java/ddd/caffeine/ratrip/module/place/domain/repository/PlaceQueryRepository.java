@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.CategoryPlaceByRegionDao;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceBookmarkDao;
@@ -23,4 +24,6 @@ public interface PlaceQueryRepository {
 
 	Slice<CategoryPlaceByRegionDao> getCategoryPlacesByRegion(Region region, Category category,
 		Pageable pageable);
+
+	Place findByKakaoId(String kakaoId);
 }

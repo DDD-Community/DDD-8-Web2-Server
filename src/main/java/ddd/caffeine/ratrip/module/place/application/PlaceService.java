@@ -1,30 +1,34 @@
 package ddd.caffeine.ratrip.module.place.application;
 
+import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ddd.caffeine.ratrip.common.exception.domain.PlaceException;
 import ddd.caffeine.ratrip.module.place.application.dto.BookmarkPlaceByRegionDto;
 import ddd.caffeine.ratrip.module.place.application.dto.CategoryPlaceByCoordinateDto;
 import ddd.caffeine.ratrip.module.place.application.dto.CategoryPlaceByRegionDto;
 import ddd.caffeine.ratrip.module.place.application.dto.PlaceByCoordinateDto;
+import ddd.caffeine.ratrip.module.place.application.dto.PlaceDetailDto;
 import ddd.caffeine.ratrip.module.place.application.validator.PlaceValidator;
 import ddd.caffeine.ratrip.module.place.domain.Address;
 import ddd.caffeine.ratrip.module.place.domain.Category;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.Region;
-import ddd.caffeine.ratrip.module.place.domain.ThirdPartyDetailSearchOption;
 import ddd.caffeine.ratrip.module.place.domain.ThirdPartySearchOption;
 import ddd.caffeine.ratrip.module.place.domain.repository.PlaceRepository;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.BookmarkPlaceByRegionDao;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.CategoryPlaceByRegionDao;
 import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceBookmarkDao;
-import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceDetailBookmarkDao;
 import ddd.caffeine.ratrip.module.place.feign.kakao.model.FeignPlaceModel;
 import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignBlogModel;
 import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignImageModel;
@@ -36,7 +40,6 @@ import ddd.caffeine.ratrip.module.place.presentation.dto.response.CategoryPlaces
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.CategoryPlacesByRegionResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceDetailResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceInRegionResponseDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSaveThirdPartyResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSearchResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -45,11 +48,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PlaceService {
+	static final long CACHE_EXPIRE_TIME = 60 * 60 * 24 * 7; // 7일
 
 	private final PlaceFeignService placeFeignService;
 	private final PlaceValidator placeValidator;
 	private final BookmarkService bookmarkService;
 	private final PlaceRepository placeRepository;
+
+	private final RedisTemplate<String, Object> redisTemplate;
 
 	public BookmarkPlacesByRegionResponseDto getBookmarkPlacesByRegion(final User user, final Region region,
 		final Pageable pageable) {
@@ -105,25 +111,51 @@ public class PlaceService {
 		return feignPlaceModel.mapByPlaceSearchResponseDto();
 	}
 
-	public PlaceDetailResponseDto readPlaceDetailsByUUID(UUID id) {
-		PlaceDetailBookmarkDao content = placeRepository.findByUUID(id);
-		placeValidator.validateExistPlaceDetailDao(content);
+	@Transactional
+	public PlaceDetailResponseDto getPlaceDetail(User user, PlaceDetailDto request) {
+		// 캐쉬에 있는지 확인
+		String cacheKey = "place:" + request.getId();
+		PlaceDetailResponseDto cache = (PlaceDetailResponseDto)redisTemplate.opsForValue().get(cacheKey);
 
-		return new PlaceDetailResponseDto(content);
+		if (cache == null) {
+			// 캐쉬에 없으면 API 콜 및 DB에 저장
+			return saveAndCachePlaceDetail(request, cacheKey);
+		}
+
+		increaseViewCount(cache.getId());
+		return cache;
 	}
 
-	@Transactional
-	public PlaceSaveThirdPartyResponseDto savePlaceByThirdPartyData(User user,
-		ThirdPartyDetailSearchOption searchOption) {
-		PlaceBookmarkDao content = placeRepository.findByThirdPartyID(searchOption.readThirdPartyId());
-		if (content == null) {
-			Place place = readPlaceEntity(searchOption.getPlaceName(), searchOption.getAddress());
-			placeRepository.save(place);
-			BookmarkResponseDto bookmarkContent = bookmarkService.readBookmark(user, place);
-			return new PlaceSaveThirdPartyResponseDto(place, bookmarkContent);
+	private void increaseViewCount(UUID id) {
+		Place place = placeRepository.findById(id).orElseThrow(() -> new PlaceException(NOT_FOUND_PLACE_EXCEPTION));
+		place.increaseViewCount();
+	}
+
+	private PlaceDetailResponseDto saveAndCachePlaceDetail(PlaceDetailDto request, String cacheKey) {
+		// API 콜
+		Place place = findPlaceDetailFromKakao(request.getName(), request.getAddress());
+
+		// DB에 없데이트
+		place = updatePlace(request, place);
+
+		// 캐시에 저장
+		PlaceDetailResponseDto response = PlaceDetailResponseDto.of(place);
+		redisTemplate.opsForValue().set(cacheKey, response, CACHE_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+
+		return response;
+	}
+
+	private Place updatePlace(PlaceDetailDto request, Place place) {
+		Place originPlace = placeRepository.findByKakaoId(request.getId());
+
+		if (originPlace == null) {
+			return placeRepository.save(place);
 		}
-		handlePlaceUpdate(content, searchOption.getPlaceName(), searchOption.getAddress());
-		return new PlaceSaveThirdPartyResponseDto(content);
+
+		originPlace.update(place);
+		originPlace.increaseViewCount();
+
+		return originPlace;
 	}
 
 	@Transactional
@@ -170,30 +202,13 @@ public class PlaceService {
 	}
 
 	/**
-	 * 장소 데이터 업데이트 처리 메서드.
-	 */
-	private void handlePlaceUpdate(PlaceBookmarkDao placeDao, String name, String address) {
-		if (checkNeedsUpdate(placeDao, name, address)) {
-			String region = address.split(" ")[0];
-			FeignPlaceModel feignPlaceModel = placeFeignService.readPlacesByAddressAndPlaceName(name, region);
-
-			Place place = placeRepository.findById(placeDao.getId()).get();
-			place.update(feignPlaceModel.readOne());
-			setImageLinkInPlace(place, place.getName());
-			setBlogsInPlace(place, place.getName());
-		}
-	}
-
-	/**
 	 * 장소이름과 주소를 가지고 그에 맞는 Place Entity 생성해주는 메서드.
 	 */
-	private Place readPlaceEntity(String name, String address) {
-		String region = address.split(" ")[0];
-		FeignPlaceModel feignPlaceModel = placeFeignService.readPlacesByAddressAndPlaceName(name, region);
+	private Place findPlaceDetailFromKakao(String name, String address) {
+		FeignPlaceModel feignPlaceModel = placeFeignService.findPlaceDetailByNameAndAddress(name, address);
 		Place place = feignPlaceModel.mapByPlaceEntity();
-
 		setImageLinkInPlace(place, place.getName());
-		setBlogsInPlace(place, place.getName());
+		//setBlogsInPlace(place, place.getName());
 
 		return place;
 	}

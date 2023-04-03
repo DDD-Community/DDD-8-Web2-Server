@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
 import ddd.caffeine.ratrip.module.place.presentation.PlaceController;
-import ddd.caffeine.ratrip.module.place.presentation.dto.request.PlaceSaveByThirdPartyRequestDto;
+import ddd.caffeine.ratrip.module.place.presentation.dto.request.PlaceDetailRequestDto;
 
 /**
  * Place Controller 계층에서 Validate Custom Annotation 에 관한 테스트 입니다.
@@ -49,7 +49,7 @@ class ValidateAnnotationPlaceTest {
 		String placeName = "지원이네 집";
 		String address = "서울특별시 서초구 양재동 16-10";
 
-		PlaceSaveByThirdPartyRequestDto request = new PlaceSaveByThirdPartyRequestDto(
+		PlaceDetailRequestDto request = new PlaceDetailRequestDto(
 			thirdPartyId, placeName, address
 		);
 
@@ -74,7 +74,7 @@ class ValidateAnnotationPlaceTest {
 		String placeName = "지원이네 집";
 		String address = "서울특별시 서초구 양재동 16-10";
 
-		PlaceSaveByThirdPartyRequestDto request = new PlaceSaveByThirdPartyRequestDto(
+		PlaceDetailRequestDto request = new PlaceDetailRequestDto(
 			thirdPartyId, placeName, address
 		);
 
