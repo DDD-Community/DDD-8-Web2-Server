@@ -9,4 +9,5 @@ import ddd.caffeine.ratrip.module.place.domain.Place;
 
 @Repository
 public interface PlaceRepository extends JpaRepository<Place, UUID>, PlaceQueryRepository {
+	
 }

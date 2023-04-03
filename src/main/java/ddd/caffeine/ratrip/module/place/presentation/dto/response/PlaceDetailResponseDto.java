@@ -1,18 +1,19 @@
 package ddd.caffeine.ratrip.module.place.presentation.dto.response;
 
-import java.util.List;
 import java.util.UUID;
 
-import ddd.caffeine.ratrip.module.place.domain.Blog;
 import ddd.caffeine.ratrip.module.place.domain.Location;
 import ddd.caffeine.ratrip.module.place.domain.Place;
-import ddd.caffeine.ratrip.module.place.domain.repository.dao.PlaceDetailBookmarkDao;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * @Todo : 프론트 및 디자인분들과 해당 필드 상의
  */
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PlaceDetailResponseDto {
 
 	private UUID id;
@@ -24,33 +25,18 @@ public class PlaceDetailResponseDto {
 	private String imageLink;
 	private String additionalInfoLink;
 	private String telephone;
-	private boolean isUpdated;
-	private List<Blog> blogs;
-	BookmarkResponseDto bookmark;
 
-	public PlaceDetailResponseDto(PlaceDetailBookmarkDao content) {
-		initPlaceContents(content.getPlace());
-		this.bookmark = createBookmarkContent(content.getIsActivated());
-	}
-
-	private BookmarkResponseDto createBookmarkContent(Boolean isActivated) {
-		if (isActivated == null) {
-			return new BookmarkResponseDto();
-		}
-		return new BookmarkResponseDto(isActivated);
-	}
-
-	private void initPlaceContents(Place place) {
-		this.id = place.getId();
-		this.kakaoId = place.getKakaoId();
-		this.name = place.getName();
-		this.category = place.getCategory().name();
-		this.address = place.getAddress().toString();
-		this.location = place.getLocation();
-		this.isUpdated = place.isUpdated();
-		this.imageLink = place.getImageLink();
-		this.additionalInfoLink = place.getAdditionalInfoLink();
-		this.telephone = place.getTelephone();
-		this.blogs = place.readBlogs();
+	public static PlaceDetailResponseDto of(Place place) {
+		return new PlaceDetailResponseDto(
+			place.getId(),
+			place.getKakaoId(),
+			place.getName(),
+			place.getCategory().name(),
+			place.getAddress().toString(),
+			place.getLocation(),
+			place.getImageLink(),
+			place.getAdditionalInfoLink(),
+			place.getTelephone()
+		);
 	}
 }

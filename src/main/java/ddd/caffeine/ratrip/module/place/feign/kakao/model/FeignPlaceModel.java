@@ -45,9 +45,9 @@ public class FeignPlaceModel {
 
 	public FeignPlaceData readOne() {
 		final int PLACE_INDEX = 0;
-		if (this.documents.isEmpty()) {
+		if (documents.isEmpty()) {
 			throw new PlaceException(NOT_FOUND_PLACE_EXCEPTION);
 		}
-		return this.documents.get(PLACE_INDEX);
+		return documents.get(PLACE_INDEX);
 	}
 }
