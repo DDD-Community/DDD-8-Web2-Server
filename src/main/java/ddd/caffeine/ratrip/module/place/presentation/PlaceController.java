@@ -100,7 +100,7 @@ public class PlaceController {
 	}
 
 	@Operation(summary = "[인증] 장소 상세 정보 API")
-	@PostMapping("/") //TODO - 임시로 /로 설정
+	@PostMapping("")
 	public ResponseEntity<PlaceDetailResponseDto> callPlaceDetailsApiByUUID(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user,
 		@Valid @RequestBody PlaceDetailRequestDto request) {
