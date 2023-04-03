@@ -53,10 +53,9 @@ public class PlaceFeignService {
 		final String KAKAO_API_KEY = secretKeyManager.getKakaoRestApiKey();
 
 		final String KAKAO_REQUEST_HEADER = "KakaoAK " + KAKAO_API_KEY;
-		final int PLACE_RADIUS = 20000;
 
 		return kakaoFeignClient.readPlacesByKeywordInRadius(
-			KAKAO_REQUEST_HEADER, option.getKeyword(), option.readLatitude(), option.readLongitude(), PLACE_RADIUS,
+			KAKAO_REQUEST_HEADER, option.getKeyword(), option.readLatitude(), option.readLongitude(),
 			option.getPage());
 	}
 
