@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.travel_plan.domain;
+package ddd.caffeine.ratrip.module.day_schedule.domain;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.common.jpa.AuditingTimeEntity;
 import ddd.caffeine.ratrip.common.util.SequentialUUIDGenerator;
+import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

@@ -3,7 +3,7 @@ package ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response;
 import java.util.ArrayList;
 import java.util.List;
 
-import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanUser;
+import ddd.caffeine.ratrip.module.travel_plan_user.domain.TravelPlanUser;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

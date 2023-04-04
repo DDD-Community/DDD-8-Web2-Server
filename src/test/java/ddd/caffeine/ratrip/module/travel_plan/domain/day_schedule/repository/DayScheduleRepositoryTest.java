@@ -13,8 +13,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import ddd.caffeine.ratrip.TestConfig;
-import ddd.caffeine.ratrip.module.travel_plan.domain.DaySchedule;
-import ddd.caffeine.ratrip.module.travel_plan.domain.repository.DayScheduleRepository;
+import ddd.caffeine.ratrip.module.day_schedule.domain.DaySchedule;
+import ddd.caffeine.ratrip.module.day_schedule.domain.respository.DayScheduleRepository;
 
 @DataJpaTest
 @Import(TestConfig.class)

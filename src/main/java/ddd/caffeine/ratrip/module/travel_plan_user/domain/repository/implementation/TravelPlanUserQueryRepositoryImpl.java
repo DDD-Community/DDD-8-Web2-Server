@@ -1,6 +1,6 @@
-package ddd.caffeine.ratrip.module.travel_plan.domain.repository.implementation;
+package ddd.caffeine.ratrip.module.travel_plan_user.domain.repository.implementation;
 
-import static ddd.caffeine.ratrip.module.travel_plan.domain.QTravelPlanUser.*;
+import static ddd.caffeine.ratrip.module.travel_plan_user.domain.QTravelPlanUser.*;
 import static org.springframework.util.ObjectUtils.*;
 
 import java.util.ArrayList;
@@ -17,8 +17,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import ddd.caffeine.ratrip.common.util.QuerydslUtils;
 import ddd.caffeine.ratrip.module.place.domain.Region;
-import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanUser;
-import ddd.caffeine.ratrip.module.travel_plan.domain.repository.TravelPlanUserQueryRepository;
+import ddd.caffeine.ratrip.module.travel_plan_user.domain.TravelPlanUser;
+import ddd.caffeine.ratrip.module.travel_plan_user.domain.repository.TravelPlanUserQueryRepository;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 

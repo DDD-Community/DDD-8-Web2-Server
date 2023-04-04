@@ -12,9 +12,9 @@ import ddd.caffeine.ratrip.common.exception.domain.TravelPlanException;
 import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanAccessOption;
-import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanUser;
-import ddd.caffeine.ratrip.module.travel_plan.domain.repository.TravelPlanUserRepository;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.MyTravelPlanResponseDto;
+import ddd.caffeine.ratrip.module.travel_plan_user.domain.TravelPlanUser;
+import ddd.caffeine.ratrip.module.travel_plan_user.domain.repository.TravelPlanUserRepository;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
