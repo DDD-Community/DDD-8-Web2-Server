@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlaceDetailRequestDto {
 
-	@Number
 	@NotBlank(message = "id must not be blank")
 	private String id;
 
