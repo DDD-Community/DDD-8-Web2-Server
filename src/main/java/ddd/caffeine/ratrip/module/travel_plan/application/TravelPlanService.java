@@ -13,26 +13,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ddd.caffeine.ratrip.common.exception.domain.TravelPlanException;
-import ddd.caffeine.ratrip.common.util.RecommendationPathCalculator;
 import ddd.caffeine.ratrip.module.day_schedule.application.DayScheduleService;
 import ddd.caffeine.ratrip.module.day_schedule.domain.DaySchedule;
 import ddd.caffeine.ratrip.module.day_schedule.domain.DayScheduleAccessOption;
 import ddd.caffeine.ratrip.module.day_schedule_place.application.DaySchedulePlaceService;
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
 import ddd.caffeine.ratrip.module.place.domain.Place;
-import ddd.caffeine.ratrip.module.travel_plan.application.dto.RecommendationPathDto;
 import ddd.caffeine.ratrip.module.travel_plan.application.validator.TravelPlanValidator;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlanAccessOption;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.TravelPlanRepository;
-import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.PlaceNameLongitudeLatitudeDao;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.DayScheduleInTravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.DaySchedulePlaceResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.DayScheduleResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.LatestTravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.MyTravelPlanResponse;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.MyTravelPlanResponseDto;
-import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.RecommendationPathResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.TravelPlanResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan_user.application.TravelPlanUserService;
 import ddd.caffeine.ratrip.module.travel_plan_user.domain.TravelPlanUser;
@@ -50,19 +46,9 @@ public class TravelPlanService {
 	private final PlaceService placeService;
 	private final TravelPlanRepository travelPlanRepository;
 
-	public RecommendationPathResponseDto getRecommendationPath(RecommendationPathDto request) {
-		TravelPlan travelPlan = travelPlanRepository.findById(request.getTravelPlanId())
+	public TravelPlan findTravelPlanById(UUID travelPlanId) {
+		return travelPlanRepository.findById(travelPlanId)
 			.orElseThrow(() -> new TravelPlanException(NOT_FOUND_TRAVEL_PLAN_EXCEPTION));
-
-		DaySchedule daySchedule = dayScheduleService.findByIdAndTravelPlanId(request.getDayScheduleId(),
-				travelPlan.getId())
-			.orElseThrow(() -> new TravelPlanException(NOT_FOUND_DAY_SCHEDULE_EXCEPTION));
-
-		List<PlaceNameLongitudeLatitudeDao> places = daySchedulePlaceService.findPlacesNameLongitudeLatitudeById(
-			daySchedule.getId());
-
-		return RecommendationPathResponseDto.of(
-			RecommendationPathCalculator.greedyAlgorithm(request.getPlaceId(), places));
 	}
 
 	public void deleteAllTravelPlan(User user) {

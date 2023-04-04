@@ -1,5 +1,7 @@
 package ddd.caffeine.ratrip.module.day_schedule.application;
 
+import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +10,16 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import ddd.caffeine.ratrip.common.exception.domain.TravelPlanException;
+import ddd.caffeine.ratrip.common.util.RecommendationPathCalculator;
+import ddd.caffeine.ratrip.module.day_schedule.application.dto.RecommendationPathDto;
 import ddd.caffeine.ratrip.module.day_schedule.domain.DaySchedule;
 import ddd.caffeine.ratrip.module.day_schedule.domain.respository.DayScheduleRepository;
+import ddd.caffeine.ratrip.module.day_schedule.domain.respository.dao.PlaceNameLongitudeLatitudeDao;
+import ddd.caffeine.ratrip.module.day_schedule.presentation.dto.response.RecommendationPathResponseDto;
 import ddd.caffeine.ratrip.module.day_schedule_place.application.DaySchedulePlaceService;
 import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.travel_plan.application.TravelPlanService;
 import ddd.caffeine.ratrip.module.travel_plan.application.validator.DayScheduleValidator;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.DaySchedulePlaceDao;
@@ -23,12 +31,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DayScheduleService {
 
+	private final TravelPlanService travelPlanService;
 	private final DaySchedulePlaceService daySchedulePlaceService;
 	private final DayScheduleValidator dayScheduleValidator;
 	private final DayScheduleRepository dayScheduleRepository;
 
-	public Optional<DaySchedule> findByIdAndTravelPlanId(UUID id, UUID travelPlanId) {
-		return dayScheduleRepository.findByIdAndTravelPlanId(id, travelPlanId);
+	public RecommendationPathResponseDto getRecommendationPath(RecommendationPathDto request) {
+		TravelPlan travelPlan = travelPlanService.findTravelPlanById(request.getTravelPlanId());
+		DaySchedule daySchedule = findByIdAndTravelPlanId(request.getDayScheduleId(), travelPlan.getId());
+
+		List<PlaceNameLongitudeLatitudeDao> places = daySchedulePlaceService.findPlacesNameLongitudeLatitudeById(
+			daySchedule.getId());
+
+		return RecommendationPathResponseDto.of(
+			RecommendationPathCalculator.greedyAlgorithm(request.getPlaceId(), places));
+	}
+
+	public DaySchedule findByIdAndTravelPlanId(UUID id, UUID travelPlanId) {
+		return dayScheduleRepository.findByIdAndTravelPlanId(id, travelPlanId)
+			.orElseThrow(() -> new TravelPlanException(NOT_FOUND_DAY_SCHEDULE_EXCEPTION));
 	}
 
 	public void deleteDaySchedule(UUID travelPlanUUID) {

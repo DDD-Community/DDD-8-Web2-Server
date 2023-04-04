@@ -10,11 +10,11 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import ddd.caffeine.ratrip.module.day_schedule.domain.DaySchedule;
+import ddd.caffeine.ratrip.module.day_schedule.domain.respository.dao.PlaceNameLongitudeLatitudeDao;
 import ddd.caffeine.ratrip.module.day_schedule_place.domain.DaySchedulePlace;
 import ddd.caffeine.ratrip.module.day_schedule_place.domain.repository.DaySchedulePlaceQueryRepository;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.DaySchedulePlaceDao;
-import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.PlaceNameLongitudeLatitudeDao;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.QDaySchedulePlaceDao;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.QPlaceNameLongitudeLatitudeDao;
 import lombok.RequiredArgsConstructor;
