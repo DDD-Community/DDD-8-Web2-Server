@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.travel_plan.application;
+package ddd.caffeine.ratrip.module.day_schedule.application;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import ddd.caffeine.ratrip.module.day_schedule.domain.DaySchedule;
 import ddd.caffeine.ratrip.module.day_schedule.domain.respository.DayScheduleRepository;
+import ddd.caffeine.ratrip.module.day_schedule_place.application.DaySchedulePlaceService;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.travel_plan.application.validator.DayScheduleValidator;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;

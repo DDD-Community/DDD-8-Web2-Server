@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.travel_plan.application;
+package ddd.caffeine.ratrip.module.travel_plan_user.application;
 
 import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
 

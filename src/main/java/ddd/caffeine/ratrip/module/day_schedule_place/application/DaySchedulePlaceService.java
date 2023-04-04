@@ -1,4 +1,4 @@
-package ddd.caffeine.ratrip.module.travel_plan.application;
+package ddd.caffeine.ratrip.module.day_schedule_place.application;
 
 import java.util.List;
 import java.util.Optional;
