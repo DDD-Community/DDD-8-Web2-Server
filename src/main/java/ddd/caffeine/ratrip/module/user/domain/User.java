@@ -15,7 +15,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import ddd.caffeine.ratrip.common.jpa.AuditingTimeEntity;
-import ddd.caffeine.ratrip.common.util.SequentialUUIDGenerator;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

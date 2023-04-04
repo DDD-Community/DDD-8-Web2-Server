@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor
 public class Address {
-
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Region region;
