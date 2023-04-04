@@ -13,13 +13,14 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.common.jpa.AuditingTimeEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Place extends AuditingTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +36,10 @@ public class Place extends AuditingTimeEntity {
 
 	@Enumerated(EnumType.STRING)
 	private Category category;
+
+	@NotNull
+	@Embedded
+	private Location location;
 
 	@NotNull
 	@Embedded
@@ -80,5 +85,17 @@ public class Place extends AuditingTimeEntity {
 		this.bookmarkCount = 0L;
 		this.viewCount = 1L;
 		this.totalScore = 0L;
+	}
+
+	public void setLocation(double latitude, double longitude) {
+		this.location = new Location(latitude, longitude);
+	}
+
+	public void setAddress(String address) {
+		this.address = new Address(address);
+	}
+
+	public void setCategoryByCode(String categoryCode) {
+		this.category = Category.createByCode(categoryCode);
 	}
 }
