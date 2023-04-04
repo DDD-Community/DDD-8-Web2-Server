@@ -12,7 +12,7 @@ import ddd.caffeine.ratrip.module.place.feign.kakao.model.KakaoRegionResponse;
 @FeignClient(name = "KakaoFeignClient", url = "https://dapi.kakao.com", configuration = FeignConfiguration.class)
 public interface KakaoFeignClient {
 	@GetMapping(value = "v2/local/search/keyword.json")
-	FeignPlaceModel readPlacesByKeywordInRadius(
+	FeignPlaceModel findPlacesByKeywordInRadius(
 		@RequestHeader("Authorization") String header,
 		@RequestParam("query") String query,
 		@RequestParam("y") String latitude,

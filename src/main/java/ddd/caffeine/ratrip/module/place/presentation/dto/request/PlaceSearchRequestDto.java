@@ -4,6 +4,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import ddd.caffeine.ratrip.module.place.application.dto.SearchPlaceDto;
 import lombok.Getter;
 
 @Getter
@@ -34,5 +35,9 @@ public class PlaceSearchRequestDto {
 			return;
 		}
 		this.page = page;
+	}
+
+	public SearchPlaceDto toServiceDto() {
+		return SearchPlaceDto.of(keyword, latitude, longitude, page);
 	}
 }
