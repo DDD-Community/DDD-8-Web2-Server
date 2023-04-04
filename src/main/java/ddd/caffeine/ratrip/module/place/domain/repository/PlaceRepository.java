@@ -7,5 +7,5 @@ import ddd.caffeine.ratrip.module.place.domain.Place;
 
 @Repository
 public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceQueryRepository {
-
+	Place findByKakaoId(String kakaoId);
 }

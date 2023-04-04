@@ -1,25 +1,41 @@
 package ddd.caffeine.ratrip.module.travel_plan.application;
 
+import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ddd.caffeine.ratrip.common.exception.domain.TravelPlanException;
+import ddd.caffeine.ratrip.module.day_plan.application.DayPlanService;
+import ddd.caffeine.ratrip.module.travel_plan.application.dto.CreateTravelPlanDto;
+import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
+import ddd.caffeine.ratrip.module.travel_plan.domain.repository.TravelPlanRepository;
+import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.CreateTravelPlanResponseDto;
+import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class TravelPlanService {
+	private final TravelPlanRepository travelPlanRepository;
+	private final DayPlanService dayPlanService;
 
-	// public TravelPlanResponseDto createTravelPlan(TravelPlan travelPlan, User user) {
-	// 	//진행중인 일정 있을 경우 예외
-	// 	travelPlanUserService.validateMakeTravelPlan(user);
-	// 	//TravelPlan 생성 및 저장
-	// 	travelPlanRepository.save(travelPlan);
-	// 	//TravelPlan 및 User 저장.
-	// 	travelPlanUserService.saveTravelPlanWithUser(travelPlan, user);
-	// 	//daySchedule 생성 및 저장.
-	// 	dayScheduleService.initTravelPlan(travelPlan, createDateList(travelPlan.getStartDate(),
-	// 		travelPlan.getTravelDays()));
-	// 	return new TravelPlanResponseDto(travelPlan);
-	// }
+	public CreateTravelPlanResponseDto createTravelPlan(User user, CreateTravelPlanDto request) {
+		validateExistOngoingTravelPlan(user);
+
+		//TravelPlan 생성 및 저장
+		TravelPlan travelPlan = travelPlanRepository.save(request.toEntity(user));
+
+		//daySchedule 생성 및 저장.
+		dayPlanService.createDayPlan(travelPlan, request.getTravelStartDate(), request.getTravelDays());
+
+		return CreateTravelPlanResponseDto.of(travelPlan);
+	}
+
+	private void validateExistOngoingTravelPlan(User user) {
+		travelPlanRepository.findByUser(user).ifPresent(travelPlan -> {
+			throw new TravelPlanException(ALREADY_EXIST_TRAVEL_PLAN_EXCEPTION);
+		});
+	}
 }

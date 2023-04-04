@@ -7,13 +7,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.common.jpa.AuditingTimeEntity;
 import ddd.caffeine.ratrip.module.place.domain.Region;
+import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,18 +51,35 @@ public class TravelPlan extends AuditingTimeEntity implements Serializable {
 
 	@NotNull
 	@Column(name = "is_end", columnDefinition = "TINYINT(1)")
-	private boolean isEnd = Boolean.FALSE;
+	private boolean isEnd;
 
 	@NotNull
 	@Column(name = "is_deleted", columnDefinition = "TINYINT(1)")
-	private boolean isDeleted = Boolean.FALSE;
+	private boolean isDeleted;
+
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", columnDefinition = "BINARY(16)")
+	private User user;
 
 	@Builder
-	public TravelPlan(String title, Region region, int travelDays, LocalDate startDate) {
+	private TravelPlan(String title, Region region, int travelDays, LocalDate startDate, User user) {
 		this.title = title;
 		this.region = region;
 		this.travelDays = travelDays;
 		this.startDate = startDate;
+		this.isEnd = Boolean.FALSE;
+		this.isDeleted = Boolean.FALSE;
+		this.user = user;
 	}
 
+	public static TravelPlan of(String title, Region region, int travelDays, LocalDate startDate, User user) {
+		return TravelPlan.builder()
+			.title(title)
+			.region(region)
+			.travelDays(travelDays)
+			.startDate(startDate)
+			.user(user)
+			.build();
+	}
 }
