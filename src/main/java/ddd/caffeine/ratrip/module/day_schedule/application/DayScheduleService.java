@@ -19,7 +19,6 @@ import ddd.caffeine.ratrip.module.day_schedule.domain.respository.dao.PlaceNameL
 import ddd.caffeine.ratrip.module.day_schedule.presentation.dto.response.RecommendationPathResponseDto;
 import ddd.caffeine.ratrip.module.day_schedule_place.application.DaySchedulePlaceService;
 import ddd.caffeine.ratrip.module.place.domain.Place;
-import ddd.caffeine.ratrip.module.travel_plan.application.TravelPlanService;
 import ddd.caffeine.ratrip.module.travel_plan.application.validator.DayScheduleValidator;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.DaySchedulePlaceDao;
@@ -31,14 +30,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DayScheduleService {
 
-	private final TravelPlanService travelPlanService;
 	private final DaySchedulePlaceService daySchedulePlaceService;
 	private final DayScheduleValidator dayScheduleValidator;
 	private final DayScheduleRepository dayScheduleRepository;
 
 	public RecommendationPathResponseDto getRecommendationPath(RecommendationPathDto request) {
-		TravelPlan travelPlan = travelPlanService.findTravelPlanById(request.getTravelPlanId());
-		DaySchedule daySchedule = findByIdAndTravelPlanId(request.getDayScheduleId(), travelPlan.getId());
+		DaySchedule daySchedule = findByIdAndTravelPlanId(request.getDayScheduleId(), request.getTravelPlanId());
 
 		List<PlaceNameLongitudeLatitudeDao> places = daySchedulePlaceService.findPlacesNameLongitudeLatitudeById(
 			daySchedule.getId());

@@ -36,4 +36,5 @@ public class DayScheduleController {
 		return ResponseEntity.ok(
 			dayScheduleService.getRecommendationPath(request.toServiceDto(user, travelPlanId, dayScheduleId)));
 	}
+
 }
