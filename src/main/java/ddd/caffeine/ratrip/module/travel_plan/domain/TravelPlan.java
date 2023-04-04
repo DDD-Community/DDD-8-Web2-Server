@@ -82,4 +82,8 @@ public class TravelPlan extends AuditingTimeEntity implements Serializable {
 			.user(user)
 			.build();
 	}
+
+	public void endTravelPlan() {
+		this.isEnd = true;
+	}
 }

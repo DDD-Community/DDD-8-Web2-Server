@@ -33,9 +33,21 @@ public class TravelPlanService {
 		return CreateTravelPlanResponseDto.of(travelPlan);
 	}
 
+	@Transactional(readOnly = true)
+	public void endTravelPlan(User user, Long travelPlanId) {
+		TravelPlan travelPlan = validateExistTravelPlan(user, travelPlanId);
+		travelPlan.endTravelPlan();
+	}
+
+	private TravelPlan validateExistTravelPlan(User user, Long travelPlanId) {
+		return travelPlanRepository.findByIdAndUser(travelPlanId, user)
+			.orElseThrow(() -> new TravelPlanException(NOT_FOUND_TRAVEL_PLAN_EXCEPTION));
+	}
+
 	private void validateExistOngoingTravelPlan(User user) {
-		travelPlanRepository.findByUser(user).ifPresent(travelPlan -> {
-			throw new TravelPlanException(ALREADY_EXIST_TRAVEL_PLAN_EXCEPTION);
-		});
+		travelPlanRepository.findOngoingTravelPlanByUser(user)
+			.ifPresent(plan -> {
+				throw new TravelPlanException(ALREADY_EXIST_TRAVEL_PLAN_EXCEPTION);
+			});
 	}
 }
