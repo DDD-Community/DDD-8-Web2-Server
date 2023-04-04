@@ -21,7 +21,7 @@ public interface KakaoFeignClient {
 	);
 
 	@GetMapping(value = "v2/local/search/keyword.json")
-	FeignPlaceModel readPlaceByKeyword(
+	FeignPlaceModel findPlaceByKeyword(
 		@RequestHeader("Authorization") String header,
 		@RequestParam("query") String query,
 		@RequestParam("size") int size

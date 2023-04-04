@@ -8,14 +8,14 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import ddd.caffeine.ratrip.common.jpa.AuditingTimeEntity;
+import ddd.caffeine.ratrip.common.util.SequentialUUIDGenerator;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends AuditingTimeEntity implements UserDetails {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "BINARY(16)")
 	private UUID id;
 
 	@Column(nullable = false)
@@ -41,6 +41,12 @@ public class User extends AuditingTimeEntity implements UserDetails {
 
 	@Embedded
 	private SocialInfo socialInfo;
+
+	@PrePersist
+	public void createUserPrimaryKey() {
+		//sequential uuid 생성
+		this.id = SequentialUUIDGenerator.generate();
+	}
 
 	@Builder
 	private User(String name, String email, UserStatus status, String socialId, UserSocialType socialType) {

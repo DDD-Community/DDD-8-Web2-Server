@@ -1,7 +1,5 @@
 package ddd.caffeine.ratrip.module.place.domain;
 
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -24,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class Place extends AuditingTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private UUID id;
+	private Long id;
 
 	@NotNull
 	@Column
@@ -97,5 +95,29 @@ public class Place extends AuditingTimeEntity {
 
 	public void setCategoryByCode(String categoryCode) {
 		this.category = Category.createByCode(categoryCode);
+	}
+
+	public void setImageLink(String imageLink) {
+		this.imageLink = imageLink;
+	}
+
+	public void increaseViewCount() {
+		this.viewCount++;
+	}
+
+	public void update(Place place) {
+		this.kakaoId = place.getKakaoId();
+		this.name = place.getName();
+		this.category = place.getCategory();
+		this.address = place.getAddress();
+		this.location = place.getLocation();
+		this.imageLink = place.getImageLink();
+		this.additionalInfoLink = place.getAdditionalInfoLink();
+		this.telephone = place.getTelephone();
+		this.bookmarkCount = place.getBookmarkCount();
+		this.tripCount = place.getTripCount();
+		this.viewCount = place.getViewCount();
+		this.totalScore = place.getTotalScore();
+		// this.blogs = place.getBlogs();
 	}
 }
