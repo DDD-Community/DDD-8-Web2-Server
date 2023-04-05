@@ -63,13 +63,14 @@ public class TravelPlan extends AuditingTimeEntity implements Serializable {
 	private User user;
 
 	@Builder
-	private TravelPlan(String title, Region region, int travelDays, LocalDate startDate, User user) {
+	private TravelPlan(String title, Region region, int travelDays, LocalDate startDate, User user, boolean isEnd,
+		boolean isDeleted) {
 		this.title = title;
 		this.region = region;
 		this.travelDays = travelDays;
 		this.startDate = startDate;
-		this.isEnd = Boolean.FALSE;
-		this.isDeleted = Boolean.FALSE;
+		this.isEnd = isEnd;
+		this.isDeleted = isDeleted;
 		this.user = user;
 	}
 
@@ -80,6 +81,8 @@ public class TravelPlan extends AuditingTimeEntity implements Serializable {
 			.travelDays(travelDays)
 			.startDate(startDate)
 			.user(user)
+			.isEnd(false)
+			.isDeleted(false)
 			.build();
 	}
 

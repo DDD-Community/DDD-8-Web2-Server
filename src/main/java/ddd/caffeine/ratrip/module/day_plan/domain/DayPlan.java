@@ -33,22 +33,24 @@ public class DayPlan extends AuditingTimeEntity {
 
 	@NotNull
 	@Column(name = "is_deleted", columnDefinition = "TINYINT(1)")
-	private boolean isDeleted = Boolean.FALSE;
+	private boolean isDeleted;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "travel_plan_id")
 	private TravelPlan travelPlan;
 
 	@Builder
-	private DayPlan(LocalDate date, TravelPlan travelPlan) {
+	private DayPlan(LocalDate date, TravelPlan travelPlan, boolean isDeleted) {
 		this.date = date;
 		this.travelPlan = travelPlan;
+		this.isDeleted = isDeleted;
 	}
 
 	public static DayPlan of(TravelPlan travelPlan, LocalDate date) {
 		return DayPlan.builder()
 			.travelPlan(travelPlan)
 			.date(date)
+			.isDeleted(false)
 			.build();
 	}
 }
