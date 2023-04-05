@@ -47,7 +47,7 @@ public class Memo {
 	private Category category;
 
 	@Column(columnDefinition = "VARCHAR(255)")
-	private String memo;
+	private String content;
 
 	@NotNull
 	@Column(name = "is_deleted", columnDefinition = "TINYINT(1)")
@@ -63,10 +63,10 @@ public class Memo {
 	private User user;
 
 	@Builder
-	private Memo(int sequence, String memo, boolean isDeleted, DayPlan dayPlan, Address address, Category category,
+	private Memo(int sequence, String content, boolean isDeleted, DayPlan dayPlan, Address address, Category category,
 		String name, User user) {
 		this.sequence = sequence;
-		this.memo = memo;
+		this.content = content;
 		this.isDeleted = isDeleted;
 		this.dayPlan = dayPlan;
 		this.address = address;
@@ -75,17 +75,22 @@ public class Memo {
 		this.user = user;
 	}
 
-	public static Memo of(DayPlan dayPlan, int sequence, String memo, Address address, Category category, String name,
+	public static Memo of(DayPlan dayPlan, int sequence, String content, Address address, Category category,
+		String name,
 		User user) {
 		return Memo.builder()
 			.dayPlan(dayPlan)
 			.sequence(sequence)
-			.memo(memo)
+			.content(content)
 			.isDeleted(false)
 			.address(address)
 			.category(category)
 			.name(name)
 			.user(user)
 			.build();
+	}
+
+	public void changeSequence(int sequence) {
+		this.sequence = sequence;
 	}
 }
