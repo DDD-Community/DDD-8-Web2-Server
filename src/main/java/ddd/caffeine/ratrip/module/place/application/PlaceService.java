@@ -74,24 +74,22 @@ public class PlaceService {
 		place.increaseBookmarkCount();
 	}
 
-	public Place validateExistPlace(Long placeId) {
-		Place place = (Place)redisTemplate.opsForValue().get("place:" + placeId);
+	public Place validateExistPlace(String placeKakaoId) {
+		Place place = (Place)redisTemplate.opsForValue().get("place:" + placeKakaoId);
 
 		if (place == null) {
-			place = placeRepository.findById(placeId).orElseThrow(() -> new PlaceException(NOT_FOUND_PLACE_EXCEPTION));
+			place = placeRepository.findByKakaoId(placeKakaoId)
+				.orElseThrow(() -> new PlaceException(NOT_FOUND_PLACE_EXCEPTION));
 		}
 
 		return place;
 	}
 
-	private Place updatePlace(PlaceDetailDto request, Place place) {
-		Place originPlace = placeRepository.findByKakaoId(request.getKakaoId());
+	private Place updatePlace(PlaceDetailDto request, Place newPlace) {
+		Place originPlace = placeRepository.findByKakaoId(request.getKakaoId())
+			.orElseGet(() -> placeRepository.save(newPlace));
 
-		if (originPlace == null) {
-			return placeRepository.save(place);
-		}
-
-		originPlace.update(place);
+		originPlace.update(newPlace);
 		originPlace.increaseViewCount();
 
 		return originPlace;

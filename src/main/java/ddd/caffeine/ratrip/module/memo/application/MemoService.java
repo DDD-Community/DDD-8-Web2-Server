@@ -23,6 +23,8 @@ import ddd.caffeine.ratrip.module.memo.domain.Memo;
 import ddd.caffeine.ratrip.module.memo.domain.repository.MemoRepository;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.response.MemosResponseDto;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.response.RecommendationPathResponseDto;
+import ddd.caffeine.ratrip.module.place.application.PlaceService;
+import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
@@ -31,11 +33,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemoService {
 	private final DayPlanService dayPlanService;
+	private final PlaceService placeService;
 	private final MemoRepository memoRepository;
 
 	public void createMemo(User user, CreateMemoDto request) {
 		DayPlan dayPlan = validateExistDayPlan(user, request.getDayPlanId());
-		memoRepository.save(request.toEntity(dayPlan, user));
+		Place place = validateExistPlace(request.getKakaoId());
+
+		memoRepository.save(request.toEntity(dayPlan, user, place));
 	}
 
 	public void changeMemoSequence(User user, ChangeMemoSequenceDto request) {
@@ -84,5 +89,9 @@ public class MemoService {
 
 	private DayPlan validateExistDayPlan(User user, Long dayPlanId) {
 		return dayPlanService.validateExistDayPlan(user, dayPlanId);
+	}
+
+	private Place validateExistPlace(String placeKakaoId) {
+		return placeService.validateExistPlace(placeKakaoId);
 	}
 }

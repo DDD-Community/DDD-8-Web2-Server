@@ -29,10 +29,11 @@ public class BookmarkController {
 	private final BookmarkService bookmarkService;
 
 	@Operation(summary = "[인증] 북마크 생성")
-	@PostMapping("/{place_id}")
+	@PostMapping("/{place_kakao_id}")
 	public ResponseEntity<String> addBookmark(
-		@Parameter(hidden = true) @AuthenticationPrincipal User user, @PathVariable("place_id") Long placeId) {
-		bookmarkService.createBookmark(user, placeId);
+		@Parameter(hidden = true) @AuthenticationPrincipal User user,
+		@PathVariable("place_kakao_id") Long placeKakaoId) {
+		bookmarkService.createBookmark(user, placeKakaoId);
 		return ResponseEntity.ok("Bookmark Create Success");
 	}
 
@@ -53,4 +54,24 @@ public class BookmarkController {
 
 		return ResponseEntity.ok(bookmarkService.getBookmarksByCategory(user, category, pageable));
 	}
+
+	// @Operation(summary = "[인증] 유저가 여행 계획 생성시 선택한 지역 내에서 북마크한 장소 추천 페이지네이션 조회")
+	// @GetMapping()
+	// public ResponseEntity<RecommendByBookmarkAndRegionResponseDto> recommendByBookmarkAndRegion(
+	// 	@Parameter(hidden = true) @AuthenticationPrincipal User user, @RequestParam Region region,
+	// 	@PageableDefault(size = 20) Pageable pageable) {
+	//
+	// 	return ResponseEntity.ok(bookmarkService.recommendByBookmarkAndRegion(user, region, pageable));
+	// }
+	//
+	// @Operation(summary = "[인증] 유저가 위치한 현재 지역 내에서 북마크한 추천 페이지네이션 조회")
+	// @GetMapping()
+	// public ResponseEntity<RecommendByBookmarkAndLocationResponseDto> recommendByBookmarkAndLocation(
+	// 	@Parameter(hidden = true) @AuthenticationPrincipal User user,
+	// 	@Valid @ModelAttribute RecommendByBookmarkAndLocationRequestDto request,
+	// 	@PageableDefault(size = 20) Pageable pageable) {
+	//
+	// 	return ResponseEntity.ok(
+	// 		bookmarkService.recommendByBookmarkAndLocation(user, request.toServiceDto(), pageable));
+	// }
 }

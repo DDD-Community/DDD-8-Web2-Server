@@ -25,15 +25,15 @@ public class BookmarkService {
 	private final PlaceService placeService;
 	private final BookmarkRepository bookmarkRepository;
 
-	public void createBookmark(User user, Long placeId) {
-		Place place = validateExistPlace(placeId);
+	public void createBookmark(User user, String placeKakaoId) {
+		Place place = validateExistPlace(placeKakaoId);
 		validateExistBookmark(user, place);
 		bookmarkRepository.save(Bookmark.of(user, place));
 		placeService.increaseBookmarkCount(place);
 	}
 
-	public boolean whetherBookmark(User user, Long placeId) {
-		Place place = validateExistPlace(placeId);
+	public boolean whetherBookmark(User user, String placeKakaoId) {
+		Place place = validateExistPlace(placeKakaoId);
 		return bookmarkRepository.findByPlaceIdAndUser(place.getId(), user).isPresent();
 	}
 
@@ -44,8 +44,13 @@ public class BookmarkService {
 		return BookmarksByCategoryResponseDto.of(bookmarks.getContent(), bookmarks.hasNext());
 	}
 
-	private Place validateExistPlace(Long placeId) {
-		return placeService.validateExistPlace(placeId);
+	// public RecommendByBookmarkAndRegionResponseDto recommendByBookmarkAndRegion(User user, Long placeId) {
+	// 	Place place = validateExistPlace(placeId);
+	// 	return RecommendByBookmarkAndRegionResponseDto.of(bookmarkRepository.findRecommendByBookmarkAndRegion(user, place));
+	// }
+
+	private Place validateExistPlace(String placeKakaoId) {
+		return placeService.validateExistPlace(placeKakaoId);
 	}
 
 	private void validateExistBookmark(User user, Place place) {
