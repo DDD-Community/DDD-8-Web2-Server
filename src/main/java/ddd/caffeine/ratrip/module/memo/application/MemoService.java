@@ -15,8 +15,10 @@ import ddd.caffeine.ratrip.module.day_plan.application.DayPlanService;
 import ddd.caffeine.ratrip.module.day_plan.domain.DayPlan;
 import ddd.caffeine.ratrip.module.memo.application.dto.ChangeMemoSequenceDto;
 import ddd.caffeine.ratrip.module.memo.application.dto.CreateMemoDto;
+import ddd.caffeine.ratrip.module.memo.application.dto.MemosDto;
 import ddd.caffeine.ratrip.module.memo.domain.Memo;
 import ddd.caffeine.ratrip.module.memo.domain.repository.MemoRepository;
+import ddd.caffeine.ratrip.module.memo.presentation.dto.response.MemosResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
@@ -41,13 +43,19 @@ public class MemoService {
 
 		for (int sequence = 0; sequence < memoIds.size(); sequence++) {
 			Long memoId = memoIds.get(sequence);
-			
+
 			Memo memo = Optional.ofNullable(memoMap.get(memoId))
 				.orElseThrow(() -> new MemoException(NOT_FOUND_MEMO_EXCEPTION));
 
 			memo.changeSequence(sequence);
 		}
+	}
 
+	public MemosResponseDto getMemos(User user, MemosDto request) {
+		DayPlan dayPlan = validateExistDayPlan(user, request.getDayPlanId());
+		List<Memo> memos = memoRepository.findByDayPlanIdAndUser(dayPlan.getId(), user);
+
+		return MemosResponseDto.of(memos);
 	}
 
 	private DayPlan validateExistDayPlan(User user, Long dayPlanId) {
