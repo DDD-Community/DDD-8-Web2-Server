@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import ddd.caffeine.ratrip.module.day_plan.domain.DayPlan;
 import ddd.caffeine.ratrip.module.place.domain.Address;
 import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Location;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -43,6 +44,10 @@ public class Memo {
 	private Address address;
 
 	@NotNull
+	@Embedded
+	private Location location;
+
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Category category;
 
@@ -63,27 +68,28 @@ public class Memo {
 	private User user;
 
 	@Builder
-	private Memo(int sequence, String content, boolean isDeleted, DayPlan dayPlan, Address address, Category category,
-		String name, User user) {
+	private Memo(int sequence, String content, boolean isDeleted, DayPlan dayPlan, Address address, Location location,
+		Category category, String name, User user) {
 		this.sequence = sequence;
 		this.content = content;
 		this.isDeleted = isDeleted;
 		this.dayPlan = dayPlan;
 		this.address = address;
+		this.location = location;
 		this.category = category;
 		this.name = name;
 		this.user = user;
 	}
 
-	public static Memo of(DayPlan dayPlan, int sequence, String content, Address address, Category category,
-		String name,
-		User user) {
+	public static Memo of(DayPlan dayPlan, int sequence, String content, Address address, Location location,
+		Category category, String name, User user) {
 		return Memo.builder()
 			.dayPlan(dayPlan)
 			.sequence(sequence)
 			.content(content)
 			.isDeleted(false)
 			.address(address)
+			.location(location)
 			.category(category)
 			.name(name)
 			.user(user)

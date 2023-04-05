@@ -5,6 +5,7 @@ import javax.validation.constraints.NotEmpty;
 import ddd.caffeine.ratrip.module.memo.application.dto.CreateMemoDto;
 import ddd.caffeine.ratrip.module.place.domain.Address;
 import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Location;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,9 @@ public class CreateMemoRequestDto {
 	@NotEmpty(message = "Address must not be empty")
 	private Address address;
 
+	@NotEmpty(message = "Location must not be empty")
+	private Location location;
+
 	@NotEmpty(message = "Category must not be empty")
 	private Category category;
 
@@ -31,6 +35,6 @@ public class CreateMemoRequestDto {
 	private String content;
 
 	public CreateMemoDto toServiceDto() {
-		return CreateMemoDto.of(dayPlanId, name, address, category, sequence, content);
+		return CreateMemoDto.of(dayPlanId, name, address, location, category, sequence, content);
 	}
 }

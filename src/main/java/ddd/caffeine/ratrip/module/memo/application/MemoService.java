@@ -11,15 +11,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ddd.caffeine.ratrip.common.exception.domain.MemoException;
+import ddd.caffeine.ratrip.common.util.RecommendationPathCalculator;
 import ddd.caffeine.ratrip.module.day_plan.application.DayPlanService;
 import ddd.caffeine.ratrip.module.day_plan.domain.DayPlan;
 import ddd.caffeine.ratrip.module.memo.application.dto.ChangeMemoSequenceDto;
 import ddd.caffeine.ratrip.module.memo.application.dto.CreateMemoDto;
 import ddd.caffeine.ratrip.module.memo.application.dto.MemosDto;
+import ddd.caffeine.ratrip.module.memo.application.dto.RecommendationPathDto;
 import ddd.caffeine.ratrip.module.memo.application.dto.UpdateMemoDto;
 import ddd.caffeine.ratrip.module.memo.domain.Memo;
 import ddd.caffeine.ratrip.module.memo.domain.repository.MemoRepository;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.response.MemosResponseDto;
+import ddd.caffeine.ratrip.module.memo.presentation.dto.response.RecommendationPathResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
@@ -61,9 +64,17 @@ public class MemoService {
 
 	public void updateMemo(User user, UpdateMemoDto request) {
 		DayPlan dayPlan = validateExistDayPlan(user, request.getDayPlanId());
-		Memo memo = validateExistMemo(user, request.getMemoId());
+		Memo memo = validateExistMemo(user, dayPlan.getId());
 
 		memo.updateContent(request.getContent());
+	}
+
+	public RecommendationPathResponseDto getRecommendationPath(User user, RecommendationPathDto request) {
+		DayPlan dayPlan = validateExistDayPlan(user, request.getDayPlanId());
+		List<Memo> memos = memoRepository.findByDayPlanIdAndUser(dayPlan.getId(), user);
+
+		return RecommendationPathResponseDto.of(
+			RecommendationPathCalculator.byGreedyAlgorithm(request.getMemoId(), memos));
 	}
 
 	private Memo validateExistMemo(User user, Long memoId) {

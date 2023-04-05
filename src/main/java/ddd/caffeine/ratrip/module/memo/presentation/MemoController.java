@@ -17,8 +17,10 @@ import ddd.caffeine.ratrip.module.memo.application.MemoService;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.request.ChangeMemoSequenceRequestDto;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.request.CreateMemoRequestDto;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.request.MemosRequestDto;
+import ddd.caffeine.ratrip.module.memo.presentation.dto.request.RecommendationRequestDto;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.request.UpdateMemoRequestDto;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.response.MemosResponseDto;
+import ddd.caffeine.ratrip.module.memo.presentation.dto.response.RecommendationPathResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -67,5 +69,14 @@ public class MemoController {
 
 		memoService.updateMemo(user, request.toServiceDto(memoId));
 		return ResponseEntity.ok("Update Memo Success");
+	}
+
+	@Operation(summary = "[인증] 선택한 메모 기준 경로 추천")
+	@GetMapping("/{memo_id}/recommendation-path")
+	public ResponseEntity<RecommendationPathResponseDto> getRecommendationPath(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user, @PathVariable("memo_id") Long memoId,
+		@Valid @RequestBody RecommendationRequestDto request) {
+
+		return ResponseEntity.ok(memoService.getRecommendationPath(user, request.toServiceDto(memoId)));
 	}
 }
