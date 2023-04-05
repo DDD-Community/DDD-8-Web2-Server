@@ -72,11 +72,11 @@ public class MemoController {
 	}
 
 	@Operation(summary = "[인증] 선택한 메모 기준 경로 추천")
-	@GetMapping("/{memo_id}/recommendation-path")
+	@GetMapping("/{place_id}/recommendation-path")
 	public ResponseEntity<RecommendationPathResponseDto> getRecommendationPath(
-		@Parameter(hidden = true) @AuthenticationPrincipal User user, @PathVariable("memo_id") Long memoId,
+		@Parameter(hidden = true) @AuthenticationPrincipal User user, @PathVariable("place_id") Long placeId,
 		@Valid @RequestBody RecommendationRequestDto request) {
 
-		return ResponseEntity.ok(memoService.getRecommendationPath(user, request.toServiceDto(memoId)));
+		return ResponseEntity.ok(memoService.getRecommendationPath(user, request.toServiceDto(placeId)));
 	}
 }

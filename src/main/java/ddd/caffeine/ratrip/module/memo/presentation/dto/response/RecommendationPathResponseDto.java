@@ -2,7 +2,7 @@ package ddd.caffeine.ratrip.module.memo.presentation.dto.response;
 
 import java.util.List;
 
-import ddd.caffeine.ratrip.module.memo.domain.Memo;
+import ddd.caffeine.ratrip.module.place.domain.Place;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecommendationPathResponseDto {
-	List<Memo> memos;
+	List<Place> places;
 
-	public static RecommendationPathResponseDto of(List<Memo> memos) {
-		return new RecommendationPathResponseDto(memos);
+	public static RecommendationPathResponseDto of(List<Place> places) {
+		return new RecommendationPathResponseDto(places);
 	}
 }

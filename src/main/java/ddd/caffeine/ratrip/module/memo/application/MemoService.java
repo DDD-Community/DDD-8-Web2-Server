@@ -77,9 +77,10 @@ public class MemoService {
 	public RecommendationPathResponseDto getRecommendationPath(User user, RecommendationPathDto request) {
 		DayPlan dayPlan = validateExistDayPlan(user, request.getDayPlanId());
 		List<Memo> memos = memoRepository.findByDayPlanIdAndUser(dayPlan.getId(), user);
+		List<Place> places = memos.stream().map(Memo::getPlace).toList(); //TODO - check
 
 		return RecommendationPathResponseDto.of(
-			RecommendationPathCalculator.byGreedyAlgorithm(request.getMemoId(), memos));
+			RecommendationPathCalculator.byGreedyAlgorithm(request.getPlaceId(), places));
 	}
 
 	private Memo validateExistMemo(User user, Long memoId) {

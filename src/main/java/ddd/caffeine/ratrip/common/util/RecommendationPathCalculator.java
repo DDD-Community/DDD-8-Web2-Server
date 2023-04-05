@@ -5,54 +5,54 @@ import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import ddd.caffeine.ratrip.common.exception.domain.MemoException;
-import ddd.caffeine.ratrip.module.memo.domain.Memo;
+import ddd.caffeine.ratrip.common.exception.domain.PlaceException;
+import ddd.caffeine.ratrip.module.place.domain.Place;
 
 public class RecommendationPathCalculator {
 	static final int EARTH_RADIUS = 6371000;
 
 	// 위도, 경도로 각 경로간 거리를 계산하고, 그 중 가장 짧은 경로를 Greedy 하게 찾아서 정렬 (A, B, C, D가 있고 출발지가 A라면 A에서 가장 가까운 B를 찾고, B에서 가장 가까운 C를 찾고, C에서 가장 가까운 D를 찾는 방식)
-	public static List<Memo> byGreedyAlgorithm(Long memoId, List<Memo> memos) {
-		List<Memo> visitOrder = new ArrayList<>();
+	public static List<Place> byGreedyAlgorithm(Long placeId, List<Place> places) {
+		List<Place> visitOrder = new ArrayList<>();
 
-		int n = memos.size();
+		int n = places.size();
 		boolean[] visited = new boolean[n];
 
-		Memo startPlace = findStartPlace(memoId, memos);
-		int startPlaceIndex = findPlaceIndexById(memos, startPlace.getId());
+		Place startPlace = findStartPlace(placeId, places);
+		int startPlaceIndex = findPlaceIndexById(places, startPlace.getId());
 
 		visited[startPlaceIndex] = true; // 출발지 방문 처리
-		visitOrder.add(memos.get(startPlaceIndex));
+		visitOrder.add(places.get(startPlaceIndex));
 
 		for (int i = 0; i < n - 1; i++) { // 현재 위치로부터 가장 가까운 장소 찾기
 			double shortestDistance = Double.MAX_VALUE;
 			int closestPlaceIndex = -1;
 
 			for (int j = 0; j < n; j++) {
-				if (!visited[j] && haversineDistance(startPlace, memos.get(j)) < shortestDistance) {
+				if (!visited[j] && haversineDistance(startPlace, places.get(j)) < shortestDistance) {
 					closestPlaceIndex = j;
-					shortestDistance = haversineDistance(startPlace, memos.get(j));
+					shortestDistance = haversineDistance(startPlace, places.get(j));
 				}
 			}
 
 			visited[closestPlaceIndex] = true;
-			visitOrder.add(memos.get(closestPlaceIndex));
-			startPlace = memos.get(closestPlaceIndex);
+			visitOrder.add(places.get(closestPlaceIndex));
+			startPlace = places.get(closestPlaceIndex);
 		}
 
 		return visitOrder;
 	}
 
-	private static Memo findStartPlace(Long memoId, List<Memo> memos) {
-		return memos.stream()
-			.filter(memo -> memo.getId().equals(memoId))
+	private static Place findStartPlace(Long placeId, List<Place> places) {
+		return places.stream()
+			.filter(place -> place.getId().equals(placeId))
 			.findFirst()
-			.orElseThrow(() -> new MemoException(NOT_FOUND_MEMO_EXCEPTION));
+			.orElseThrow(() -> new PlaceException(NOT_FOUND_PLACE_EXCEPTION));
 	}
 
-	private static int findPlaceIndexById(List<Memo> memos, Long id) {
-		for (int i = 0; i < memos.size(); i++) {
-			if (memos.get(i).getId().equals(id)) {
+	private static int findPlaceIndexById(List<Place> places, Long id) {
+		for (int i = 0; i < places.size(); i++) {
+			if (places.get(i).getId().equals(id)) {
 				return i;
 			}
 		}
@@ -60,7 +60,7 @@ public class RecommendationPathCalculator {
 		return -1;
 	}
 
-	private static double haversineDistance(Memo originPlace, Memo place) {
+	private static double haversineDistance(Place originPlace, Place place) {
 		double deltaLatitude = Math.toRadians(
 			place.getLocation().getLatitude() - originPlace.getLocation().getLatitude());
 

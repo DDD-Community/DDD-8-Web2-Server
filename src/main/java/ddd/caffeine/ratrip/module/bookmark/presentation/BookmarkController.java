@@ -32,17 +32,18 @@ public class BookmarkController {
 	@PostMapping("/{place_kakao_id}")
 	public ResponseEntity<String> addBookmark(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user,
-		@PathVariable("place_kakao_id") Long placeKakaoId) {
+		@PathVariable("place_kakao_id") String placeKakaoId) {
 		bookmarkService.createBookmark(user, placeKakaoId);
 		return ResponseEntity.ok("Bookmark Create Success");
 	}
 
 	@Operation(summary = "[인증] 특정 장소 북마크 여부 조회")
-	@GetMapping("/{place_id}")
+	@GetMapping("/{place_kakao_id}")
 	public ResponseEntity<Boolean> whetherBookmark(
-		@Parameter(hidden = true) @AuthenticationPrincipal User user, @PathVariable("place_id") Long placeId) {
+		@Parameter(hidden = true) @AuthenticationPrincipal User user,
+		@PathVariable("place_kakao_id") String placeKakaoId) {
 
-		return ResponseEntity.ok(bookmarkService.whetherBookmark(user, placeId));
+		return ResponseEntity.ok(bookmarkService.whetherBookmark(user, placeKakaoId));
 	}
 
 	@Operation(summary = "[인증] 카테고리별 북마크 페이지네이션 조회")

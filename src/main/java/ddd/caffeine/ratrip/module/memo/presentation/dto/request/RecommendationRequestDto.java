@@ -13,7 +13,7 @@ public class RecommendationRequestDto {
 	@NotBlank(message = "DayPlanId must not be empty")
 	private Long dayPlanId;
 
-	public RecommendationPathDto toServiceDto(Long memoId) {
-		return RecommendationPathDto.of(dayPlanId, memoId);
+	public RecommendationPathDto toServiceDto(Long placeId) {
+		return RecommendationPathDto.of(dayPlanId, placeId);
 	}
 }

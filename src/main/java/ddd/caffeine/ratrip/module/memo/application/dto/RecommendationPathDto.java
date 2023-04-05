@@ -8,9 +8,9 @@ import lombok.Getter;
 @Getter
 public class RecommendationPathDto {
 	private final Long dayPlanId;
-	private final Long memoId;
+	private final Long placeId;
 
-	public static RecommendationPathDto of(Long dayPlanId, Long memoId) {
-		return new RecommendationPathDto(dayPlanId, memoId);
+	public static RecommendationPathDto of(Long dayPlanId, Long placeId) {
+		return new RecommendationPathDto(dayPlanId, placeId);
 	}
 }
