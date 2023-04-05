@@ -39,7 +39,7 @@ public class PlaceService {
 
 	public PlaceDetailResponseDto getPlaceDetail(User user, PlaceDetailDto request) {
 		// 캐쉬에 있는지 확인
-		String cacheKey = "place:" + request.getId();
+		String cacheKey = "place:" + request.getKakaoId();
 		PlaceDetailResponseDto cache = (PlaceDetailResponseDto)redisTemplate.opsForValue().get(cacheKey);
 
 		if (cache == null) {
@@ -71,7 +71,7 @@ public class PlaceService {
 	}
 
 	private Place updatePlace(PlaceDetailDto request, Place place) {
-		Place originPlace = placeRepository.findByKakaoId(request.getId());
+		Place originPlace = placeRepository.findByKakaoId(request.getKakaoId());
 
 		if (originPlace == null) {
 			return placeRepository.save(place);

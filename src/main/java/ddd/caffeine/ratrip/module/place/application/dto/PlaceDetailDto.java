@@ -7,11 +7,11 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class PlaceDetailDto {
-	private String id;
+	private String kakaoId;
 	private String name;
 	private String address;
 
-	public static PlaceDetailDto of(String id, String name, String address) {
-		return new PlaceDetailDto(id, name, address);
+	public static PlaceDetailDto of(String kakaoId, String name, String address) {
+		return new PlaceDetailDto(kakaoId, name, address);
 	}
 }

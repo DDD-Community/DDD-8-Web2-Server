@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlaceDetailRequestDto {
 
-	@NotBlank(message = "id must not be blank")
-	private String id;
+	@NotBlank(message = "kakaoId must not be blank")
+	private String kakaoId;
 
 	@NotBlank(message = "PlaceName must not be blank")
 	private String name;
@@ -21,6 +21,6 @@ public class PlaceDetailRequestDto {
 	private String address;
 
 	public PlaceDetailDto toServiceDto() {
-		return PlaceDetailDto.of(id, name, address);
+		return PlaceDetailDto.of(kakaoId, name, address);
 	}
 }
