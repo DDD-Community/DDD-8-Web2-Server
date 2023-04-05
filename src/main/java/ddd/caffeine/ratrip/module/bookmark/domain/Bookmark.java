@@ -35,7 +35,6 @@ public class Bookmark extends AuditingTimeEntity {
 	@JoinColumn(name = "user_id", columnDefinition = "BINARY(16)")
 	private User user;
 
-	@Id
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "place_id")
