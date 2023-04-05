@@ -3,6 +3,7 @@ package ddd.caffeine.ratrip.module.bookmark.presentation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +24,17 @@ public class BookmarkController {
 
 	@Operation(summary = "[인증] 북마크 생성")
 	@PostMapping("/{place_id}")
-	public ResponseEntity<String> callCreateBookmarkApi(
+	public ResponseEntity<String> addBookmark(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user, @PathVariable("place_id") Long placeId) {
 		bookmarkService.createBookmark(user, placeId);
 		return ResponseEntity.ok("Bookmark Create Success");
+	}
+
+	@Operation(summary = "[인증] 특정 장소 북마크 여부 조회")
+	@GetMapping("/{place_id}")
+	public ResponseEntity<Boolean> whetherBookmark(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user, @PathVariable("place_id") Long placeId) {
+
+		return ResponseEntity.ok(bookmarkService.whetherBookmark(user, placeId));
 	}
 }

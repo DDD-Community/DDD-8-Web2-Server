@@ -105,6 +105,10 @@ public class Place extends AuditingTimeEntity {
 		this.viewCount++;
 	}
 
+	public void increaseBookmarkCount() {
+		this.bookmarkCount++;
+	}
+
 	public void update(Place place) {
 		this.kakaoId = place.getKakaoId();
 		this.name = place.getName();

@@ -1,8 +1,11 @@
 package ddd.caffeine.ratrip.module.bookmark.application;
 
+import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ddd.caffeine.ratrip.common.exception.domain.BookmarkException;
 import ddd.caffeine.ratrip.module.bookmark.domain.Bookmark;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.BookmarkRepository;
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
@@ -19,10 +22,22 @@ public class BookmarkService {
 
 	public void createBookmark(User user, Long placeId) {
 		Place place = validateExistPlace(placeId);
+		validateExistBookmark(user, place);
 		bookmarkRepository.save(Bookmark.of(user, place));
+		placeService.increaseBookmarkCount(place);
+	}
+
+	public boolean whetherBookmark(User user, Long placeId) {
+		Place place = validateExistPlace(placeId);
+		return bookmarkRepository.findByPlaceIdAndUser(place.getId(), user).isPresent();
 	}
 
 	private Place validateExistPlace(Long placeId) {
 		return placeService.validateExistPlace(placeId);
+	}
+
+	private void validateExistBookmark(User user, Place place) {
+		bookmarkRepository.findByPlaceIdAndUser(place.getId(), user)
+			.orElseThrow(() -> new BookmarkException(ALREADY_EXIST_BOOKMARK_EXCEPTION));
 	}
 }

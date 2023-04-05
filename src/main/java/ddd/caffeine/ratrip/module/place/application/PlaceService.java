@@ -70,6 +70,10 @@ public class PlaceService {
 		return response;
 	}
 
+	public void increaseBookmarkCount(Place place) {
+		place.increaseBookmarkCount();
+	}
+
 	public Place validateExistPlace(Long placeId) {
 		Place place = (Place)redisTemplate.opsForValue().get("place:" + placeId);
 
