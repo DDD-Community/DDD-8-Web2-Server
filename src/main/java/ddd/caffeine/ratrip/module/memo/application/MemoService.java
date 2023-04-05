@@ -16,6 +16,7 @@ import ddd.caffeine.ratrip.module.day_plan.domain.DayPlan;
 import ddd.caffeine.ratrip.module.memo.application.dto.ChangeMemoSequenceDto;
 import ddd.caffeine.ratrip.module.memo.application.dto.CreateMemoDto;
 import ddd.caffeine.ratrip.module.memo.application.dto.MemosDto;
+import ddd.caffeine.ratrip.module.memo.application.dto.UpdateMemoDto;
 import ddd.caffeine.ratrip.module.memo.domain.Memo;
 import ddd.caffeine.ratrip.module.memo.domain.repository.MemoRepository;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.response.MemosResponseDto;
@@ -56,6 +57,18 @@ public class MemoService {
 		List<Memo> memos = memoRepository.findByDayPlanIdAndUser(dayPlan.getId(), user);
 
 		return MemosResponseDto.of(memos);
+	}
+
+	public void updateMemo(User user, UpdateMemoDto request) {
+		DayPlan dayPlan = validateExistDayPlan(user, request.getDayPlanId());
+		Memo memo = validateExistMemo(user, request.getMemoId());
+
+		memo.updateContent(request.getContent());
+	}
+
+	private Memo validateExistMemo(User user, Long memoId) {
+		return memoRepository.findByIdAndUser(memoId, user)
+			.orElseThrow(() -> new MemoException(NOT_FOUND_MEMO_EXCEPTION));
 	}
 
 	private DayPlan validateExistDayPlan(User user, Long dayPlanId) {

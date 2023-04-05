@@ -93,4 +93,8 @@ public class Memo {
 	public void changeSequence(int sequence) {
 		this.sequence = sequence;
 	}
+
+	public void updateContent(String content) {
+		this.content = content;
+	}
 }

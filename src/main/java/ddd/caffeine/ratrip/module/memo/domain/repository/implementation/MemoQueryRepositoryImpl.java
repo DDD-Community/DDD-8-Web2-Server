@@ -3,6 +3,7 @@ package ddd.caffeine.ratrip.module.memo.domain.repository.implementation;
 import static ddd.caffeine.ratrip.module.memo.domain.QMemo.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -20,5 +21,16 @@ public class MemoQueryRepositoryImpl implements MemoQueryRepository {
 		return jpaQueryFactory.selectFrom(memo)
 			.where(memo.dayPlan.id.eq(dayPlanId), memo.dayPlan.user.eq(user))
 			.fetch();
+	}
+
+	@Override
+	public Optional<Memo> findByIdAndUser(Long memoId, User user) {
+		return Optional.ofNullable(jpaQueryFactory
+			.selectFrom(memo)
+			.where(
+				memo.id.eq(memoId),
+				memo.user.eq(user)
+			)
+			.fetchOne());
 	}
 }
