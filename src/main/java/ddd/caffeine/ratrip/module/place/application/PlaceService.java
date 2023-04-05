@@ -70,6 +70,16 @@ public class PlaceService {
 		return response;
 	}
 
+	public Place validateExistPlace(Long placeId) {
+		Place place = (Place)redisTemplate.opsForValue().get("place:" + placeId);
+
+		if (place == null) {
+			place = placeRepository.findById(placeId).orElseThrow(() -> new PlaceException(NOT_FOUND_PLACE_EXCEPTION));
+		}
+
+		return place;
+	}
+
 	private Place updatePlace(PlaceDetailDto request, Place place) {
 		Place originPlace = placeRepository.findByKakaoId(request.getKakaoId());
 
