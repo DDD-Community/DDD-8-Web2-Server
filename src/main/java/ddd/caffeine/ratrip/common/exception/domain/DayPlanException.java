@@ -5,13 +5,13 @@ import ddd.caffeine.ratrip.common.exception.ExceptionInformation;
 import lombok.Getter;
 
 @Getter
-public class DaySchedulePlaceException extends BaseException {
+public class DayPlanException extends BaseException {
 
-	public DaySchedulePlaceException(int status, String errorCode, String message) {
+	public DayPlanException(int status, String errorCode, String message) {
 		super(status, errorCode, message);
 	}
 
-	public DaySchedulePlaceException(ExceptionInformation information) {
+	public DayPlanException(ExceptionInformation information) {
 		super(information);
 	}
 }

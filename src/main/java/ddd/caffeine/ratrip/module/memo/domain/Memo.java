@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import ddd.caffeine.ratrip.module.day_plan.domain.DayPlan;
 import ddd.caffeine.ratrip.module.place.domain.Address;
 import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,20 +57,35 @@ public class Memo {
 	@JoinColumn(name = "day_plan_id")
 	private DayPlan dayPlan;
 
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", columnDefinition = "BINARY(16)")
+	private User user;
+
 	@Builder
-	private Memo(int sequence, String memo, boolean isDeleted, DayPlan dayPlan) {
+	private Memo(int sequence, String memo, boolean isDeleted, DayPlan dayPlan, Address address, Category category,
+		String name, User user) {
 		this.sequence = sequence;
 		this.memo = memo;
 		this.isDeleted = isDeleted;
 		this.dayPlan = dayPlan;
+		this.address = address;
+		this.category = category;
+		this.name = name;
+		this.user = user;
 	}
 
-	public static Memo of(DayPlan dayPlan, int sequence, String memo) {
+	public static Memo of(DayPlan dayPlan, int sequence, String memo, Address address, Category category, String name,
+		User user) {
 		return Memo.builder()
 			.dayPlan(dayPlan)
 			.sequence(sequence)
 			.memo(memo)
 			.isDeleted(false)
+			.address(address)
+			.category(category)
+			.name(name)
+			.user(user)
 			.build();
 	}
 }

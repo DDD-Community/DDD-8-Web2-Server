@@ -28,11 +28,8 @@ public class TravelPlanService {
 	public CreateTravelPlanResponseDto createTravelPlan(User user, CreateTravelPlanDto request) {
 		validateExistOngoingTravelPlan(user);
 
-		//TravelPlan 생성 및 저장
 		TravelPlan travelPlan = travelPlanRepository.save(request.toEntity(user));
-
-		//daySchedule 생성 및 저장.
-		dayPlanService.createDayPlan(travelPlan, request.getTravelStartDate(), request.getTravelDays());
+		dayPlanService.createDayPlan(travelPlan, user, request.getTravelStartDate(), request.getTravelDays());
 
 		return CreateTravelPlanResponseDto.of(travelPlan);
 	}
@@ -47,7 +44,7 @@ public class TravelPlanService {
 	public TerminatedTravelPlansResponseDto getTerminatedTravelPlans(User user, Pageable pageable) {
 		Slice<TerminatedTravelPlanDao> terminatedTravelPlans = travelPlanRepository.findTerminatedTravelPlansByUser(
 			user, pageable);
-		
+
 		return TerminatedTravelPlansResponseDto.of(terminatedTravelPlans.getContent(), terminatedTravelPlans.hasNext());
 
 	}

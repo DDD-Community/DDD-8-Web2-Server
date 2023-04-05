@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.common.jpa.AuditingTimeEntity;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
+import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,16 +40,23 @@ public class DayPlan extends AuditingTimeEntity {
 	@JoinColumn(name = "travel_plan_id")
 	private TravelPlan travelPlan;
 
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", columnDefinition = "BINARY(16)")
+	private User user;
+
 	@Builder
-	private DayPlan(LocalDate date, TravelPlan travelPlan, boolean isDeleted) {
+	private DayPlan(LocalDate date, TravelPlan travelPlan, boolean isDeleted, User user) {
 		this.date = date;
 		this.travelPlan = travelPlan;
 		this.isDeleted = isDeleted;
+		this.user = user;
 	}
 
-	public static DayPlan of(TravelPlan travelPlan, LocalDate date) {
+	public static DayPlan of(TravelPlan travelPlan, User user, LocalDate date) {
 		return DayPlan.builder()
 			.travelPlan(travelPlan)
+			.user(user)
 			.date(date)
 			.isDeleted(false)
 			.build();

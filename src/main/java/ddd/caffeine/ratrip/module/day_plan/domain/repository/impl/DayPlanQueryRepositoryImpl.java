@@ -3,6 +3,7 @@ package ddd.caffeine.ratrip.module.day_plan.domain.repository.impl;
 import static ddd.caffeine.ratrip.module.day_plan.domain.QDayPlan.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -24,5 +25,16 @@ public class DayPlanQueryRepositoryImpl implements DayPlanQueryRepository {
 				dayPlan.travelPlan.user.eq(user)
 			)
 			.fetch();
+	}
+
+	@Override
+	public Optional<DayPlan> findByIdAndUser(Long dayPlanId, User user) {
+		return Optional.ofNullable(
+			jpaQueryFactory.selectFrom(dayPlan)
+				.where(
+					dayPlan.id.eq(dayPlanId),
+					dayPlan.user.eq(user)
+				)
+				.fetchOne());
 	}
 }

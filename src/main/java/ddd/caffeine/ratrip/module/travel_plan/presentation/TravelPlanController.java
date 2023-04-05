@@ -37,8 +37,8 @@ public class TravelPlanController {
 	public ResponseEntity<CreateTravelPlanResponseDto> createTravelPlan(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user,
 		@Valid @RequestBody CreateTravelPlanRequestDto request) {
-		CreateTravelPlanResponseDto response = travelPlanService.createTravelPlan(user, request.toServiceDto());
-		return ResponseEntity.ok(response);
+
+		return ResponseEntity.ok(travelPlanService.createTravelPlan(user, request.toServiceDto()));
 	}
 
 	@Operation(summary = "[인증] 여행 계획 종료")
