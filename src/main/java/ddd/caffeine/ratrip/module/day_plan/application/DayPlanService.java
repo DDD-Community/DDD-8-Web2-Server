@@ -7,9 +7,12 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ddd.caffeine.ratrip.module.day_plan.application.dto.DayPlansDto;
 import ddd.caffeine.ratrip.module.day_plan.domain.DayPlan;
 import ddd.caffeine.ratrip.module.day_plan.domain.repository.DayPlanRepository;
+import ddd.caffeine.ratrip.module.day_plan.presentation.dto.response.DayPlansResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
+import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,6 +27,11 @@ public class DayPlanService {
 		for (int i = 0; i < travelDays; i++) {
 			dayPlanRepository.save(DayPlan.of(travelPlan, travelDates.get(i)));
 		}
+	}
+
+	public DayPlansResponseDto getDayPlans(User user, DayPlansDto request) {
+		List<DayPlan> dayPlans = dayPlanRepository.findByTravelPlanIdAndUser(request.getTravelPlanId(), user);
+		return DayPlansResponseDto.of(dayPlans);
 	}
 
 	private List<LocalDate> createDateList(LocalDate startTravelDate, int travelDays) {

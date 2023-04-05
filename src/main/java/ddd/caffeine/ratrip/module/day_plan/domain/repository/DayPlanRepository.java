@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import ddd.caffeine.ratrip.module.day_plan.domain.DayPlan;
 
 @Repository
-public interface DayPlanRepository extends JpaRepository<DayPlan, Long> {
+public interface DayPlanRepository extends JpaRepository<DayPlan, Long>, DayPlanQueryRepository {
 }
