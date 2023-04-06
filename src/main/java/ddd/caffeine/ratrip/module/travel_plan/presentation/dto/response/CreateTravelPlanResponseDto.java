@@ -2,8 +2,8 @@ package ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response;
 
 import java.time.LocalDate;
 
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
-import ddd.caffeine.ratrip.module.travel_plan.place.domain.Region;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

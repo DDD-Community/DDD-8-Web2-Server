@@ -16,11 +16,11 @@ import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.RecommendByBook
 import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.BookmarksByCategoryResponseDto;
 import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.RecommendByBookmarkAndLocationResponseDto;
 import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.RecommendByBookmarkAndRegionResponseDto;
-import ddd.caffeine.ratrip.module.travel_plan.place.application.PlaceFeignService;
-import ddd.caffeine.ratrip.module.travel_plan.place.application.PlaceService;
-import ddd.caffeine.ratrip.module.travel_plan.place.domain.Category;
-import ddd.caffeine.ratrip.module.travel_plan.place.domain.Place;
-import ddd.caffeine.ratrip.module.travel_plan.place.domain.Region;
+import ddd.caffeine.ratrip.module.place.application.PlaceFeignService;
+import ddd.caffeine.ratrip.module.place.application.PlaceService;
+import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 

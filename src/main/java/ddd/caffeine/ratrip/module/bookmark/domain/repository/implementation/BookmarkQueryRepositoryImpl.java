@@ -17,8 +17,8 @@ import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.BookmarkByCateg
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.QBookmarkByCategoryDao;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.QRecommendByBookmarkDao;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.RecommendByBookmarkDao;
-import ddd.caffeine.ratrip.module.travel_plan.place.domain.Category;
-import ddd.caffeine.ratrip.module.travel_plan.place.domain.Region;
+import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 

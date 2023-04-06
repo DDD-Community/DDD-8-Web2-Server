@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.common.jpa.AuditingTimeEntity;
-import ddd.caffeine.ratrip.module.travel_plan.place.domain.Region;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
