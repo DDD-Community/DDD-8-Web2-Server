@@ -73,7 +73,8 @@ public class BookmarkService {
 	}
 
 	private void validateExistBookmark(User user, Place place) {
-		bookmarkRepository.findByPlaceIdAndUser(place.getId(), user)
-			.orElseThrow(() -> new BookmarkException(ALREADY_EXIST_BOOKMARK_EXCEPTION));
+		bookmarkRepository.findByPlaceIdAndUser(place.getId(), user).ifPresent(bookmark -> {
+			throw new BookmarkException(ALREADY_EXIST_BOOKMARK_EXCEPTION);
+		});
 	}
 }
