@@ -53,7 +53,7 @@ public class PlaceService {
 
 		if (cache == null) {
 			// 캐쉬에 없으면 API 콜 및 DB에 저장
-			return saveAndCachePlaceDetail(request, cacheKey);
+			return saveAndCachePlace(request, cacheKey);
 		}
 
 		increaseViewCount(cache.getId());
@@ -87,18 +87,17 @@ public class PlaceService {
 	}
 
 	private Place updatePlace(String originPlaceKakaoId, Place newPlace) {
-		// 기존에 장소가 있으면 update, 없으면 save 후 조회수 증가
+		// 기존에 장소가 있으면 update 후 조회수 증가, 없으면 save
 		Place place = placeRepository.findByKakaoId(originPlaceKakaoId)
 			.map(originPlace -> {
 				originPlace.updateToNewData(newPlace);
+				originPlace.increaseViewCount();
 				return originPlace;
 			})
 			.orElseGet(() -> {
 				placeRepository.save(newPlace);
 				return newPlace;
 			});
-
-		place.increaseViewCount();
 
 		return place;
 	}
@@ -108,7 +107,7 @@ public class PlaceService {
 		place.increaseViewCount();
 	}
 
-	private Place saveAndCachePlaceDetail(PlaceDetailDto request, String cacheKey) {
+	private Place saveAndCachePlace(PlaceDetailDto request, String cacheKey) {
 		// API 콜
 		Place updatedPlace = findPlaceFromFeign(request.getName(), request.getAddress());
 

@@ -114,6 +114,7 @@ public class Place extends AuditingTimeEntity {
 	}
 
 	public void increaseViewCount() {
+		System.out.println("호출됨");
 		this.viewCount++;
 	}
 
