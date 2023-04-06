@@ -17,7 +17,6 @@ public class ChangeMemoSequenceRequestDto {
 	@NotNull(message = "DayPlanId must not be null")
 	private Long dayPlanId;
 
-	//TODO - TEST
 	@NotEmpty(message = "MemoIds must not be empty")
 	private List<Long> memoIds;
 

@@ -43,7 +43,6 @@ public class MemoController {
 		return ResponseEntity.ok("Create Memo Success");
 	}
 
-	//TODO - TEST
 	@Operation(summary = "[인증] 메모 순서 변경")
 	@PatchMapping("/sequence")
 	public ResponseEntity<String> changeMemoSequence(
