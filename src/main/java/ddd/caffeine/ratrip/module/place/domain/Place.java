@@ -115,14 +115,17 @@ public class Place extends AuditingTimeEntity {
 
 	public void increaseViewCount() {
 		this.viewCount++;
+		this.totalScore += 1;
 	}
 
 	public void increaseTripCount() {
 		this.tripCount++;
+		this.totalScore += 2;
 	}
 
 	public void increaseBookmarkCount() {
 		this.bookmarkCount++;
+		this.totalScore += 1.5;
 	}
 
 	public void updateToNewData(Place place) {
