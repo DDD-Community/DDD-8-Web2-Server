@@ -2,6 +2,7 @@ package ddd.caffeine.ratrip.module.place.application;
 
 import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,10 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import ddd.caffeine.ratrip.common.exception.domain.PlaceException;
 import ddd.caffeine.ratrip.module.place.application.dto.PlaceDetailDto;
 import ddd.caffeine.ratrip.module.place.application.dto.SearchPlaceDto;
+import ddd.caffeine.ratrip.module.place.domain.Address;
+import ddd.caffeine.ratrip.module.place.domain.Blog;
+import ddd.caffeine.ratrip.module.place.domain.Location;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.repository.PlaceRepository;
-import ddd.caffeine.ratrip.module.place.feign.kakao.model.FeignPlaceModel;
-import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignImageModel;
+import ddd.caffeine.ratrip.module.place.feign.kakao.model.KakaoPlaceDetail;
+import ddd.caffeine.ratrip.module.place.feign.kakao.model.KakaoPlaceMeta;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceDetailResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSearchResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
@@ -32,9 +36,9 @@ public class PlaceService {
 
 	@Transactional(readOnly = true)
 	public PlaceSearchResponseDto searchPlaces(SearchPlaceDto request) {
-		FeignPlaceModel feignPlaceModel = placeFeignService.findPlacesByKeywordAndCoordinate(request);
+		KakaoPlaceMeta kakaoPlaceMeta = placeFeignService.findPlacesByKeywordAndCoordinate(request);
 
-		return feignPlaceModel.mapByPlaceSearchResponseDto();
+		return kakaoPlaceMeta.mapByPlaceSearchResponseDto();
 	}
 
 	public PlaceDetailResponseDto getPlaceDetail(User user, PlaceDetailDto request) {
@@ -58,13 +62,13 @@ public class PlaceService {
 
 	private PlaceDetailResponseDto saveAndCachePlaceDetail(PlaceDetailDto request, String cacheKey) {
 		// API 콜
-		Place place = findPlaceDetailFromKakao(request.getName(), request.getAddress());
+		Place updatedPlace = findPlaceFromFeign(request.getName(), request.getAddress());
 
 		// DB에 없데이트
-		place = updatePlace(request, place);
+		updatedPlace = updatePlace(request.getKakaoId(), updatedPlace);
 
 		// 캐시에 저장
-		PlaceDetailResponseDto response = PlaceDetailResponseDto.of(place);
+		PlaceDetailResponseDto response = PlaceDetailResponseDto.of(updatedPlace);
 		redisTemplate.opsForValue().set(cacheKey, response, CACHE_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 
 		return response;
@@ -85,29 +89,33 @@ public class PlaceService {
 		return place;
 	}
 
-	private Place updatePlace(PlaceDetailDto request, Place newPlace) {
-		Place originPlace = placeRepository.findByKakaoId(request.getKakaoId())
-			.orElseGet(() -> placeRepository.save(newPlace));
+	private Place updatePlace(String originPlaceKakaoId, Place newPlace) {
+		// 기존에 장소가 있으면 update, 없으면 save 후 조회수 증가
+		Place place = placeRepository.findByKakaoId(originPlaceKakaoId)
+			.map(originPlace -> {
+				originPlace.updateToNewData(newPlace);
+				return originPlace;
+			})
+			.orElseGet(() -> {
+				placeRepository.save(newPlace);
+				return newPlace;
+			});
 
-		originPlace.update(newPlace);
-		originPlace.increaseViewCount();
-
-		return originPlace;
-	}
-
-	private Place findPlaceDetailFromKakao(String name, String address) {
-		FeignPlaceModel feignPlaceModel = placeFeignService.findPlaceDetailByNameAndAddress(name, address);
-		Place place = feignPlaceModel.mapByPlaceEntity();
-		setImageLinkInPlace(place, place.getName());
-		//setBlogsInPlace(place, place.getName());
+		place.increaseViewCount();
 
 		return place;
 	}
 
-	private void setImageLinkInPlace(Place place, String keyword) {
-		final int DATA_INDEX = 0;
+	private Place findPlaceFromFeign(String name, String address) {
+		final String QUERY = address + " " + name;
 
-		FeignImageModel imageModel = placeFeignService.findImageModelFromKakao(keyword);
-		place.setImageLink(imageModel.readImageLinkByIndex(DATA_INDEX));
+		KakaoPlaceDetail kakaoPlaceDetail = placeFeignService.findPlaceDetailFromKakao(QUERY).getOne();
+		String imageLink = placeFeignService.findImageFromNaver(QUERY).toImageLink();
+		List<Blog> blogs = placeFeignService.findBlogsFromNaver(QUERY).toBlogs();
+
+		return Place.of(kakaoPlaceDetail.getId(), kakaoPlaceDetail.getPlaceName(), kakaoPlaceDetail.getPlaceUrl(),
+			kakaoPlaceDetail.getPhone(), kakaoPlaceDetail.getCategoryGroupCode(),
+			Location.of(kakaoPlaceDetail.getX(), kakaoPlaceDetail.getY()),
+			Address.of(kakaoPlaceDetail.getAddressName()), imageLink, blogs);
 	}
 }

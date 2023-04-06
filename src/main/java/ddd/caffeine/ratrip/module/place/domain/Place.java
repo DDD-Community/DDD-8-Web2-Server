@@ -1,6 +1,10 @@
 package ddd.caffeine.ratrip.module.place.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -63,7 +67,7 @@ public class Place extends AuditingTimeEntity {
 	private String imageLink;
 
 	@Column(columnDefinition = "VARCHAR(255)")
-	private String additionalInfoLink;
+	private String placeLink;
 
 	@Column(columnDefinition = "VARCHAR(100)")
 	private String telephone;
@@ -72,12 +76,21 @@ public class Place extends AuditingTimeEntity {
 	@Column(columnDefinition = "TINYINT(1)")
 	private boolean isDeleted;
 
+	@ElementCollection
+	private List<Blog> blogs = new ArrayList<>();
+
 	@Builder
-	public Place(String kakaoId, String name, String additionalInfoLink, String telephone) {
+	public Place(String kakaoId, String name, String placeLink, String telephone, Category category,
+		Location location, Address address, String imageLink, List<Blog> blogs) {
 		this.kakaoId = kakaoId;
 		this.name = name;
-		this.additionalInfoLink = additionalInfoLink;
+		this.placeLink = placeLink;
 		this.telephone = telephone;
+		this.category = category;
+		this.location = location;
+		this.address = address;
+		this.imageLink = imageLink;
+		this.blogs = blogs;
 		this.isDeleted = false;
 		this.tripCount = 0L;
 		this.bookmarkCount = 0L;
@@ -85,20 +98,19 @@ public class Place extends AuditingTimeEntity {
 		this.totalScore = 0L;
 	}
 
-	public void setLocation(double latitude, double longitude) {
-		this.location = new Location(latitude, longitude);
-	}
-
-	public void setAddress(String address) {
-		this.address = new Address(address);
-	}
-
-	public void setCategoryByCode(String categoryCode) {
-		this.category = Category.createByCode(categoryCode);
-	}
-
-	public void setImageLink(String imageLink) {
-		this.imageLink = imageLink;
+	public static Place of(String kakaoId, String name, String placeLink, String telephone, String categoryGroupCode,
+		Location location, Address address, String imageLink, List<Blog> blogs) {
+		return Place.builder()
+			.kakaoId(kakaoId)
+			.name(name)
+			.placeLink(placeLink)
+			.telephone(telephone)
+			.category(Category.codeToCategory(categoryGroupCode))
+			.location(location)
+			.address(address)
+			.imageLink(imageLink)
+			.blogs(blogs)
+			.build();
 	}
 
 	public void increaseViewCount() {
@@ -109,19 +121,19 @@ public class Place extends AuditingTimeEntity {
 		this.bookmarkCount++;
 	}
 
-	public void update(Place place) {
+	public void updateToNewData(Place place) {
 		this.kakaoId = place.getKakaoId();
 		this.name = place.getName();
 		this.category = place.getCategory();
 		this.address = place.getAddress();
 		this.location = place.getLocation();
 		this.imageLink = place.getImageLink();
-		this.additionalInfoLink = place.getAdditionalInfoLink();
+		this.placeLink = place.getPlaceLink();
 		this.telephone = place.getTelephone();
+		this.blogs = place.getBlogs();
 		this.bookmarkCount = place.getBookmarkCount();
 		this.tripCount = place.getTripCount();
 		this.viewCount = place.getViewCount();
 		this.totalScore = place.getTotalScore();
-		// this.blogs = place.getBlogs();
 	}
 }

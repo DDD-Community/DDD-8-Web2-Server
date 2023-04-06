@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class FeignBlogModel {
-	private List<BlogItem> items;
+	private List<BlogInfo> infos;
 
-	public List<Blog> readBlogs() {
+	public List<Blog> toBlogs() {
 		List<Blog> blogs = new ArrayList<>();
-		for (BlogItem item : items) {
-			blogs.add(item.mapByBlogEntity());
+		for (BlogInfo info : infos) {
+			blogs.add(info.toEntity());
 		}
 		return blogs;
 	}

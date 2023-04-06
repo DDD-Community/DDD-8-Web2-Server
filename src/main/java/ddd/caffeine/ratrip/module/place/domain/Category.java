@@ -21,7 +21,7 @@ public enum Category {
 		this.code = code;
 	}
 
-	public static Category createByCode(String code) {
+	public static Category codeToCategory(String code) {
 		Optional<Category> category = Arrays.stream(Category.values())
 			.filter(c -> c.code.contains(code))
 			.findFirst();

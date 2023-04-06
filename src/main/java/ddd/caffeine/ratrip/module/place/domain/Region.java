@@ -31,7 +31,7 @@ public enum Region {
 		this.keyword = keyword;
 	}
 
-	public static Region createRegionIfNotExistReturnEtc(String keyword) {
+	public static Region of(String keyword) {
 		Optional<Region> region = Arrays.stream(values()).filter(r -> r.name().contains(keyword))
 			.findFirst();
 

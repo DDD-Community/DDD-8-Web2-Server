@@ -7,9 +7,10 @@ import ddd.caffeine.ratrip.common.util.HttpHeaderUtils;
 import ddd.caffeine.ratrip.module.place.application.dto.SearchPlaceDto;
 import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.place.feign.kakao.KakaoFeignClient;
-import ddd.caffeine.ratrip.module.place.feign.kakao.model.FeignPlaceModel;
+import ddd.caffeine.ratrip.module.place.feign.kakao.model.KakaoPlaceMeta;
 import ddd.caffeine.ratrip.module.place.feign.kakao.model.KakaoRegionResponse;
 import ddd.caffeine.ratrip.module.place.feign.naver.NaverFeignClient;
+import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignBlogModel;
 import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignImageModel;
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +21,7 @@ public class PlaceFeignService {
 	private final KakaoFeignClient kakaoFeignClient;
 	private final NaverFeignClient naverFeignClient;
 
-	public FeignPlaceModel findPlacesByKeywordAndCoordinate(SearchPlaceDto request) {
+	public KakaoPlaceMeta findPlacesByKeywordAndCoordinate(SearchPlaceDto request) {
 		final String KAKAO_API_KEY = secretKeyManager.getKakaoRestApiKey();
 		final String KAKAO_REQUEST_HEADER = "KakaoAK " + KAKAO_API_KEY;
 
@@ -31,18 +32,26 @@ public class PlaceFeignService {
 			KAKAO_REQUEST_HEADER, request.getKeyword(), latitude, longitude, request.getPage());
 	}
 
-	public FeignPlaceModel findPlaceDetailByNameAndAddress(String name, String address) {
+	public KakaoPlaceMeta findPlaceDetailFromKakao(String query) {
 		final String KAKAO_API_KEY = secretKeyManager.getKakaoRestApiKey();
 
 		final String KAKAO_REQUEST_HEADER = "KakaoAK " + KAKAO_API_KEY;
-		final String keyword = address + " " + name;
-		final int DATA_COUNT = 1;
+		final int SIZE = 1;
 
-		return kakaoFeignClient.findPlaceByKeyword(KAKAO_REQUEST_HEADER, keyword,
-			DATA_COUNT);
+		return kakaoFeignClient.findPlaceByKeyword(KAKAO_REQUEST_HEADER, query,
+			SIZE);
 	}
 
-	public FeignImageModel findImageModelFromKakao(String keyword) {
+	public FeignBlogModel findBlogsFromNaver(String query) {
+		final int DISPLAY = 3;
+		final String SORT = "sim";
+		final String NAVER_CLIENT_KEY = secretKeyManager.getNaverClientKey();
+		final String NAVER_SECRET_KEY = secretKeyManager.getNaverSecretKey();
+
+		return naverFeignClient.readBlogModelsByKeyword(NAVER_CLIENT_KEY, NAVER_SECRET_KEY, query, DISPLAY, SORT);
+	}
+
+	public FeignImageModel findImageFromNaver(String query) {
 		final int DATA_COUNT = 1;
 		final String SORT_TYPE = "sim";
 		final String SIZE_FILTER = "medium";
@@ -50,7 +59,7 @@ public class PlaceFeignService {
 		final String NAVER_SECRET_KEY = secretKeyManager.getNaverSecretKey();
 
 		FeignImageModel imageModel = naverFeignClient.readImageModelByPlaceName(
-			NAVER_CLIENT_KEY, NAVER_SECRET_KEY, keyword, DATA_COUNT, SORT_TYPE, SIZE_FILTER
+			NAVER_CLIENT_KEY, NAVER_SECRET_KEY, query, DATA_COUNT, SORT_TYPE, SIZE_FILTER
 		);
 
 		return imageModel;

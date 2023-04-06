@@ -15,11 +15,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.LowerCaseStrategy.class)
-public class BlogItem {
+public class BlogInfo {
 	private String title;
 	private String link;
 
-	public Blog mapByBlogEntity() {
+	public Blog toEntity() {
 		return new Blog(title, link);
 	}
 }

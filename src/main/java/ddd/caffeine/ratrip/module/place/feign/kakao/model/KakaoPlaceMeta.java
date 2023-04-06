@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ddd.caffeine.ratrip.common.exception.domain.PlaceException;
-import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSearchResponse;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSearchResponseDto;
 import lombok.Getter;
@@ -17,13 +16,13 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor
-public class FeignPlaceModel {
-	List<FeignPlaceData> documents;
+public class KakaoPlaceMeta {
+	List<KakaoPlaceDetail> documents;
 	FeignPlaceMetaData meta;
 
 	public PlaceSearchResponseDto mapByPlaceSearchResponseDto() {
 		List<PlaceSearchResponse> searchModels = new ArrayList<>();
-		for (FeignPlaceData document : documents) {
+		for (KakaoPlaceDetail document : documents) {
 
 			PlaceSearchResponse model = PlaceSearchResponse.builder()
 				.id(document.getId())
@@ -38,12 +37,7 @@ public class FeignPlaceModel {
 		return new PlaceSearchResponseDto(searchModels, this.meta);
 	}
 
-	public Place mapByPlaceEntity() {
-		FeignPlaceData feignPlaceData = readOne();
-		return feignPlaceData.mapByPlaceEntity();
-	}
-
-	public FeignPlaceData readOne() {
+	public KakaoPlaceDetail getOne() {
 		final int PLACE_INDEX = 0;
 		if (documents.isEmpty()) {
 			throw new PlaceException(NOT_FOUND_PLACE_EXCEPTION);

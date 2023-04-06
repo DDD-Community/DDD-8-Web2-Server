@@ -21,7 +21,7 @@ public class PlaceDetailResponseDto {
 	private String address;
 	private Location location;
 	private String imageLink;
-	private String additionalInfoLink;
+	private String placeLink;
 	private String telephone;
 
 	public static PlaceDetailResponseDto of(Place place) {
@@ -33,7 +33,7 @@ public class PlaceDetailResponseDto {
 			place.getAddress().toString(),
 			place.getLocation(),
 			place.getImageLink(),
-			place.getAdditionalInfoLink(),
+			place.getPlaceLink(),
 			place.getTelephone()
 		);
 	}
