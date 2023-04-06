@@ -1,6 +1,7 @@
 package ddd.caffeine.ratrip.module.place.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ddd.caffeine.ratrip.common.secret.SecretKeyManager;
 import ddd.caffeine.ratrip.common.util.HttpHeaderUtils;
@@ -15,6 +16,7 @@ import ddd.caffeine.ratrip.module.place.feign.naver.model.FeignImageModel;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PlaceFeignService {
 	private final SecretKeyManager secretKeyManager;
