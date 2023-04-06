@@ -20,7 +20,6 @@ import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.repository.PlaceRepository;
 import ddd.caffeine.ratrip.module.place.feign.kakao.model.KakaoPlaceDetail;
 import ddd.caffeine.ratrip.module.place.feign.kakao.model.KakaoPlaceMeta;
-import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceDetailResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSearchResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -42,10 +41,10 @@ public class PlaceService {
 		return kakaoPlaceMeta.mapByPlaceSearchResponseDto();
 	}
 
-	public PlaceDetailResponseDto getPlaceDetail(User user, PlaceDetailDto request) {
+	public Place getPlaceDetail(User user, PlaceDetailDto request) {
 		// 캐쉬에 있는지 확인
 		String cacheKey = "place:" + request.getKakaoId();
-		PlaceDetailResponseDto cache = (PlaceDetailResponseDto)redisTemplate.opsForValue().get(cacheKey);
+		Place cache = (Place)redisTemplate.opsForValue().get(cacheKey);
 
 		if (cache == null) {
 			// 캐쉬에 없으면 API 콜 및 DB에 저장
@@ -93,7 +92,7 @@ public class PlaceService {
 		place.increaseViewCount();
 	}
 
-	private PlaceDetailResponseDto saveAndCachePlaceDetail(PlaceDetailDto request, String cacheKey) {
+	private Place saveAndCachePlaceDetail(PlaceDetailDto request, String cacheKey) {
 		// API 콜
 		Place updatedPlace = findPlaceFromFeign(request.getName(), request.getAddress());
 
@@ -101,10 +100,9 @@ public class PlaceService {
 		updatedPlace = updatePlace(request.getKakaoId(), updatedPlace);
 
 		// 캐시에 저장
-		PlaceDetailResponseDto response = PlaceDetailResponseDto.of(updatedPlace);
-		redisTemplate.opsForValue().set(cacheKey, response, CACHE_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+		redisTemplate.opsForValue().set(cacheKey, updatedPlace, CACHE_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 
-		return response;
+		return updatedPlace;
 	}
 
 	private Place findPlaceFromFeign(String name, String address) {

@@ -40,8 +40,11 @@ public class MemoService {
 
 	public void createMemo(User user, CreateMemoDto request) {
 		DayPlan dayPlan = validateExistDayPlan(user, request.getDayPlanId());
+		System.out.println("여기1");
 		Place place = validateExistPlace(request.getKakaoId());
+		System.out.println("여기4");
 		validateAlreadyExistMemo(dayPlan, user, place);
+		System.out.println("여기5");
 
 		memoRepository.save(request.toEntity(dayPlan, user, place));
 	}

@@ -74,7 +74,7 @@ public class Place extends AuditingTimeEntity {
 
 	@NotNull
 	@Column(columnDefinition = "TINYINT(1)")
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
 	@ElementCollection
 	private List<Blog> blogs = new ArrayList<>();

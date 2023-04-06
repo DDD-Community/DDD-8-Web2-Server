@@ -11,15 +11,16 @@ import lombok.NoArgsConstructor;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class KakaoPlaceDetail {
 	private String id;
+	private String placeName;
+	private String categoryName;
 	private String categoryGroupCode;
 	private String categoryGroupName;
-	private String categoryName;
 	private String phone;
-	private String placeName;
-	private String placeUrl;
-	private String roadAddressName;
 	private String addressName;
+	private String roadAddressName;
 	private String x;
 	private String y;
+	private String placeUrl;
+	private String distance;
 }
 

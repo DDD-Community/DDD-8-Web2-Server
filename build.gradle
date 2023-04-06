@@ -62,7 +62,8 @@ dependencies {
 
     // jackson
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.0'
-
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.14.0'
+    
     //UUID
     implementation "com.fasterxml.uuid:java-uuid-generator:4.0.1"
 

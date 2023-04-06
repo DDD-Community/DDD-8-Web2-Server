@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
+import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.presentation.dto.request.PlaceDetailRequestDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.request.PlaceSearchRequestDto;
-import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceDetailResponseDto;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSearchResponseDto;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,7 +39,7 @@ public class PlaceController {
 
 	@Operation(summary = "[인증] 장소 상세 정보 API")
 	@PostMapping("")
-	public ResponseEntity<PlaceDetailResponseDto> getPlaceDetail(
+	public ResponseEntity<Place> getPlaceDetail(
 		@Parameter(hidden = true) @AuthenticationPrincipal User user,
 		@Valid @RequestBody PlaceDetailRequestDto request) {
 
