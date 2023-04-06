@@ -39,6 +39,7 @@ public class MemoService {
 	public void createMemo(User user, CreateMemoDto request) {
 		DayPlan dayPlan = validateExistDayPlan(user, request.getDayPlanId());
 		Place place = validateExistPlace(request.getKakaoId());
+		validateAlreadyExistMemo(dayPlan, user, place);
 
 		memoRepository.save(request.toEntity(dayPlan, user, place));
 	}
@@ -86,6 +87,13 @@ public class MemoService {
 	private Memo validateExistMemo(User user, Long memoId) {
 		return memoRepository.findByIdAndUser(memoId, user)
 			.orElseThrow(() -> new MemoException(NOT_FOUND_MEMO_EXCEPTION));
+	}
+
+	private void validateAlreadyExistMemo(DayPlan dayPlan, User user, Place place) {
+		memoRepository.findByDayPlanIdAndPlaceIdAndUser(dayPlan.getId(), user, place)
+			.ifPresent(memo -> {
+				throw new MemoException(ALREADY_EXIST_MEMO_EXCEPTION);
+			});
 	}
 
 	private DayPlan validateExistDayPlan(User user, Long dayPlanId) {

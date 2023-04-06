@@ -9,6 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import ddd.caffeine.ratrip.module.memo.domain.Memo;
 import ddd.caffeine.ratrip.module.memo.domain.repository.MemoQueryRepository;
+import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
@@ -33,4 +34,17 @@ public class MemoQueryRepositoryImpl implements MemoQueryRepository {
 			)
 			.fetchOne());
 	}
+
+	@Override
+	public Optional<Memo> findByDayPlanIdAndPlaceIdAndUser(Long id, User user, Place place) {
+		return Optional.ofNullable(jpaQueryFactory
+			.selectFrom(memo)
+			.where(
+				memo.dayPlan.id.eq(id),
+				memo.dayPlan.user.eq(user),
+				memo.place.eq(place)
+			)
+			.fetchOne());
+	}
+
 }

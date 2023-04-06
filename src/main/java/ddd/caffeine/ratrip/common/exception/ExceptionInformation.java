@@ -55,7 +55,8 @@ public enum ExceptionInformation {
 	ALREADY_EXIST_USER_EXCEPTION(CONFLICT, "이미 존재하는 유저입니다."),
 	ALREADY_EXIST_BOOKMARK_EXCEPTION(CONFLICT, "이미 존재하는 북마크입니다."),
 	ALREADY_EXIST_TRAVEL_PLAN_EXCEPTION(CONFLICT, "진행중인 여행 계획이 존재합니다."),
-	ALREADY_EXIST_PLACE_IN_PLAN_EXCEPTION(CONFLICT, "이미 추가된 장소입니다.");
+	ALREADY_EXIST_PLACE_IN_PLAN_EXCEPTION(CONFLICT, "이미 추가된 장소입니다."),
+	ALREADY_EXIST_MEMO_EXCEPTION(CONFLICT, "이미 추가된 메모입니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;
