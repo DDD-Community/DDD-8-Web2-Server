@@ -8,12 +8,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ddd.caffeine.ratrip.common.exception.domain.BookmarkException;
+import ddd.caffeine.ratrip.module.bookmark.application.dto.RecommendByBookmarkAndLocationDto;
 import ddd.caffeine.ratrip.module.bookmark.domain.Bookmark;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.BookmarkRepository;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.BookmarkByCategoryDao;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.RecommendByBookmarkDao;
 import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.BookmarksByCategoryResponseDto;
+import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.RecommendByBookmarkAndLocationResponseDto;
 import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.RecommendByBookmarkAndRegionResponseDto;
+import ddd.caffeine.ratrip.module.place.application.PlaceFeignService;
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
 import ddd.caffeine.ratrip.module.place.domain.Category;
 import ddd.caffeine.ratrip.module.place.domain.Place;
@@ -26,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BookmarkService {
 	private final PlaceService placeService;
+	private final PlaceFeignService placeFeignService;
 	private final BookmarkRepository bookmarkRepository;
 
 	public void createBookmark(User user, String placeKakaoId) {
@@ -52,6 +56,16 @@ public class BookmarkService {
 		Slice<RecommendByBookmarkDao> places = bookmarkRepository.findPlacesByRegionAndUser(region, user, pageable);
 
 		return RecommendByBookmarkAndRegionResponseDto.of(places.getContent(), places.hasNext());
+	}
+
+	public RecommendByBookmarkAndLocationResponseDto recommendByBookmarkAndLocation(User user,
+		RecommendByBookmarkAndLocationDto request, Pageable pageable) {
+		Region region = placeFeignService.convertLongituteAndLatitudeToRegion(request.getLongitude(),
+			request.getLatitude());
+
+		Slice<RecommendByBookmarkDao> places = bookmarkRepository.findPlacesByRegionAndUser(region, user, pageable);
+
+		return RecommendByBookmarkAndLocationResponseDto.of(places.getContent(), places.hasNext());
 	}
 
 	private Place validateExistPlace(String placeKakaoId) {
