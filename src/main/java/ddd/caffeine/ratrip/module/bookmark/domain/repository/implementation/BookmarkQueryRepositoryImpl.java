@@ -15,7 +15,10 @@ import ddd.caffeine.ratrip.module.bookmark.domain.Bookmark;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.BookmarkQueryRepository;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.BookmarkByCategoryDao;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.QBookmarkByCategoryDao;
+import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.QRecommendByBookmarkDao;
+import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.RecommendByBookmarkDao;
 import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
@@ -41,7 +44,7 @@ public class BookmarkQueryRepositoryImpl implements BookmarkQueryRepository {
 		List<BookmarkByCategoryDao> contents = jpaQueryFactory
 			.select(
 				new QBookmarkByCategoryDao(
-					bookmark.id, bookmark.place.id, bookmark.place.name, bookmark.place.address.detailed,
+					bookmark.id, bookmark.place.kakaoId, bookmark.place.name, bookmark.place.address.detailed,
 					bookmark.place.category
 				)
 			)
@@ -52,7 +55,30 @@ public class BookmarkQueryRepositoryImpl implements BookmarkQueryRepository {
 				bookmark.isDeleted.isFalse()
 			)
 			.offset(pageable.getOffset())
-			.limit(pageable.getPageSize())
+			.limit(pageable.getPageSize() + 1)
+			.fetch();
+
+		return QuerydslUtils.toSlice(contents, pageable);
+	}
+
+	@Override
+	public Slice<RecommendByBookmarkDao> findPlacesByRegionAndUser(Region region, User user, Pageable pageable) {
+		List<RecommendByBookmarkDao> contents = jpaQueryFactory
+			.select(
+				new QRecommendByBookmarkDao(
+					bookmark.place.id, bookmark.place.kakaoId, bookmark.place.name, bookmark.place.address.detailed,
+					bookmark.place.category, bookmark.place.imageLink
+				)
+			)
+			.from(bookmark)
+			.where(
+				bookmark.user.eq(user),
+				bookmark.place.address.region.eq(region),
+				bookmark.isDeleted.isFalse()
+			)
+			.orderBy(bookmark.place.totalScore.desc())
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize() + 1)
 			.fetch();
 
 		return QuerydslUtils.toSlice(contents, pageable);

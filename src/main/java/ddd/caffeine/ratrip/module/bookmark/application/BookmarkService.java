@@ -11,10 +11,13 @@ import ddd.caffeine.ratrip.common.exception.domain.BookmarkException;
 import ddd.caffeine.ratrip.module.bookmark.domain.Bookmark;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.BookmarkRepository;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.BookmarkByCategoryDao;
+import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.RecommendByBookmarkDao;
 import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.BookmarksByCategoryResponseDto;
+import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.RecommendByBookmarkAndRegionResponseDto;
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
 import ddd.caffeine.ratrip.module.place.domain.Category;
 import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
@@ -44,10 +47,12 @@ public class BookmarkService {
 		return BookmarksByCategoryResponseDto.of(bookmarks.getContent(), bookmarks.hasNext());
 	}
 
-	// public RecommendByBookmarkAndRegionResponseDto recommendByBookmarkAndRegion(User user, Long placeId) {
-	// 	Place place = validateExistPlace(placeId);
-	// 	return RecommendByBookmarkAndRegionResponseDto.of(bookmarkRepository.findRecommendByBookmarkAndRegion(user, place));
-	// }
+	public RecommendByBookmarkAndRegionResponseDto recommendByBookmarkAndRegion(User user, Region region,
+		Pageable pageable) {
+		Slice<RecommendByBookmarkDao> places = bookmarkRepository.findPlacesByRegionAndUser(region, user, pageable);
+
+		return RecommendByBookmarkAndRegionResponseDto.of(places.getContent(), places.hasNext());
+	}
 
 	private Place validateExistPlace(String placeKakaoId) {
 		return placeService.validateExistPlace(placeKakaoId);

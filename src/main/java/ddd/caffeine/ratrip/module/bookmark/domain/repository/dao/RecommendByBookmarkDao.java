@@ -6,19 +6,23 @@ import ddd.caffeine.ratrip.module.place.domain.Category;
 import lombok.Getter;
 
 @Getter
-public class BookmarkByCategoryDao {
+
+public class RecommendByBookmarkDao {
 	private final Long id;
 	private final String placeKakaoId;
 	private final String name;
 	private final String detailAddress;
 	private final Category category;
+	private final String imageLink;
 
 	@QueryProjection
-	public BookmarkByCategoryDao(Long id, String placeKakaoId, String name, String detailAddress, Category category) {
+	public RecommendByBookmarkDao(Long id, String placeKakaoId, String name, String detailAddress, Category category,
+		String imageLink) {
 		this.id = id;
 		this.placeKakaoId = placeKakaoId;
 		this.name = name;
 		this.detailAddress = detailAddress;
 		this.category = category;
+		this.imageLink = imageLink;
 	}
 }

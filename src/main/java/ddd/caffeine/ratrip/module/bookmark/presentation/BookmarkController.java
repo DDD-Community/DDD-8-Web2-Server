@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ddd.caffeine.ratrip.module.bookmark.application.BookmarkService;
 import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.BookmarksByCategoryResponseDto;
+import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.RecommendByBookmarkAndRegionResponseDto;
 import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -56,15 +58,15 @@ public class BookmarkController {
 		return ResponseEntity.ok(bookmarkService.getBookmarksByCategory(user, category, pageable));
 	}
 
-	// @Operation(summary = "[인증] 유저가 여행 계획 생성시 선택한 지역 내에서 북마크한 장소 추천 페이지네이션 조회")
-	// @GetMapping()
-	// public ResponseEntity<RecommendByBookmarkAndRegionResponseDto> recommendByBookmarkAndRegion(
-	// 	@Parameter(hidden = true) @AuthenticationPrincipal User user, @RequestParam Region region,
-	// 	@PageableDefault(size = 20) Pageable pageable) {
-	//
-	// 	return ResponseEntity.ok(bookmarkService.recommendByBookmarkAndRegion(user, region, pageable));
-	// }
-	//
+	@Operation(summary = "[인증] 유저가 여행 계획 생성시 선택한 지역 내에서 북마크한 장소 추천 페이지네이션 조회")
+	@GetMapping()
+	public ResponseEntity<RecommendByBookmarkAndRegionResponseDto> recommendByBookmarkAndRegion(
+		@Parameter(hidden = true) @AuthenticationPrincipal User user, @RequestParam Region region,
+		@PageableDefault(size = 20) Pageable pageable) {
+
+		return ResponseEntity.ok(bookmarkService.recommendByBookmarkAndRegion(user, region, pageable));
+	}
+
 	// @Operation(summary = "[인증] 유저가 위치한 현재 지역 내에서 북마크한 추천 페이지네이션 조회")
 	// @GetMapping()
 	// public ResponseEntity<RecommendByBookmarkAndLocationResponseDto> recommendByBookmarkAndLocation(
