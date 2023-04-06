@@ -13,6 +13,7 @@ import ddd.caffeine.ratrip.common.exception.domain.DayPlanException;
 import ddd.caffeine.ratrip.module.day_plan.application.dto.DayPlansDto;
 import ddd.caffeine.ratrip.module.day_plan.domain.DayPlan;
 import ddd.caffeine.ratrip.module.day_plan.domain.repository.DayPlanRepository;
+import ddd.caffeine.ratrip.module.day_plan.domain.repository.dao.DayPlanDao;
 import ddd.caffeine.ratrip.module.day_plan.presentation.dto.response.DayPlansResponseDto;
 import ddd.caffeine.ratrip.module.travel_plan.domain.TravelPlan;
 import ddd.caffeine.ratrip.module.user.domain.User;
@@ -33,7 +34,7 @@ public class DayPlanService {
 	}
 
 	public DayPlansResponseDto getDayPlans(User user, DayPlansDto request) {
-		List<DayPlan> dayPlans = dayPlanRepository.findByTravelPlanIdAndUser(request.getTravelPlanId(), user);
+		List<DayPlanDao> dayPlans = dayPlanRepository.findByTravelPlanIdAndUser(request.getTravelPlanId(), user);
 		return DayPlansResponseDto.of(dayPlans);
 	}
 

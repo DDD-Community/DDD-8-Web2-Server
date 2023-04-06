@@ -2,7 +2,7 @@ package ddd.caffeine.ratrip.module.day_plan.presentation.dto.response;
 
 import java.util.List;
 
-import ddd.caffeine.ratrip.module.day_plan.domain.DayPlan;
+import ddd.caffeine.ratrip.module.day_plan.domain.repository.dao.DayPlanDao;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DayPlansResponseDto {
-	List<DayPlan> dayPlans;
+	List<DayPlanDao> dayPlans;
 
-	public static DayPlansResponseDto of(List<DayPlan> dayPlans) {
+	public static DayPlansResponseDto of(List<DayPlanDao> dayPlans) {
 		return new DayPlansResponseDto(dayPlans);
 	}
 }

@@ -9,6 +9,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import ddd.caffeine.ratrip.module.day_plan.domain.DayPlan;
 import ddd.caffeine.ratrip.module.day_plan.domain.repository.DayPlanQueryRepository;
+import ddd.caffeine.ratrip.module.day_plan.domain.repository.dao.DayPlanDao;
+import ddd.caffeine.ratrip.module.day_plan.domain.repository.dao.QDayPlanDao;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
@@ -17,12 +19,13 @@ public class DayPlanQueryRepositoryImpl implements DayPlanQueryRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public List<DayPlan> findByTravelPlanIdAndUser(Long travelPlanId, User user) {
-		return jpaQueryFactory
-			.selectFrom(dayPlan)
+	public List<DayPlanDao> findByTravelPlanIdAndUser(Long travelPlanId, User user) {
+		return jpaQueryFactory.select(
+				new QDayPlanDao(dayPlan.id, dayPlan.date))
+			.from(dayPlan)
 			.where(
 				dayPlan.travelPlan.id.eq(travelPlanId),
-				dayPlan.travelPlan.user.eq(user)
+				dayPlan.user.eq(user)
 			)
 			.fetch();
 	}
