@@ -1,19 +1,18 @@
 package ddd.caffeine.ratrip.module.bookmark.presentation.dto.request;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.module.bookmark.application.dto.RecommendByBookmarkAndLocationDto;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class RecommendByBookmarkAndLocationRequestDto {
-	@NotEmpty(message = "Longitude must not be Blank")
+	@NotNull(message = "Longitude must not be null")
 	private Double longitude;
 
-	@NotEmpty(message = "Latitude must not be Blank")
+	@NotNull(message = "Latitude must not be null")
 	private Double latitude;
 
 	public RecommendByBookmarkAndLocationDto toServiceDto() {
