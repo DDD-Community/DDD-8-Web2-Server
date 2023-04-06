@@ -36,5 +36,5 @@
 </br>
 
 ## 📚 ERD 
-<img width="569" alt="스크린샷 2023-02-17 오후 1 40 27" src="https://user-images.githubusercontent.com/80501465/219551170-718970fb-b64b-4a72-94a7-6fe461421262.png">
+<img width="569" alt="스크린샷 2023-02-17 오후 1 40 27" src="https://user-images.githubusercontent.com/62228195/230364203-4982b855-67b0-461e-9628-d080c42e7774.png">
 
