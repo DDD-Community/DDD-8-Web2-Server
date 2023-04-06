@@ -1,6 +1,6 @@
 package ddd.caffeine.ratrip.module.memo.presentation.dto.request;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.module.memo.application.dto.RecommendationPathDto;
 import lombok.AccessLevel;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class RecommendationRequestDto {
-	@NotBlank(message = "DayPlanId must not be empty")
+	@NotNull(message = "DayPlanId must not be null")
 	private Long dayPlanId;
 
 	public RecommendationPathDto toServiceDto(Long placeId) {

@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class PlaceService {
-	static final long CACHE_EXPIRE_TIME = 60 * 60 * 24 * 7; // 7일
+	static final long CACHE_EXPIRE_TIME = 60 * 60 * 24 * 7 * 1000L; // 7일
 	private final PlaceFeignService placeFeignService;
 	private final PlaceRepository placeRepository;
 

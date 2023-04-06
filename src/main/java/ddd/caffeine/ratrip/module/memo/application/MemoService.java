@@ -22,6 +22,7 @@ import ddd.caffeine.ratrip.module.memo.application.dto.UpdateMemoDto;
 import ddd.caffeine.ratrip.module.memo.domain.Memo;
 import ddd.caffeine.ratrip.module.memo.domain.repository.MemoRepository;
 import ddd.caffeine.ratrip.module.memo.domain.repository.dao.MemoDao;
+import ddd.caffeine.ratrip.module.memo.domain.repository.dao.ShortestPathDao;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.response.MemosResponseDto;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.response.RecommendationPathResponseDto;
 import ddd.caffeine.ratrip.module.place.application.PlaceService;
@@ -78,8 +79,7 @@ public class MemoService {
 
 	public RecommendationPathResponseDto getRecommendationPath(User user, RecommendationPathDto request) {
 		DayPlan dayPlan = validateExistDayPlan(user, request.getDayPlanId());
-		List<Memo> memos = memoRepository.findByDayPlanIdAndUser(dayPlan.getId(), user);
-		List<Place> places = memos.stream().map(Memo::getPlace).toList();
+		List<ShortestPathDao> places = memoRepository.findShortestPathDaoByDayPlanIdAndUser(dayPlan.getId(), user);
 
 		return RecommendationPathResponseDto.of(
 			RecommendationPathCalculator.byGreedyAlgorithm(request.getPlaceId(), places));

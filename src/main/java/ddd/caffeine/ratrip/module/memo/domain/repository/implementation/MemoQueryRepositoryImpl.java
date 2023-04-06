@@ -11,6 +11,8 @@ import ddd.caffeine.ratrip.module.memo.domain.Memo;
 import ddd.caffeine.ratrip.module.memo.domain.repository.MemoQueryRepository;
 import ddd.caffeine.ratrip.module.memo.domain.repository.dao.MemoDao;
 import ddd.caffeine.ratrip.module.memo.domain.repository.dao.QMemoDao;
+import ddd.caffeine.ratrip.module.memo.domain.repository.dao.QShortestPathDao;
+import ddd.caffeine.ratrip.module.memo.domain.repository.dao.ShortestPathDao;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +74,24 @@ public class MemoQueryRepositoryImpl implements MemoQueryRepository {
 				memo.place.eq(place)
 			)
 			.fetchOne());
+	}
+
+	@Override
+	public List<ShortestPathDao> findShortestPathDaoByDayPlanIdAndUser(Long id, User user) {
+		return jpaQueryFactory
+			.select(
+				new QShortestPathDao(
+					memo.id,
+					memo.place.name,
+					memo.place.location
+				)
+			)
+			.from(memo)
+			.where(
+				memo.dayPlan.id.eq(id),
+				memo.dayPlan.user.eq(user)
+			)
+			.fetch();
 	}
 
 }

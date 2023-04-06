@@ -3,6 +3,7 @@ package ddd.caffeine.ratrip.module.memo.presentation.dto.request;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.module.memo.application.dto.ChangeMemoSequenceDto;
 import lombok.AccessLevel;
@@ -13,9 +14,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChangeMemoSequenceRequestDto {
 
-	@NotEmpty(message = "DayPlanId must not be empty")
+	@NotNull(message = "DayPlanId must not be null")
 	private Long dayPlanId;
 
+	//TODO - TEST
 	@NotEmpty(message = "MemoIds must not be empty")
 	private List<Long> memoIds;
 
