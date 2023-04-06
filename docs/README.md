@@ -31,7 +31,7 @@
 </br>
 
 ## 📚 프로젝트 구조도
-<img width="672" alt="image" src="https://user-images.githubusercontent.com/62228195/230448607-36c198d4-21d1-423d-a7d3-d22b43305ae4.png">
+<img width="672" alt="image" src="https://user-images.githubusercontent.com/62228195/230451609-c72af27a-a431-4aa9-b7b4-cf28fc7dc5bc.png">
 
 </br>
 
