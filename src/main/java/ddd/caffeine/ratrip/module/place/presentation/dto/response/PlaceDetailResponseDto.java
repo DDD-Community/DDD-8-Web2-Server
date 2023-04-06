@@ -1,7 +1,8 @@
 package ddd.caffeine.ratrip.module.place.presentation.dto.response;
 
-import java.util.UUID;
+import java.util.List;
 
+import ddd.caffeine.ratrip.module.place.domain.Blog;
 import ddd.caffeine.ratrip.module.place.domain.Location;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import lombok.AllArgsConstructor;
@@ -16,15 +17,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlaceDetailResponseDto {
 
-	private UUID id;
+	private Long id;
 	private String kakaoId;
 	private String name;
 	private String category;
 	private String address;
 	private Location location;
 	private String imageLink;
-	private String additionalInfoLink;
+	private String placeLink;
 	private String telephone;
+	private List<Blog> blogs;
 
 	public static PlaceDetailResponseDto of(Place place) {
 		return new PlaceDetailResponseDto(
@@ -35,8 +37,9 @@ public class PlaceDetailResponseDto {
 			place.getAddress().toString(),
 			place.getLocation(),
 			place.getImageLink(),
-			place.getAdditionalInfoLink(),
-			place.getTelephone()
+			place.getPlaceLink(),
+			place.getTelephone(),
+			place.getBlogs()
 		);
 	}
 }

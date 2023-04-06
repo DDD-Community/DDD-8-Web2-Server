@@ -2,19 +2,22 @@ package ddd.caffeine.ratrip.module.travel_plan.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.common.jpa.AuditingTimeEntity;
-import ddd.caffeine.ratrip.common.util.SequentialUUIDGenerator;
 import ddd.caffeine.ratrip.module.place.domain.Region;
+import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,8 +29,8 @@ import lombok.NoArgsConstructor;
 public class TravelPlan extends AuditingTimeEntity implements Serializable {
 
 	@Id
-	@Column(columnDefinition = "BINARY(16)")
-	private UUID id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@NotNull
 	@Column
@@ -48,35 +51,42 @@ public class TravelPlan extends AuditingTimeEntity implements Serializable {
 
 	@NotNull
 	@Column(name = "is_end", columnDefinition = "TINYINT(1)")
-	private boolean isEnd = Boolean.FALSE;
+	private boolean isEnd;
 
 	@NotNull
 	@Column(name = "is_deleted", columnDefinition = "TINYINT(1)")
-	private boolean isDeleted = Boolean.FALSE;
+	private boolean isDeleted;
 
-	public void endTheTrip() {
-		isEnd = Boolean.TRUE;
-	}
-
-	@PrePersist
-	public void createPrimaryKey() {
-		//sequential uuid 생성
-		this.id = SequentialUUIDGenerator.generate();
-	}
-
-	public UUID readUUID() {
-		return this.id;
-	}
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", columnDefinition = "BINARY(16)")
+	private User user;
 
 	@Builder
-	public TravelPlan(String title, Region region, int travelDays, LocalDate startDate) {
+	private TravelPlan(String title, Region region, int travelDays, LocalDate startDate, User user, boolean isEnd,
+		boolean isDeleted) {
 		this.title = title;
 		this.region = region;
 		this.travelDays = travelDays;
 		this.startDate = startDate;
+		this.isEnd = isEnd;
+		this.isDeleted = isDeleted;
+		this.user = user;
 	}
 
-	public void delete() {
-		this.isDeleted = Boolean.TRUE;
+	public static TravelPlan of(String title, Region region, int travelDays, LocalDate startDate, User user) {
+		return TravelPlan.builder()
+			.title(title)
+			.region(region)
+			.travelDays(travelDays)
+			.startDate(startDate)
+			.user(user)
+			.isEnd(false)
+			.isDeleted(false)
+			.build();
+	}
+
+	public void endTravelPlan() {
+		this.isEnd = true;
 	}
 }

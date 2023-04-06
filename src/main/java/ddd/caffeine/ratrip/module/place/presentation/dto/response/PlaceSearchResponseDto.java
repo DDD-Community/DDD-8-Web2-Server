@@ -16,7 +16,7 @@ public class PlaceSearchResponseDto {
 	@Builder
 	public PlaceSearchResponseDto(List<PlaceSearchResponse> placeSearchResponses, FeignPlaceMetaData metaData) {
 		this.thirdPartyModel = placeSearchResponses;
-		this.isEnd = metaData.isEnd();
+		this.isEnd = metaData.getIsEnd();
 		this.pageableCount = metaData.getPageableCount();
 		this.totalCount = metaData.getTotalCount();
 	}

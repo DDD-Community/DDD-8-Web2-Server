@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 public class FeignImageModel {
 	private List<ImageItem> items;
 
-	public String readImageLinkByIndex(int index) {
+	public String toImageLink() {
+		final int INDEX = 0;
+
 		if (this.items.isEmpty()) {
 			return null;
 		}
-		ImageItem imageItem = this.items.get(index);
+		ImageItem imageItem = this.items.get(INDEX);
 		return imageItem.getLink();
 	}
 }

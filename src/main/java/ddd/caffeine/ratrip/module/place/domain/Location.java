@@ -21,9 +21,13 @@ public class Location {
 	@Column
 	private double longitude;
 
-	public Location(double latitude, double longitude) {
-		this.latitude = latitude;
+	private Location(double longitude, double latitude) {
 		this.longitude = longitude;
+		this.latitude = latitude;
+	}
+
+	public static Location of(String longitude, String latitude) {
+		return new Location(Double.parseDouble(latitude), Double.parseDouble(longitude));
 	}
 
 	@Override

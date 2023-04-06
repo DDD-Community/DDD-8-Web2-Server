@@ -1,112 +1,81 @@
 package ddd.caffeine.ratrip.common.util;
 
-import ddd.caffeine.ratrip.common.exception.domain.CommonException;
-import ddd.caffeine.ratrip.module.travel_plan.domain.repository.dao.PlaceNameLongitudeLatitudeDao;
-import ddd.caffeine.ratrip.module.travel_plan.presentation.dto.response.PlaceNameResponse;
+import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.NOT_FOUND_PLACE_EXCEPTION;
+import ddd.caffeine.ratrip.common.exception.domain.PlaceException;
+import ddd.caffeine.ratrip.module.memo.domain.repository.dao.ShortestPathDao;
 
 public class RecommendationPathCalculator {
-    static final int EARTH_RADIUS = 6371000;
+	static final int EARTH_RADIUS = 6371000;
 
-    public static List<PlaceNameResponse> greedyAlgorithm(final UUID id,
-                                                          final List<PlaceNameLongitudeLatitudeDao> places) {
+	// 위도, 경도로 각 경로간 거리를 계산하고, 그 중 가장 짧은 경로를 Greedy 하게 찾아서 정렬 (A, B, C, D가 있고 출발지가 A라면 A에서 가장 가까운 B를 찾고, B에서 가장 가까운 C를 찾고, C에서 가장 가까운 D를 찾는 방식)
+	public static List<ShortestPathDao> byGreedyAlgorithm(Long placeId, List<ShortestPathDao> places) {
+		List<ShortestPathDao> visitOrder = new ArrayList<>();
 
-        return greedyAlgorithm(initDistanceMatrix(places), id, places);
-    }
+		int n = places.size();
+		boolean[] visited = new boolean[n];
 
-    private static List<PlaceNameResponse> greedyAlgorithm(final double[][] distanceMatrix, final UUID startPlaceId,
-                                                           List<PlaceNameLongitudeLatitudeDao> places) {
+		ShortestPathDao startPlace = findStartPlace(placeId, places);
+		int startPlaceIndex = findPlaceIndexById(places, startPlace.getId());
 
-        List<PlaceNameLongitudeLatitudeDao> visitOrder = new ArrayList<>(); // 방문 순서를 저장할 리스트
-        int n = distanceMatrix.length;
-        boolean[] visited = new boolean[n];
+		visited[startPlaceIndex] = true; // 출발지 방문 처리
+		visitOrder.add(places.get(startPlaceIndex));
 
-        PlaceNameLongitudeLatitudeDao startPlace = findStartPlace(startPlaceId, places);
-        int currentPlaceIndex = findPlaceIndexById(places, startPlace.getId()); // 출발지 인덱스 구하기
+		for (int i = 0; i < n - 1; i++) { // 현재 위치로부터 가장 가까운 장소 찾기
+			double shortestDistance = Double.MAX_VALUE;
+			int closestPlaceIndex = -1;
 
-        visited[currentPlaceIndex] = true; // 출발지 방문 처리
-        visitOrder.add(places.get(currentPlaceIndex));
+			for (int j = 0; j < n; j++) {
+				if (!visited[j] && haversineDistance(startPlace, places.get(j)) < shortestDistance) {
+					closestPlaceIndex = j;
+					shortestDistance = haversineDistance(startPlace, places.get(j));
+				}
+			}
 
-        for (int i = 0; i < n - 1; i++) { // 현재 위치로부터 가장 가까운 장소 찾기
-            double shortestDistance = Double.MAX_VALUE;
-            int closestPlaceIndex = -1;
+			visited[closestPlaceIndex] = true;
+			visitOrder.add(places.get(closestPlaceIndex));
+			startPlace = places.get(closestPlaceIndex);
+		}
 
-            for (int j = 0; j < n; j++) {
-                if (!visited[j] && distanceMatrix[currentPlaceIndex][j] < shortestDistance) {
-                    closestPlaceIndex = j;
-                    shortestDistance = distanceMatrix[currentPlaceIndex][j];
-                }
-            }
+		return visitOrder;
+	}
 
-            visited[closestPlaceIndex] = true;
-            visitOrder.add(places.get(closestPlaceIndex));
-            currentPlaceIndex = closestPlaceIndex;
-        }
+	private static ShortestPathDao findStartPlace(Long placeId, List<ShortestPathDao> places) {
+		return places.stream()
+			.filter(place -> place.getId().equals(placeId))
+			.findFirst()
+			.orElseThrow(() -> new PlaceException(NOT_FOUND_PLACE_EXCEPTION));
+	}
 
-        return mapToPlaceDistanceResponse(visitOrder);
-    }
+	private static int findPlaceIndexById(List<ShortestPathDao> places, Long id) {
+		for (int i = 0; i < places.size(); i++) {
+			if (places.get(i).getId().equals(id)) {
+				return i;
+			}
+		}
 
-    private static double haversineDistance(final PlaceNameLongitudeLatitudeDao originPlace,
-                                            final PlaceNameLongitudeLatitudeDao place) {
+		return -1;
+	}
 
-        double deltaLatitude = Math.toRadians(place.getLatitude() - originPlace.getLatitude());
-        double deltaLongitude = Math.toRadians(place.getLongitude() - originPlace.getLongitude());
+	private static double haversineDistance(ShortestPathDao originPlace, ShortestPathDao place) {
+		double deltaLatitude = Math.toRadians(
+			place.getLocation().getLatitude() - originPlace.getLocation().getLatitude());
 
-        double latitudeOriginRadians = Math.toRadians(originPlace.getLatitude());
-        double latitudeCompareRadians = Math.toRadians(place.getLatitude());
+		double deltaLongitude = Math.toRadians(
+			place.getLocation().getLongitude() - originPlace.getLocation().getLongitude());
 
-        // 두 좌표 사이의 거리 계산 (haversine 공식 사용)
-        double a = Math.sin(deltaLatitude / 2) * Math.sin(deltaLatitude / 2) + Math.cos(latitudeOriginRadians)
-                * Math.cos(latitudeCompareRadians) * Math.sin(deltaLongitude / 2) * Math.sin(deltaLongitude / 2);
+		double latitudeOriginRadians = Math.toRadians(originPlace.getLocation().getLatitude());
+		double latitudeCompareRadians = Math.toRadians(place.getLocation().getLatitude());
 
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		// 두 좌표 사이의 거리 계산 (haversine 공식 사용)
+		double a = Math.sin(deltaLatitude / 2) * Math.sin(deltaLatitude / 2) + Math.cos(latitudeOriginRadians)
+			* Math.cos(latitudeCompareRadians) * Math.sin(deltaLongitude / 2) * Math.sin(deltaLongitude / 2);
 
-        return EARTH_RADIUS * c;
-    }
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    private static double[][] initDistanceMatrix(List<PlaceNameLongitudeLatitudeDao> places) {
-        double[][] distances = new double[places.size()][places.size()];
-
-        for (int i = 0; i < places.size(); i++) {
-            for (int j = 0; j < places.size(); j++) {
-                distances[i][j] = haversineDistance(places.get(i), places.get(j));
-            }
-        }
-        return distances;
-    }
-
-    private static List<PlaceNameResponse> mapToPlaceDistanceResponse(
-            List<PlaceNameLongitudeLatitudeDao> visitOrder) {
-
-        List<PlaceNameResponse> placeNameResponses = new ArrayList<>();
-
-        for (PlaceNameLongitudeLatitudeDao place : visitOrder) {
-            placeNameResponses.add(PlaceNameResponse.of(place.getName()));
-        }
-
-        return placeNameResponses;
-    }
-
-    private static PlaceNameLongitudeLatitudeDao findStartPlace(final UUID id,
-                                                                final List<PlaceNameLongitudeLatitudeDao> places) {
-
-        return places.stream()
-                .filter(p -> p.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new CommonException(NOT_FOUND_PLACE_EXCEPTION));
-    }
-
-    private static int findPlaceIndexById(List<PlaceNameLongitudeLatitudeDao> places, UUID id) {
-        for (int i = 0; i < places.size(); i++) {
-            if (places.get(i).getId().equals(id)) {
-                return i;
-            }
-        }
-        return -1;
-    }
+		return EARTH_RADIUS * c;
+	}
 }

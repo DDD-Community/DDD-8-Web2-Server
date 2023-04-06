@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor
 public class Address {
-
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Region region;
@@ -24,23 +23,20 @@ public class Address {
 	@Column(name = "detailed_address", columnDefinition = "VARCHAR(100)")
 	private String detailed;
 
-	//예시 : "제주특별자치도 제주시 외도일동 640-2"
-	public Address(String address) {
-		setAddress(address);
+	private Address(Region region, String detailed) {
+		this.region = region;
+		this.detailed = detailed;
+	}
+
+	//address 예시 : "제주특별자치도 제주시 외도일동 640-2"
+	public static Address of(String addressName) {
+		Region region = Region.of(addressName.split(" ")[0]);
+		;
+		return new Address(region, addressName);
 	}
 
 	public String toString() {
 		return this.region.name() + " " + detailed;
-	}
-
-	private void setAddress(String address) {
-		String[] split = address.split(" ");
-		this.region = createRegion(split[0]);
-		this.detailed = address.replace(split[0] + " ", "");
-	}
-
-	private Region createRegion(String keyword) {
-		return Region.createRegionIfNotExistReturnEtc(keyword);
 	}
 
 	@Override

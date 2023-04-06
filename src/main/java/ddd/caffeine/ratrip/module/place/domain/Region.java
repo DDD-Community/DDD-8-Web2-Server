@@ -1,8 +1,6 @@
 package ddd.caffeine.ratrip.module.place.domain;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import lombok.Getter;
@@ -33,22 +31,10 @@ public enum Region {
 		this.keyword = keyword;
 	}
 
-	public static Region createRegionIfNotExistReturnEtc(String keyword) {
+	public static Region of(String keyword) {
 		Optional<Region> region = Arrays.stream(values()).filter(r -> r.name().contains(keyword))
 			.findFirst();
 
 		return region.orElse(Region.기타);
-	}
-
-	public static List<Region> createRegions(List<String> requestRegions) {
-		List<Region> regions = new ArrayList<>();
-		for (String region : requestRegions) {
-			Optional<Region> optionalRegion = Arrays.stream(values()).filter(
-				r -> r.name().contains(region)).findFirst();
-
-			optionalRegion.ifPresent(r -> regions.add(r));
-		}
-
-		return regions;
 	}
 }

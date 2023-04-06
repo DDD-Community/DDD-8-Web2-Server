@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class FeignPlaceMetaData {
-	private boolean isEnd;
-	private int pageableCount;
+	private Boolean isEnd;
+	private Integer pageableCount;
 	private SameName sameName;
-	private int totalCount;
+	private Integer totalCount;
 
 	@NoArgsConstructor
 	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
