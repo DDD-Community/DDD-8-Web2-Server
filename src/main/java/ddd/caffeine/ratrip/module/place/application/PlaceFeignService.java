@@ -24,12 +24,13 @@ public class PlaceFeignService {
 	public KakaoPlaceMeta findPlacesByKeywordAndCoordinate(SearchPlaceDto request) {
 		final String KAKAO_API_KEY = secretKeyManager.getKakaoRestApiKey();
 		final String KAKAO_REQUEST_HEADER = "KakaoAK " + KAKAO_API_KEY;
+		final Integer SIZE = 20;
 
 		String latitude = String.valueOf(request.getLatitude());
 		String longitude = String.valueOf(request.getLongitude());
 
 		return kakaoFeignClient.findPlacesByKeywordInRadius(
-			KAKAO_REQUEST_HEADER, request.getKeyword(), latitude, longitude, request.getPage());
+			KAKAO_REQUEST_HEADER, request.getKeyword(), latitude, longitude, request.getPage(), SIZEgit);
 	}
 
 	public KakaoPlaceMeta findPlaceDetailFromKakao(String query) {

@@ -17,7 +17,8 @@ public interface KakaoFeignClient {
 		@RequestParam("query") String query,
 		@RequestParam("y") String latitude,
 		@RequestParam("x") String longitude,
-		@RequestParam("page") int page
+		@RequestParam("page") int page,
+		@RequestParam("size") int size
 	);
 
 	@GetMapping(value = "v2/local/search/keyword.json")

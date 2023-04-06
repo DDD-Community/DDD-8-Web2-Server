@@ -30,7 +30,7 @@ public class PlaceController {
 	private final PlaceService placeService;
 
 	@Operation(summary = "[인증] 장소 키워드 검색 API")
-	@GetMapping("search")
+	@GetMapping("/search")
 	public ResponseEntity<PlaceSearchResponseDto> searchPlaces(
 		@Valid @ModelAttribute PlaceSearchRequestDto request) {
 
