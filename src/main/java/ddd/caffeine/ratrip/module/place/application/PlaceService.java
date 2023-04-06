@@ -5,23 +5,28 @@ import static ddd.caffeine.ratrip.common.exception.ExceptionInformation.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ddd.caffeine.ratrip.common.exception.domain.PlaceException;
 import ddd.caffeine.ratrip.module.place.application.dto.PlaceDetailDto;
+import ddd.caffeine.ratrip.module.place.application.dto.RecommendByLocationDto;
 import ddd.caffeine.ratrip.module.place.application.dto.SearchPlaceDto;
 import ddd.caffeine.ratrip.module.place.domain.Address;
 import ddd.caffeine.ratrip.module.place.domain.Blog;
 import ddd.caffeine.ratrip.module.place.domain.Category;
 import ddd.caffeine.ratrip.module.place.domain.Location;
 import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.place.domain.repository.PlaceRepository;
+import ddd.caffeine.ratrip.module.place.domain.repository.dao.RecommendByLocationDao;
 import ddd.caffeine.ratrip.module.place.feign.kakao.model.KakaoPlaceDetail;
 import ddd.caffeine.ratrip.module.place.feign.kakao.model.KakaoPlaceMeta;
 import ddd.caffeine.ratrip.module.place.presentation.dto.response.PlaceSearchResponseDto;
-import ddd.caffeine.ratrip.module.user.domain.User;
+import ddd.caffeine.ratrip.module.place.presentation.dto.response.RecommendByLocationResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -36,12 +41,12 @@ public class PlaceService {
 
 	@Transactional(readOnly = true)
 	public PlaceSearchResponseDto searchPlaces(SearchPlaceDto request) {
-		KakaoPlaceMeta kakaoPlaceMeta = placeFeignService.findPlacesByKeywordAndCoordinate(request);
+		KakaoPlaceMeta kakaoPlaceMeta = placeFeignService.findPlacesByKeywordAndLocationFromKakao(request);
 
 		return kakaoPlaceMeta.mapByPlaceSearchResponseDto();
 	}
 
-	public Place getPlaceDetail(User user, PlaceDetailDto request) {
+	public Place getPlaceDetail(PlaceDetailDto request) {
 		// 캐쉬에 있는지 확인
 		String cacheKey = "place:" + request.getKakaoId();
 		Place cache = (Place)redisTemplate.opsForValue().get(cacheKey);
@@ -53,6 +58,13 @@ public class PlaceService {
 
 		increaseViewCount(cache.getId());
 		return cache;
+	}
+
+	public RecommendByLocationResponseDto recommendByLocation(RecommendByLocationDto request, Pageable pageable) {
+		Region region = convertLocationToRegion(request.getLongitude(), request.getLatitude());
+		Slice<RecommendByLocationDao> places = placeRepository.findByRegion(region, pageable);
+
+		return RecommendByLocationResponseDto.of(places.getContent(), places.hasNext());
 	}
 
 	public void increaseBookmarkCount(Place place) {
@@ -68,6 +80,10 @@ public class PlaceService {
 		}
 
 		return place;
+	}
+
+	public Region convertLocationToRegion(Double longitude, Double latitude) {
+		return placeFeignService.convertLocationToRegionFromKakao(longitude, latitude);
 	}
 
 	private Place updatePlace(String originPlaceKakaoId, Place newPlace) {

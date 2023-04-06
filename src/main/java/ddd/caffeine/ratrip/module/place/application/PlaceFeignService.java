@@ -23,7 +23,7 @@ public class PlaceFeignService {
 	private final KakaoFeignClient kakaoFeignClient;
 	private final NaverFeignClient naverFeignClient;
 
-	public KakaoPlaceMeta findPlacesByKeywordAndCoordinate(SearchPlaceDto request) {
+	public KakaoPlaceMeta findPlacesByKeywordAndLocationFromKakao(SearchPlaceDto request) {
 		final String KAKAO_API_KEY = secretKeyManager.getKakaoRestApiKey();
 		final String KAKAO_REQUEST_HEADER = "KakaoAK " + KAKAO_API_KEY;
 		final Integer SIZE = 15;
@@ -68,7 +68,7 @@ public class PlaceFeignService {
 		return imageModel;
 	}
 
-	public Region convertLongituteAndLatitudeToRegion(final double longitude, final double latitude) {
+	public Region convertLocationToRegionFromKakao(final double longitude, final double latitude) {
 		final String KAKAO_REQUEST_HEADER = HttpHeaderUtils.concatWithKakaoAKPrefix(
 			secretKeyManager.getKakaoRestApiKey());
 

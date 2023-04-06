@@ -60,9 +60,7 @@ public class BookmarkService {
 
 	public RecommendByBookmarkAndLocationResponseDto recommendByBookmarkAndLocation(User user,
 		RecommendByBookmarkAndLocationDto request, Pageable pageable) {
-		Region region = placeFeignService.convertLongituteAndLatitudeToRegion(request.getLongitude(),
-			request.getLatitude());
-
+		Region region = placeService.convertLocationToRegion(request.getLongitude(), request.getLatitude());
 		Slice<RecommendByBookmarkDao> places = bookmarkRepository.findPlacesByRegionAndUser(region, user, pageable);
 
 		return RecommendByBookmarkAndLocationResponseDto.of(places.getContent(), places.hasNext());
