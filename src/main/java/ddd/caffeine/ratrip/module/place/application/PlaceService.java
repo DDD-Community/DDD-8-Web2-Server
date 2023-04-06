@@ -55,25 +55,6 @@ public class PlaceService {
 		return cache;
 	}
 
-	private void increaseViewCount(Long id) {
-		Place place = placeRepository.findById(id).orElseThrow(() -> new PlaceException(NOT_FOUND_PLACE_EXCEPTION));
-		place.increaseViewCount();
-	}
-
-	private PlaceDetailResponseDto saveAndCachePlaceDetail(PlaceDetailDto request, String cacheKey) {
-		// API 콜
-		Place updatedPlace = findPlaceFromFeign(request.getName(), request.getAddress());
-
-		// DB에 없데이트
-		updatedPlace = updatePlace(request.getKakaoId(), updatedPlace);
-
-		// 캐시에 저장
-		PlaceDetailResponseDto response = PlaceDetailResponseDto.of(updatedPlace);
-		redisTemplate.opsForValue().set(cacheKey, response, CACHE_EXPIRE_TIME, TimeUnit.MILLISECONDS);
-
-		return response;
-	}
-
 	public void increaseBookmarkCount(Place place) {
 		place.increaseBookmarkCount();
 	}
@@ -104,6 +85,25 @@ public class PlaceService {
 		place.increaseViewCount();
 
 		return place;
+	}
+
+	private void increaseViewCount(Long id) {
+		Place place = placeRepository.findById(id).orElseThrow(() -> new PlaceException(NOT_FOUND_PLACE_EXCEPTION));
+		place.increaseViewCount();
+	}
+
+	private PlaceDetailResponseDto saveAndCachePlaceDetail(PlaceDetailDto request, String cacheKey) {
+		// API 콜
+		Place updatedPlace = findPlaceFromFeign(request.getName(), request.getAddress());
+
+		// DB에 없데이트
+		updatedPlace = updatePlace(request.getKakaoId(), updatedPlace);
+
+		// 캐시에 저장
+		PlaceDetailResponseDto response = PlaceDetailResponseDto.of(updatedPlace);
+		redisTemplate.opsForValue().set(cacheKey, response, CACHE_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+
+		return response;
 	}
 
 	private Place findPlaceFromFeign(String name, String address) {
