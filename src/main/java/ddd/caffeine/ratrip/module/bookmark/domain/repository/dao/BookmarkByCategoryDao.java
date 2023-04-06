@@ -2,7 +2,7 @@ package ddd.caffeine.ratrip.module.bookmark.domain.repository.dao;
 
 import com.querydsl.core.annotations.QueryProjection;
 
-import ddd.caffeine.ratrip.module.place.domain.Category;
+import ddd.caffeine.ratrip.module.travel_plan.place.domain.Category;
 import lombok.Getter;
 
 @Getter

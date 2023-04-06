@@ -21,8 +21,8 @@ import ddd.caffeine.ratrip.module.bookmark.presentation.dto.request.RecommendByB
 import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.BookmarksByCategoryResponseDto;
 import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.RecommendByBookmarkAndLocationResponseDto;
 import ddd.caffeine.ratrip.module.bookmark.presentation.dto.response.RecommendByBookmarkAndRegionResponseDto;
-import ddd.caffeine.ratrip.module.place.domain.Category;
-import ddd.caffeine.ratrip.module.place.domain.Region;
+import ddd.caffeine.ratrip.module.travel_plan.place.domain.Category;
+import ddd.caffeine.ratrip.module.travel_plan.place.domain.Region;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

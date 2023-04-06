@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import ddd.caffeine.ratrip.module.place.domain.Region;
 import ddd.caffeine.ratrip.module.travel_plan.application.dto.CreateTravelPlanDto;
+import ddd.caffeine.ratrip.module.travel_plan.place.domain.Region;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

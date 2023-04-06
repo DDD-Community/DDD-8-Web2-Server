@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ddd.caffeine.ratrip.common.exception.domain.PlaceException;
-import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.travel_plan.place.domain.Place;
 
 public class RecommendationPathCalculator {
 	static final int EARTH_RADIUS = 6371000;

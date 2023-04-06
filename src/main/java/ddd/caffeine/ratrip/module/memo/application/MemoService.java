@@ -23,8 +23,8 @@ import ddd.caffeine.ratrip.module.memo.domain.Memo;
 import ddd.caffeine.ratrip.module.memo.domain.repository.MemoRepository;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.response.MemosResponseDto;
 import ddd.caffeine.ratrip.module.memo.presentation.dto.response.RecommendationPathResponseDto;
-import ddd.caffeine.ratrip.module.place.application.PlaceService;
-import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.travel_plan.place.application.PlaceService;
+import ddd.caffeine.ratrip.module.travel_plan.place.domain.Place;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.RequiredArgsConstructor;
 

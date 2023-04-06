@@ -2,7 +2,7 @@ package ddd.caffeine.ratrip.module.memo.application.dto;
 
 import ddd.caffeine.ratrip.module.day_plan.domain.DayPlan;
 import ddd.caffeine.ratrip.module.memo.domain.Memo;
-import ddd.caffeine.ratrip.module.place.domain.Place;
+import ddd.caffeine.ratrip.module.travel_plan.place.domain.Place;
 import ddd.caffeine.ratrip.module.user.domain.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

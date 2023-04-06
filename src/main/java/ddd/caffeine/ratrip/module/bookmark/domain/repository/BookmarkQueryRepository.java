@@ -8,8 +8,8 @@ import org.springframework.data.domain.Slice;
 import ddd.caffeine.ratrip.module.bookmark.domain.Bookmark;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.BookmarkByCategoryDao;
 import ddd.caffeine.ratrip.module.bookmark.domain.repository.dao.RecommendByBookmarkDao;
-import ddd.caffeine.ratrip.module.place.domain.Category;
-import ddd.caffeine.ratrip.module.place.domain.Region;
+import ddd.caffeine.ratrip.module.travel_plan.place.domain.Category;
+import ddd.caffeine.ratrip.module.travel_plan.place.domain.Region;
 import ddd.caffeine.ratrip.module.user.domain.User;
 
 public interface BookmarkQueryRepository {
