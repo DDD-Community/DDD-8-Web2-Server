@@ -14,6 +14,7 @@ import ddd.caffeine.ratrip.module.place.application.dto.PlaceDetailDto;
 import ddd.caffeine.ratrip.module.place.application.dto.SearchPlaceDto;
 import ddd.caffeine.ratrip.module.place.domain.Address;
 import ddd.caffeine.ratrip.module.place.domain.Blog;
+import ddd.caffeine.ratrip.module.place.domain.Category;
 import ddd.caffeine.ratrip.module.place.domain.Location;
 import ddd.caffeine.ratrip.module.place.domain.Place;
 import ddd.caffeine.ratrip.module.place.domain.repository.PlaceRepository;
@@ -114,7 +115,7 @@ public class PlaceService {
 		List<Blog> blogs = placeFeignService.findBlogsFromNaver(QUERY).toBlogs();
 
 		return Place.of(kakaoPlaceDetail.getId(), kakaoPlaceDetail.getPlaceName(), kakaoPlaceDetail.getPlaceUrl(),
-			kakaoPlaceDetail.getPhone(), kakaoPlaceDetail.getCategoryGroupCode(),
+			kakaoPlaceDetail.getPhone(), Category.codeToCategory(kakaoPlaceDetail.getCategoryGroupCode()),
 			Location.of(kakaoPlaceDetail.getX(), kakaoPlaceDetail.getY()),
 			Address.of(kakaoPlaceDetail.getAddressName()), imageLink, blogs);
 	}

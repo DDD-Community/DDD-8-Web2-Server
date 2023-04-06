@@ -98,14 +98,14 @@ public class Place extends AuditingTimeEntity {
 		this.totalScore = 0L;
 	}
 
-	public static Place of(String kakaoId, String name, String placeLink, String telephone, String categoryGroupCode,
+	public static Place of(String kakaoId, String name, String placeLink, String telephone, Category category,
 		Location location, Address address, String imageLink, List<Blog> blogs) {
 		return Place.builder()
 			.kakaoId(kakaoId)
 			.name(name)
 			.placeLink(placeLink)
 			.telephone(telephone)
-			.category(Category.codeToCategory(categoryGroupCode))
+			.category(category)
 			.location(location)
 			.address(address)
 			.imageLink(imageLink)
