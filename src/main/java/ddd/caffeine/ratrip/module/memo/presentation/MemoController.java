@@ -56,7 +56,7 @@ public class MemoController {
 	@Operation(summary = "[인증] 하루 일정의 모든 메모 조회")
 	@GetMapping
 	public ResponseEntity<MemosResponseDto> getMemos(@Parameter(hidden = true) @AuthenticationPrincipal User user,
-		MemosRequestDto request) {
+		@Valid @RequestBody MemosRequestDto request) {
 
 		return ResponseEntity.ok(memoService.getMemos(user, request.toServiceDto()));
 	}

@@ -1,6 +1,6 @@
 package ddd.caffeine.ratrip.module.memo.presentation.dto.request;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import ddd.caffeine.ratrip.module.memo.application.dto.MemosDto;
 import lombok.AccessLevel;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemosRequestDto {
-	@NotEmpty
+	@NotNull(message = "DayPlanId must not be null")
 	private Long dayPlanId;
 
 	public MemosDto toServiceDto() {
