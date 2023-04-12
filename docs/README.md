@@ -10,7 +10,7 @@
 ## ⚒️ 기술 스택
 #### Development Tools
 
-![Java](https://img.shields.io/badge/Java17-D77310?style=flat&logo=java&logoColor=000000) ![SpringBoot](https://img.shields.io/badge/SpringBoot2.6.4-6DB33F?style=flat&logo=springboot&logoColor=000000) ![SpringDataJpa](https://img.shields.io/badge/SpringDataJpa-6DB33F?style=flat&logo=spring&logoColor=000000) ![Spring Security](https://img.shields.io/badge/SpringSecurity-6DB33F?style=flat&logo=springsecurity&logoColor=000000) ![Spring Cloud](https://img.shields.io/badge/SpringCloud-6DB33F?style=flat&logo=spring&logoColor=000000) ![Querydsl](https://img.shields.io/badge/Querydsl-0769AD?style=flat&logo=Querydsl&logoColor=000000) ![MySQL](https://img.shields.io/badge/MySQL8.0-4479A1?style=flat&logo=mysql&logoColor=000000) ![Redis](https://img.shields.io/badge/Redis7.0-DC382D?style=flat&logo=redis&logoColor=000000) ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=swagger&logoColor=000000) ![Gradle](https://img.shields.io/badge/Gradle-02303A?style=flat&logo=gradle&logoColor=000000)
+![Java](https://img.shields.io/badge/Java17-D77310?style=flat&logo=java&logoColor=000000) ![SpringBoot](https://img.shields.io/badge/SpringBoot2.6.4-6DB33F?style=flat&logo=springboot&logoColor=000000) ![Spring Batch](https://img.shields.io/badge/SpringBatch-6DB33F?style=flat&logo=spring&logoColor=000000) ![SpringDataJpa](https://img.shields.io/badge/SpringDataJpa-6DB33F?style=flat&logo=spring&logoColor=000000) ![Spring Security](https://img.shields.io/badge/SpringSecurity-6DB33F?style=flat&logo=springsecurity&logoColor=000000) ![Spring Cloud](https://img.shields.io/badge/SpringCloud-6DB33F?style=flat&logo=spring&logoColor=000000) ![Querydsl](https://img.shields.io/badge/Querydsl-0769AD?style=flat&logo=Querydsl&logoColor=000000) ![MySQL](https://img.shields.io/badge/MySQL8.0-4479A1?style=flat&logo=mysql&logoColor=000000) ![Redis](https://img.shields.io/badge/Redis7.0-DC382D?style=flat&logo=redis&logoColor=000000) ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=swagger&logoColor=000000) ![Gradle](https://img.shields.io/badge/Gradle-02303A?style=flat&logo=gradle&logoColor=000000)
 
 </br>
 
@@ -31,7 +31,7 @@
 </br>
 
 ## 📚 프로젝트 구조도
-<img width="672" alt="image" src="https://user-images.githubusercontent.com/62228195/221605031-1621a6aa-a99c-474c-86a5-a850724b18ab.png">
+<img width="672" alt="image" src="https://user-images.githubusercontent.com/62228195/230451609-c72af27a-a431-4aa9-b7b4-cf28fc7dc5bc.png">
 
 </br>
 
