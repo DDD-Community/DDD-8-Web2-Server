@@ -22,18 +22,19 @@ public class TokenService {
 	private final JwtProvider jwtProvider;
 	private final JwtUtil jwtUtil;
 
-	public TokenResponseDto createJwtToken(UUID userId) {
+	public TokenResponseDto createJwtToken(final UUID userId) {
 		return jwtProvider.createJwtToken(userId);
 	}
 
-	public TokenResponseDto reissueToken(TokenReissueDto request) {
+	public TokenResponseDto reissueToken(final TokenReissueDto request) {
 		UUID userId = jwtUtil.validateTokensAndGetUserId(request.getAccessToken(), request.getRefreshToken());
 		return jwtProvider.createJwtToken(userId);
 	}
 
-	public SignOutResponseDto deleteToken(SignOutDto request) {
+	public SignOutResponseDto deleteToken(final SignOutDto request) {
 		UUID userId = jwtUtil.validateTokensAndGetUserId(request.getAccessToken(), request.getRefreshToken());
 		jwtRemover.deleteRefreshToken(userId);
-		return new SignOutResponseDto(userId);
+
+		return SignOutResponseDto.of(userId);
 	}
 }

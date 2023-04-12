@@ -46,8 +46,8 @@ public enum ExceptionInformation {
 	NOT_FOUND_PLACE_EXCEPTION(NOT_FOUND, "존재하지 않는 장소입니다."),
 	NOT_FOUND_BOOKMARK_EXCEPTION(NOT_FOUND, "존재하지 않는 북마크입니다."),
 	NOT_FOUND_TRAVEL_PLAN_EXCEPTION(NOT_FOUND, "존재 하지 않는 여행입니다."),
-	NOT_FOUND_DAY_SCHEDULE_EXCEPTION(NOT_FOUND, "존재 하지 않는 하루 일정입니다."),
-	NOT_FOUND_DAY_SCHEDULE_PLACE_EXCEPTION(NOT_FOUND, "존재 하지 않는 일정 내의 장소입니다."),
+	NOT_FOUND_DAY_PLAN_EXCEPTION(NOT_FOUND, "존재 하지 않는 하루 일정입니다."),
+	NOT_FOUND_MEMO_EXCEPTION(NOT_FOUND, "존재 하지 않는 일정 내의 메모입니다."),
 	NOT_FOUND_NOTIFICATION_EXCEPTION(NOT_FOUND, "존재하지 않는 공지사항입니다."),
 	NOT_FOUND_PUBLIC_KEY_EXCEPTION(NOT_FOUND, "존재하지 않는 애플 Public Key 입니다."),
 
@@ -55,7 +55,8 @@ public enum ExceptionInformation {
 	ALREADY_EXIST_USER_EXCEPTION(CONFLICT, "이미 존재하는 유저입니다."),
 	ALREADY_EXIST_BOOKMARK_EXCEPTION(CONFLICT, "이미 존재하는 북마크입니다."),
 	ALREADY_EXIST_TRAVEL_PLAN_EXCEPTION(CONFLICT, "진행중인 여행 계획이 존재합니다."),
-	ALREADY_EXIST_PLACE_IN_SCHEDULE_EXCEPTION(CONFLICT, "이미 추가된 장소입니다.");
+	ALREADY_EXIST_PLACE_IN_PLAN_EXCEPTION(CONFLICT, "이미 추가된 장소입니다."),
+	ALREADY_EXIST_MEMO_EXCEPTION(CONFLICT, "이미 추가된 메모입니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;

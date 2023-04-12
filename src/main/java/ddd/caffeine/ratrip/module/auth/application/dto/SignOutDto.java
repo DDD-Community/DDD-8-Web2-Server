@@ -10,7 +10,7 @@ public class SignOutDto {
 	private String accessToken;
 	private String refreshToken;
 
-	public static SignOutDto of(String accessToken, String refreshToken) {
+	public static SignOutDto of(final String accessToken, final String refreshToken) {
 		return new SignOutDto(accessToken, refreshToken);
 	}
 }

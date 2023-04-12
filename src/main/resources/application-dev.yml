@@ -10,9 +10,9 @@ spring:
       on-profile: "dev"
 
   datasource:
-    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_SCHEMA}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://${NEW_DB_HOST}:${NEW_DB_PORT}/${NEW_DB_SCHEMA}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${NEW_DB_USERNAME}
+    password: ${NEW_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:

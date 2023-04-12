@@ -10,7 +10,7 @@ public class TokenReissueDto {
 	private String accessToken;
 	private String refreshToken;
 
-	public static TokenReissueDto of(String accessToken, String refreshToken) {
+	public static TokenReissueDto of(final String accessToken, final String refreshToken) {
 		return new TokenReissueDto(accessToken, refreshToken);
 	}
 }
