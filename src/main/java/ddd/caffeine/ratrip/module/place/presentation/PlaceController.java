@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class PlaceController {
 	private final PlaceService placeService;
 
-	@Operation(summary = "장소 키워드 검색 API")
+	@Operation(summary = "[인증] 장소 키워드 검색 API")
 	@GetMapping("/search")
 	public ResponseEntity<PlaceSearchResponseDto> searchPlaces(
 		@Valid @ModelAttribute PlaceSearchRequestDto request) {
@@ -38,14 +38,14 @@ public class PlaceController {
 		return ResponseEntity.ok(placeService.searchPlaces(request.toServiceDto()));
 	}
 
-	@Operation(summary = "장소 상세 정보 API")
+	@Operation(summary = "[인증] 장소 상세 정보 API")
 	@PostMapping("")
 	public ResponseEntity<Place> getPlaceDetail(@Valid @RequestBody PlaceDetailRequestDto request) {
 
 		return ResponseEntity.ok(placeService.getPlaceDetail(request.toServiceDto()));
 	}
 
-	@Operation(summary = "유저가 위치한 현재 지역 내의 장소 추천 페이지네이션 조회")
+	@Operation(summary = "[인증] 유저가 위치한 현재 지역 내의 장소 추천 페이지네이션 조회")
 	@GetMapping("/recommendation/location")
 	public ResponseEntity<RecommendByLocationResponseDto> recommendByLocation(
 		@Valid @ModelAttribute RecommendByLocationRequestDto request,
