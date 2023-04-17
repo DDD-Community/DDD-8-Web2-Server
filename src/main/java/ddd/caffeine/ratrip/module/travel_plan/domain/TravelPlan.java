@@ -53,7 +53,6 @@ public class TravelPlan extends AuditingTimeEntity implements Serializable {
 	@Column(name = "is_end", columnDefinition = "TINYINT(1)")
 	private boolean isEnd;
 
-	@NotNull
 	@Column(name = "is_deleted", columnDefinition = "TINYINT(1)")
 	private boolean isDeleted;
 
